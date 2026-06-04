@@ -88,8 +88,9 @@
   .dolce-banner h3 { color: #d4af37; font-size: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
   .dolce-banner p { color: #bca07d; font-size: 14.5px; font-style: italic; }
 
-  .section { display: none; }
-  .section.active { display: block; }
+  /* Section Toggling Layout */
+  .section { display: none !important; }
+  .section.active { display: block !important; }
 
   /* Premium Luxury Footer */
   .footer { background: #0b0202; color: #d4af37; text-align: center; padding: 30px 20px; font-size: 14px; border-top: 3px solid #d4af37; margin-top: 50px; }
@@ -106,6 +107,7 @@
 
 <div id="google_translate_element"></div>
 
+<!-- Luxury Header -->
 <div class="header">
   <div style="display:flex;align-items:center;justify-content:center;gap:18px;">
     <img src="images.jpeg" style="width:85px;height:85px;object-fit:contain;background:#fff;padding:6px;border-radius:20px;box-shadow:0 4px 15px rgba(212,175,55,0.3); border: 2px solid #d4af37;">
@@ -117,6 +119,7 @@
   </div>
 </div>
 
+<!-- Navigation Bar -->
 <div class="lang-bar">
   <button class="lang-btn active" onclick="setLang('it', this)">🇮🇹 Italiano</button>
   <button class="lang-btn" onclick="setLang('fr', this)">🇫🇷 Français</button>
@@ -124,7 +127,7 @@
   <button class="lang-btn" onclick="setLang('de', this)">🇩🇪 Deutsch</button>
   
   <div class="translate-wrap">
-    <button class="translate-btn" onclick="toggleDropdown()" id="translateBtn">🌐 More Languages ▾</button>
+    <button class="translate-btn" onclick="toggleDropdown(event)" id="translateBtn">🌐 More Languages ▾</button>
     <div class="lang-dropdown" id="langDropdown">
       <div class="lang-dropdown-section">🇪🇺 Europa</div>
       <div class="lang-dropdown-item" onclick="googleTranslate('es')">🇪🇸 Español – Spanish</div>
@@ -135,6 +138,7 @@
   </div>
 </div>
 
+<!-- Quick Link Cards -->
 <div class="quick-cards">
   <a class="quick-card" href="https://www.wineappy.it/lago-bin/" target="_blank">
     <div class="card-icon">🍷</div>
@@ -143,17 +147,18 @@
       <span class="card-label" data-it="I Nostri Vini" data-fr="Nos Vins" data-en="Our Wines" data-de="Unsere Weine">I Nostri Vini</span>
     </div>
   </a>
-  <a class="quick-card" href="#" onclick="setTab('dolce', this); return false;">
+  <div class="quick-card" onclick="setTab('dolce')">
     <div class="card-icon">🍰</div>
     <div class="card-text">
        <span data-it="Dolce" data-fr="Desserts" data-en="Desserts" data-de="Desserts">Dolce</span>
       <span class="card-label" data-it="I Nostri Dessert" data-fr="Nos Desserts" data-en="Our Desserts" data-de="Unsere Desserts">I Nostri Dessert</span>
     </div>
-  </a>
+  </div>
 </div>
 
 <div class="translating-bar" id="translatingBar">🌐 Translating menu... please wait a moment</div>
 
+<!-- Navigation Sticky Tabs -->
 <div class="tabs-wrap">
   <div class="tabs">
     <button class="tab-btn active" onclick="setTab('menu_packages', this)">🍽️ <span data-it="Menù" data-fr="Menus" data-en="Menu" data-de="Menü">Menù</span></button>
@@ -168,6 +173,7 @@
 
 <div class="content">
 
+  <!-- 1. MENU PACKAGES SECTION -->
   <div class="section active" id="sec-menu_packages">
     <h2 class="cat-title">🍽️ <span data-it="I Nostri Menù" data-fr="Nos Menus" data-en="Our Set Menus" data-de="Unsere Menüs">I Nostri Menù</span></h2>
 
@@ -231,6 +237,7 @@
         <span data-it="I Menù non sono Divisibili per più Persone." data-fr="Les Menus ne peuvent pas être partagés entre plusieurs personnes." data-en="Set menus cannot be shared between guests." data-de="Menüs können nicht auf mehrere Personen aufgeteilt werden.">I Menù non sono Divisibili per più Persone.</span>
       </div>
 
+      <!-- Piatti del Menu Box -->
       <div class="piatti-box">
         <div class="piatti-box-title" data-it="Piatti inclusi nei Menù" data-fr="Plats inclus dans les Menus" data-en="Dishes included in the Menus" data-de="In den Menüs enthaltene Gerichte">Piatti inclusi nei Menù</div>
         <div class="piatti-box-subtitle" data-it="(Valido per Gastronomico e Degustazione)" data-fr="(Valable pour Gastronomique et Dégustation)" data-en="(Valid for Gastronomic and Tasting)" data-de="(Gültig für gastronomische und Verkostungsmenüs)">(Valido per Gastronomico e Degustazione)</div>
@@ -267,6 +274,7 @@
     </div>
   </div>
 
+  <!-- 2. ANTIPASTI -->
   <div class="section" id="sec-antipasti">
     <h2 class="cat-title">🥗 <span data-it="Antipasti à la Carte" data-fr="Entrées à la Carte" data-en="Starters à la Carte" data-de="Vorspeisen à la Carte">Antipasti à la Carte</span></h2>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Antipasto Tipico del Lago Bin</span><span class="sub-trans" data-it="" data-fr="(Assortiment Typique du Lago Bin)" data-en="(Typical Lago Bin Starter)" data-de="(Typische Lago Bin Vorspeise)"></span></div></div><div class="item-price">€15,00</div></div>
@@ -279,6 +287,7 @@
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Tomino d'Alpeggio Caldo</span><span class="sub-trans" data-it="" data-fr="(Tomino d'Alpeggio Chaud)" data-en="(Warm Alpine Tomino Cheese)" data-de="(Warmer Alpen-Tomino-Käse)"></span></div></div><div class="item-price">€12,00</div></div>
   </div>
 
+  <!-- 3. PRIMI -->
   <div class="section" id="sec-primi">
     <h2 class="cat-title">🍝 <span data-it="Primi Piatti" data-fr="Premiers Plats" data-en="First Courses" data-de="Erster Gang">Primi Piatti</span></h2>
     <div class="item">
@@ -299,6 +308,7 @@
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Gnocchi di Patate</span><span class="sub-trans" data-it="" data-fr="(Gnocchi de Pommes de Terre)" data-en="(Potato Gnocchi)" data-de="(Kartoffelgnocchi)"></span></div><div class="item-desc" data-it="Ai Funghi o ai Formaggi con Gorgonzola" data-fr="Aux champignons ou aux fromages avec gorgonzola" data-en="With Mushrooms or Mixed Cheese with Gorgonzola" data-de="Mit Pilzen oder Käsesauce und Gorgonzola">Ai Funghi o ai Formaggi con Gorgonzola</div></div><div class="item-price">€15,00</div></div>
   </div>
 
+  <!-- 4. SECONDI -->
   <div class="section" id="sec-secondi">
     <h2 class="cat-title">🥩 <span data-it="Secondi Piatti" data-fr="Secondes Plats" data-en="Main Courses" data-de="Hauptgerichte">Secondi Piatti</span></h2>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Coniglio alla Rocchettina</span><span class="sub-trans" data-it="" data-fr="(Lapin à la Rocchettina)" data-en="(Rabbit Rocchettina Style)" data-de="(Kaninchen nach Rocchettina-Art)"></span></div></div><div class="item-price">€15,00</div></div>
@@ -308,6 +318,183 @@
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Roast Beef</span><span class="sub-trans" data-it="" data-fr="(Rosbif Traditionnel)" data-en="(Traditional Roast Beef)" data-de="(Klassisches Roastbeef)"></span></div></div><div class="item-price">€18,00</div></div>
   </div>
 
+  <!-- 5. CONTORNI -->
   <div class="section" id="sec-contorni">
     <h2 class="cat-title">🥦 <span data-it="Contorni & Formaggi" data-fr="Accompagnements & Fromages" data-en="Sides & Cheeses" data-de="Beilagen & Käse">Contorni & Formaggi</span></h2>
-    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Assortimento Misto di Formaggi</span><span class="sub-trans" data-it="" data-fr="(Sélection de Fromages)" data-en="(Mixed Cheese Platter)" data-
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Assortimento Misto di Formaggi</span><span class="sub-trans" data-it="" data-fr="(Sélection de Fromages)" data-en="(Mixed Cheese Platter)" data-de="(Gemischte Käseplatte)"></span></div></div><div class="item-price">€10,00</div></div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Grigliata Mista di Verdure</span><span class="sub-trans" data-it="" data-fr="(Légumes Grillés)" data-en="(Mixed Grilled Vegetables)" data-de="(Gegrilltes Gemüse)"></span></div></div><div class="item-price">€10,00</div></div>
+  </div>
+
+  <!-- 6. DOLCE -->
+  <div class="section" id="sec-dolce">
+    <h2 class="cat-title">🍰 <span data-it="I Nostri Dolci" data-fr="Desserts Artisanaux" data-en="Homemade Desserts" data-de="Dessertkarte">I Nostri Dolci</span></h2>
+    <div class="dolce-banner">
+      <h3 data-it="I Dolci di Nostra Production" data-fr="Nos Desserts Fait Maison" data-en="Our Homemade Desserts" data-de="Hausgemachte Desserts">I Dolci di Nostra Produzione</h3>
+      <p data-it="Tutti i nostri dolci sono preparati artigianalmente ogni giorno" data-fr="Tous nos desserts sont préparés avec amour chaque jour" data-en="All our desserts are handcrafted and freshly made every day" data-de="Alle unsere Desserts werden jeden Tag frisch handgemacht">Tutti i nostri dolci sono preparati artigianalmente ogni giorno</p>
+    </div>
+
+    <div class="item">
+      <div class="item-left">
+        <div class="item-name"><span class="notranslate">Tiramisù</span><span class="sub-trans" data-it="" data-fr="(Tiramisu Classique)" data-en="(Classic Tiramisu)" data-de="(Klassisches Tiramisu)"></span></div>
+        <div class="item-desc" data-it="Dolce al caffè con mascarpone e cacao" data-fr="Dessert au café avec mascarpone et cacao" data-en="Traditional coffee dessert with mascarpone cream and cocoa" data-de="Kaffeedessert mit Mascarpone und Kakao">Dolce al caffè con mascarpone e cacao</div>
+      </div>
+      <div class="item-price">€6,00</div>
+    </div>
+
+    <div class="item">
+      <div class="item-left">
+        <div class="item-name"><span class="notranslate">Panna Cotta</span><span class="sub-trans" data-it="" data-fr="(Panna Cotta)" data-en="(Panna Cotta)" data-de="(Panna Cotta)"></span></div>
+        <div class="item-desc" data-it="Dolce cremoso alla vaniglia con salsa di frutta" data-fr="Dessert crémeux à la vanille avec coulis di fruits" data-en="Creamy vanilla pudding served with fruit coulis" data-de="Cremiges Vanilledessert mit Fruchtsauce">Dolce cremoso alla vaniglia con salsa di frutta</div>
+      </div>
+      <div class="item-price">€6,00</div>
+    </div>
+  </div>
+
+  <!-- 7. GELATO -->
+  <div class="section" id="sec-gelato">
+    <h2 class="cat-title">🍦 <span data-it="Gelato Artigianale" data-fr="Glace Artisanale" data-en="Artisan Ice Cream" data-de="Hausgemachtes Eis">Gelato Artigianale</span></h2>
+    
+    <div class="item">
+      <div class="item-left">
+        <div class="item-name">🍦 <span class="notranslate">Vaniglia</span><span class="sub-trans" data-it="" data-fr="(Glace Vanille)" data-en="(Vanilla Ice Cream)" data-de="(Vanilleeis)"></span></div>
+      </div>
+      <div class="item-price">€5,00</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <div class="item-name">🥛 <span class="notranslate">Fiore di Latte</span><span class="sub-trans" data-it="" data-fr="(Crème de Lait)" data-en="(Sweet Milk Cream Ice Cream)" data-de="(Milcheis)"></span></div>
+      </div>
+      <div class="item-price">€5,00</div>
+    </div>
+    <div class="item">
+      <div class="item-left">
+        <div class="item-name">🍫 <span class="notranslate">Cioccolata</span><span class="sub-trans" data-it="" data-fr="(Chocolat)" data-en="(Chocolate Ice Cream)" data-de="(Schokoladeneis)"></span></div>
+      </div>
+      <div class="item-price">€5,00</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Premium Footer -->
+<div class="footer">
+  <div style="letter-spacing:2px" class="notranslate">✦ LAGO BIN ✦</div>
+  <div class="note" data-it="I Menù non sono Divisibili per più Persone" data-fr="Les Menus ne peuvent pas être partagés" data-en="Set menus cannot be shared between multiple guests" data-de="Menüs können nicht auf mehrere Personen aufgeteilt werden">I Menù non sono Divisibili per più Persone</div>
+</div>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({ pageLanguage: 'it', autoDisplay: false }, 'google_translate_element');
+}
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
+  let currentLang = 'it';
+
+  function setLang(lang, el) {
+    currentLang = lang;
+    resetGoogleTranslate();
+
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    if(el) el.classList.add('active');
+
+    document.querySelectorAll('[data-' + lang + ']').forEach(item => {
+      if (!item.classList.contains('sub-trans')) {
+        item.textContent = item.getAttribute('data-' + lang);
+      }
+    });
+
+    // Handle Big Custom Under-Name Translation
+    document.querySelectorAll('.sub-trans').forEach(item => {
+      item.removeAttribute('data-google-translated');
+      let text = item.getAttribute('data-' + lang);
+      if(text && text.trim() !== "") {
+        item.textContent = text;
+        item.style.display = "block";
+        item.classList.add('notranslate'); 
+      } else {
+        item.textContent = "";
+        item.style.display = "none";
+        item.classList.remove('notranslate');
+      }
+    });
+
+    document.getElementById('translateBtn').textContent = '🌐 More Languages ▾';
+    closeDropdown();
+  }
+
+  function setTab(tab, el) {
+    // If no explicit element button passed, find it dynamically
+    let btn = el;
+    if (!btn) {
+      btn = document.querySelector(`.tab-btn[onclick*="${tab}"]`);
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    
+    const targetSection = document.getElementById('sec-' + tab);
+    if(targetSection) {
+      targetSection.classList.add('active');
+    }
+
+    const tabsWrap = document.querySelector('.tabs-wrap');
+    if(tabsWrap) {
+      window.scrollTo({ top: tabsWrap.offsetTop - 10, behavior: 'smooth' });
+    }
+  }
+
+  function toggleDropdown(event) { 
+    if(event) event.stopPropagation();
+    document.getElementById('langDropdown').classList.toggle('open'); 
+  }
+  
+  function closeDropdown() { 
+    document.getElementById('langDropdown').classList.remove('open'); 
+  }
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.translate-wrap')) {
+      closeDropdown();
+    }
+  });
+
+  function googleTranslate(langCode) {
+    closeDropdown();
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('translatingBar').classList.add('show');
+    
+    document.querySelectorAll('.sub-trans').forEach(item => {
+      item.classList.remove('notranslate');
+      let defaultTrans = item.getAttribute('data-en') || item.getAttribute('data-fr');
+      if(defaultTrans) {
+        item.textContent = defaultTrans;
+        item.style.display = "block";
+      }
+    });
+
+    const select = document.querySelector('.goog-te-combo');
+    if (select) {
+      select.value = langCode;
+      select.dispatchEvent(new Event('change'));
+      setTimeout(() => document.getElementById('translatingBar').classList.remove('show'), 2000);
+    } else {
+      document.cookie = "googtrans=/it/" + langCode + "; path=/";
+      setTimeout(() => { window.location.reload(); }, 500);
+    }
+  }
+
+  function resetGoogleTranslate() {
+    document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    const select = document.querySelector('.goog-te-combo');
+    if (select && select.value !== "") {
+      select.value = "";
+      select.dispatchEvent(new Event('change'));
+    }
+  }
+</script>
+</body>
+</html>
