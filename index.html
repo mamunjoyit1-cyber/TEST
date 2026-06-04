@@ -3,95 +3,97 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lago Bin – Menu Professionale</title>
+<title>Lago Bin – Menu Premium</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Palatino Linotype', Palatino, serif; background: #faf6f0; color: #2a1a12; -webkit-font-smoothing: antialiased; }
+  /* Deep Luxury Dark Theme Background */
+  body { font-family: 'Palatino Linotype', Palatino, serif; background: #150e0b; color: #f9f1e2; -webkit-font-smoothing: antialiased; }
 
-  /* Premium Header */
-  .header { background: linear-gradient(135deg, #1f0505 0%, #3d0b0b 50%, #1f0505 100%); padding: 35px 20px 25px; text-align: center; border-bottom: 3px solid #d4af37; }
-  .header .subtitle { color: #d4af37; font-size: 11px; letter-spacing: 6px; text-transform: uppercase; margin-bottom: 12px; opacity: 0.9; font-weight: bold; }
-  .header h1 { color: #f9f1e2; font-size: clamp(32px, 8vw, 46px); font-weight: normal; letter-spacing: 4px; text-shadow: 1px 1px 4px rgba(0,0,0,0.6); }
-  .header .divider { width: 80px; height: 1px; background: #d4af37; margin: 12px auto 0; opacity: 0.8; }
+  /* Premium Luxury Header */
+  .header { background: linear-gradient(135deg, #0f0303 0%, #260707 50%, #0f0303 100%); padding: 40px 20px 30px; text-align: center; border-bottom: 4px solid #d4af37; }
+  .header .subtitle { color: #d4af37; font-size: 12px; letter-spacing: 6px; text-transform: uppercase; margin-bottom: 12px; font-weight: bold; }
+  .header h1 { color: #ffffff; font-size: clamp(34px, 8vw, 48px); font-weight: normal; letter-spacing: 5px; text-shadow: 2px 2px 6px rgba(0,0,0,0.8); }
+  .header .divider { width: 100px; height: 2px; background: #d4af37; margin: 15px auto 0; }
   
-  /* Modern Bar Navigation */
-  .lang-bar { background: #1a0505; padding: 12px 10px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-  .lang-btn { background: rgba(255,255,255,0.06); color: #f9f1e2; border: 1px solid rgba(212,175,55,0.4); border-radius: 25px; padding: 8px 18px; font-size: 14px; cursor: pointer; font-family: inherit; transition: all 0.3s ease; }
-  .lang-btn.active, .lang-btn:hover { background: #d4af37; color: #1a0505; border-color: #d4af37; font-weight: bold; box-shadow: 0 3px 8px rgba(212,175,55,0.3); }
+  /* Navigation Bar */
+  .lang-bar { background: #0b0202; padding: 14px 10px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid rgba(212,175,55,0.2); }
+  .lang-btn { background: rgba(255,255,255,0.05); color: #f9f1e2; border: 1px solid #d4af37; border-radius: 25px; padding: 9px 20px; font-size: 14px; cursor: pointer; font-family: inherit; transition: all 0.3s ease; }
+  .lang-btn.active, .lang-btn:hover { background: #d4af37; color: #150e0b; font-weight: bold; box-shadow: 0 4px 12px rgba(212,175,55,0.4); }
 
   /* Dropdown Styles */
   .translate-wrap { position: relative; display: inline-block; }
-  .translate-btn { background: rgba(255,255,255,0.1); color: #f9f1e2; border: 1px dashed rgba(212,175,55,0.7); border-radius: 25px; padding: 8px 18px; font-size: 14px; cursor: pointer; font-family: inherit; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
-  .translate-btn:hover { background: rgba(212,175,55,0.15); }
-  .lang-dropdown { display: none; position: absolute; top: 115%; left: 50%; transform: translateX(-50%); background: #fff; border: 1px solid #d4af37; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); z-index: 999; min-width: 220px; max-height: 350px; overflow-y: auto; }
+  .translate-btn { background: rgba(255,255,255,0.08); color: #f9f1e2; border: 1px dashed #d4af37; border-radius: 25px; padding: 9px 20px; font-size: 14px; cursor: pointer; font-family: inherit; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .translate-btn:hover { background: rgba(212,175,55,0.2); }
+  .lang-dropdown { display: none; position: absolute; top: 115%; left: 50%; transform: translateX(-50%); background: #221815; border: 2px solid #d4af37; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 999; min-width: 220px; max-height: 350px; overflow-y: auto; }
   .lang-dropdown.open { display: block; }
-  .lang-dropdown-item { padding: 12px 18px; font-size: 15px; cursor: pointer; color: #2a1a12; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f4eae0; transition: background 0.2s; font-family: inherit; }
+  .lang-dropdown-item { padding: 12px 18px; font-size: 15px; cursor: pointer; color: #f9f1e2; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(212,175,55,0.1); transition: background 0.2s; font-family: inherit; }
   .lang-dropdown-item:last-child { border-bottom: none; }
-  .lang-dropdown-item:hover { background: #fdf5e6; color: #8b1a1a; font-weight: bold; }
-  .lang-dropdown-section { padding: 10px 18px 6px; font-size: 12px; font-weight: bold; color: #aa8445; text-transform: uppercase; letter-spacing: 2px; background: #faf4eb; border-bottom: 1px solid #eadecc; }
+  .lang-dropdown-item:hover { background: #3d0b0b; color: #d4af37; font-weight: bold; }
+  .lang-dropdown-section { padding: 10px 18px 6px; font-size: 11px; font-weight: bold; color: #d4af37; text-transform: uppercase; letter-spacing: 2px; background: #1a110e; border-bottom: 1px solid rgba(212,175,55,0.2); }
 
-  /* Premium Navigation Cards */
-  .quick-cards { display: flex; gap: 14px; padding: 16px; background: #eae0d5; border-bottom: 1px solid #dcd0c0; justify-content: center; flex-wrap: wrap; }
-  .quick-card { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid #c5a880; border-radius: 12px; padding: 12px 22px; cursor: pointer; text-decoration: none; color: #2a1a12; font-family: inherit; font-size: 15px; font-weight: bold; transition: all 0.3s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
-  .quick-card:hover { background: #3d0b0b; color: #f9f1e2; border-color: #3d0b0b; transform: translateY(-2px); box-shadow: 0 5px 12px rgba(0,0,0,0.15); }
+  /* Quick Navigation Cards */
+  .quick-cards { display: flex; gap: 16px; padding: 18px; background: #1f1512; border-bottom: 1px solid rgba(212,175,55,0.1); justify-content: center; flex-wrap: wrap; }
+  .quick-card { display: flex; align-items: center; gap: 12px; background: #2a1d19; border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 12px 24px; cursor: pointer; text-decoration: none; color: #f9f1e2; font-family: inherit; font-size: 15px; font-weight: bold; transition: all 0.3s ease; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+  .quick-card:hover { background: #d4af37; color: #150e0b; border-color: #d4af37; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(212,175,55,0.4); }
   .quick-card .card-icon { font-size: 22px; }
   .quick-card .card-text { display: flex; flex-direction: column; }
-  .quick-card .card-label { font-size: 12px; color: #8a6d48; font-weight: normal; font-style: italic; margin-top: 1px; }
-  .quick-card:hover .card-label { color: #d4af37; }
+  .quick-card .card-label { font-size: 12px; color: #bca07d; font-weight: normal; font-style: italic; margin-top: 1px; }
+  .quick-card:hover .card-label { color: #4a361c; }
 
-  .translating-bar { display: none; background: #fff9e6; padding: 12px 20px; text-align: center; font-size: 14px; color: #856404; border-bottom: 1px solid #ffeeba; font-weight: bold; }
+  .translating-bar { display: none; background: #fff3cd; padding: 12px 20px; text-align: center; font-size: 14px; color: #856404; border-bottom: 1px solid #ffeeba; font-weight: bold; }
   .translating-bar.show { display: block; }
 
-  /* Categories Tabs */
-  .tabs-wrap { background: #fff; border-bottom: 2px solid #eadecc; width: 100%; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
-  .tabs { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 10px; padding: 12px 16px; -webkit-overflow-scrolling: touch; justify-content: flex-start; }
+  /* Sticky Category Tabs */
+  .tabs-wrap { background: #1a110e; border-bottom: 3px solid #d4af37; width: 100%; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
+  .tabs { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 12px; padding: 14px 16px; -webkit-overflow-scrolling: touch; justify-content: flex-start; }
   .tabs::-webkit-scrollbar { display: none; }
-  .tab-btn { background: #faf6f0; border: 1px solid #eadecc; border-radius: 20px; color: #5a4a40; padding: 10px 18px; font-size: 14px; cursor: pointer; font-family: inherit; white-space: nowrap; transition: all 0.2s; font-weight: 600; }
-  .tab-btn.active { background: #3d0b0b; color: #f9f1e2; border-color: #3d0b0b; box-shadow: 0 3px 6px rgba(61,11,11,0.2); }
+  .tab-btn { background: #2a1d19; border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; color: #d4af37; padding: 10px 20px; font-size: 14px; cursor: pointer; font-family: inherit; white-space: nowrap; transition: all 0.2s; font-weight: 600; }
+  .tab-btn.active { background: #d4af37; color: #150e0b; border-color: #d4af37; box-shadow: 0 4px 8px rgba(212,175,55,0.3); }
  
-  /* Content & Luxury Menu Items Container */
-  .content { padding: 25px 16px 50px; max-width: 750px; margin: 0 auto; }
-  .cat-title { text-align: center; color: #3d0b0b; font-weight: normal; font-size: 24px; letter-spacing: 2px; margin-bottom: 25px; border-bottom: 2px solid #c5a880; padding-bottom: 14px; text-transform: uppercase; }
+  /* Main Container & Professional White/Cream Cards */
+  .content { padding: 30px 16px 60px; max-width: 750px; margin: 0 auto; }
+  .cat-title { text-align: center; color: #d4af37; font-weight: normal; font-size: 26px; letter-spacing: 3px; margin-bottom: 30px; border-bottom: 1px solid #d4af37; padding-bottom: 14px; text-transform: uppercase; }
 
-  .item { background: #fff; border-radius: 14px; padding: 20px 22px; margin-bottom: 14px; box-shadow: 0 3px 10px rgba(42,26,18,0.06); border: 1px solid #eadecc; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; transition: transform 0.2s; }
-  .item:hover { transform: translateY(-1px); box-shadow: 0 5px 15px rgba(42,26,18,0.1); }
+  /* Premium High-Contrast Food Cards */
+  .item { background: #fffbf4; border-radius: 14px; padding: 22px 24px; margin-bottom: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 1px solid #d4af37; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; transition: transform 0.2s; color: #1a0505; }
+  .item:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(212,175,55,0.2); }
   .item-left { flex: 1; }
   
-  /* ফন্ট সাইজ বড় করা হয়েছে */
-  .item-name { font-weight: bold; font-size: 17px; color: #1a0505; line-height: 1.4; letter-spacing: 0.3px; }
+  /* খাবারের নাম আরও বড় ও বোল্ড */
+  .item-name { font-weight: 800; font-size: 18px; color: #110303; line-height: 1.4; letter-spacing: 0.3px; }
   
-  /* অনুবাদিত ব্র্যাকেটের ফন্ট বড় এবং স্পষ্ট করা হয়েছে */
-  .sub-trans { font-size: 15px; color: #403028; font-weight: 600; display: none; margin-top: 5px; font-style: italic; background: #fdf8f2; padding: 2px 8px; border-radius: 4px; border-left: 3px solid #d4af37; }
+  /* অনূদিত টেক্সট ডিজাইন - অত্যন্ত স্পষ্ট ও বড় */
+  .sub-trans { font-size: 16px; color: #2d1b10; font-weight: bold; display: none; margin-top: 6px; font-style: italic; background: #f5ede0; padding: 4px 10px; border-radius: 6px; border-left: 4px solid #b31e1e; }
   
-  .item-desc { font-size: 14px; color: #605048; font-style: italic; line-height: 1.6; margin-top: 6px; }
-  .item-price { font-size: 17px; font-weight: bold; color: #3d0b0b; white-space: nowrap; flex-shrink: 0; background: #faf4eb; padding: 4px 10px; border-radius: 8px; border: 1px solid #eadecc; }
+  .item-desc { font-size: 14.5px; color: #4f3f35; font-style: italic; line-height: 1.6; margin-top: 6px; font-weight: 500; }
+  .item-price { font-size: 18px; font-weight: 800; color: #b31e1e; white-space: nowrap; flex-shrink: 0; background: #fdf5e6; padding: 6px 12px; border-radius: 8px; border: 1px solid #d4af37; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-  /* Premium Box for Packages Inner Content */
-  .piatti-box { background: linear-gradient(180deg, #fdfbfa, #faf2e8); border: 1px solid #c5a880; border-radius: 14px; padding: 22px; margin-top: 20px; box-shadow: inset 0 0 10px rgba(0,0,0,0.02); }
-  .piatti-box-title { text-align: center; color: #3d0b0b; font-size: 19px; font-weight: bold; margin-bottom: 4px; letter-spacing: 1px; text-transform: uppercase; }
-  .piatti-box-subtitle { text-align: center; color: #7a6550; font-size: 13px; font-style: italic; margin-bottom: 20px; }
-  .piatti-subhead { font-size: 13px; font-weight: bold; color: #3d0b0b; margin: 16px 0 8px; text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px solid #eadecc; padding-bottom: 4px; }
-  .piatti-item { font-size: 14.5px; color: #2a1a12; padding: 8px 0; border-bottom: 1px dotted #dcd0c0; line-height: 1.5; font-weight: 500; }
+  /* Package Content Premium Box */
+  .piatti-box { background: linear-gradient(180deg, #1f1411, #120907); border: 2px solid #d4af37; border-radius: 14px; padding: 24px; margin-top: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.4); color: #f9f1e2; }
+  .piatti-box-title { text-align: center; color: #d4af37; font-size: 20px; font-weight: bold; margin-bottom: 4px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .piatti-box-subtitle { text-align: center; color: #bca07d; font-size: 14px; font-style: italic; margin-bottom: 22px; }
+  .piatti-subhead { font-size: 14px; font-weight: bold; color: #d4af37; margin: 18px 0 10px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 6px; }
+  .piatti-item { font-size: 15px; color: #f9f1e2; padding: 9px 0; border-bottom: 1px dotted rgba(212,175,55,0.2); line-height: 1.5; font-weight: 500; }
   .piatti-item:last-child { border-bottom: none; }
-  .piatti-sauce { font-size: 13.5px; color: #6a5545; font-style: italic; font-weight: normal; display: block; margin-top: 2px; }
+  .piatti-sauce { font-size: 14px; color: #d4af37; font-style: italic; font-weight: normal; display: block; margin-top: 3px; }
   
-  /* Children Menu Grid Grid */
-  .bambini-grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 8px !important; margin-top: 14px; margin-bottom: 14px; }
-  .bambini-item { background: #fff; border: 1px solid #eadecc; border-radius: 8px; padding: 10px 14px; font-size: 14px; color: #2a1a12; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+  /* Children Menu Grid */
+  .bambini-grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; margin-top: 14px; margin-bottom: 14px; }
+  .bambini-item { background: #fdf5e6; border: 1px solid #c5a880; border-radius: 8px; padding: 12px 14px; font-size: 15px; color: #1a0505; font-weight: bold; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-  .note-box { background: #fffaf0; border: 1px solid #d4af37; border-radius: 12px; padding: 16px; margin-top: 16px; font-size: 13.5px; color: #705520; line-height: 1.6; }
-  .note-box strong { color: #403000; font-style: normal; font-size: 15px; }
+  .note-box { background: rgba(212,175,55,0.08); border: 1px dashed #d4af37; border-radius: 12px; padding: 18px; margin-top: 18px; font-size: 14px; color: #e1c084; line-height: 1.6; }
+  .note-box strong { color: #d4af37; font-size: 16px; }
 
-  .dolce-banner { background: linear-gradient(135deg, #fffaf5, #f5eae0); border: 1px solid #c5a880; border-radius: 14px; padding: 22px; margin-bottom: 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-  .dolce-banner h3 { color: #3d0b0b; font-size: 18px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-  .dolce-banner p { color: #605048; font-size: 14px; font-style: italic; }
+  .dolce-banner { background: linear-gradient(135deg, #2a1d19, #1a110e); border: 1px solid #d4af37; border-radius: 14px; padding: 24px; margin-bottom: 25px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  .dolce-banner h3 { color: #d4af37; font-size: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .dolce-banner p { color: #bca07d; font-size: 14.5px; font-style: italic; }
 
   .section { display: none; }
   .section.active { display: block; }
 
-  /* Premium Footer */
-  .footer { background: #1a0505; color: #d4af37; text-align: center; padding: 25px 20px; font-size: 13px; border-top: 2px solid #d4af37; margin-top: 40px; }
-  .footer .note { color: #a59080; font-size: 12px; font-style: italic; margin-top: 8px; }
+  /* Premium Luxury Footer */
+  .footer { background: #0b0202; color: #d4af37; text-align: center; padding: 30px 20px; font-size: 14px; border-top: 3px solid #d4af37; margin-top: 50px; }
+  .footer .note { color: #bca07d; font-size: 13px; font-style: italic; margin-top: 10px; }
 
   /* Google Translate Protections */
   #google_translate_element { display: none; }
@@ -104,10 +106,10 @@
 
 <div id="google_translate_element"></div>
 
-<!-- Header -->
+<!-- Luxury Header -->
 <div class="header">
-  <div style="display:flex;align-items:center;justify-content:center;gap:16px;">
-    <img src="images.jpeg" style="width:80px;height:80px;object-fit:contain;background:#fff;padding:6px;border-radius:20px;box-shadow:0 4px 15px rgba(0,0,0,0.25); border: 1px solid #d4af37;">
+  <div style="display:flex;align-items:center;justify-content:center;gap:18px;">
+    <img src="images.jpeg" style="width:85px;height:85px;object-fit:contain;background:#fff;padding:6px;border-radius:20px;box-shadow:0 4px 15px rgba(212,175,55,0.3); border: 2px solid #d4af37;">
     <div>
       <div class="subtitle">✦ RISTORANTE LUXURY ✦</div>
       <h1 class="notranslate">LAGO BIN</h1>
@@ -116,7 +118,7 @@
   </div>
 </div>
 
-<!-- Navigation & Bar -->
+<!-- Navigation Bar -->
 <div class="lang-bar">
   <button class="lang-btn active" onclick="setLang('it', this)">🇮🇹 Italiano</button>
   <button class="lang-btn" onclick="setLang('fr', this)">🇫🇷 Français</button>
@@ -135,7 +137,7 @@
   </div>
 </div>
 
-<!-- Quick Cards -->
+<!-- Quick Link Cards -->
 <div class="quick-cards">
   <a class="quick-card" href="https://www.wineappy.it/lago-bin/" target="_blank">
     <div class="card-icon">🍷</div>
@@ -230,11 +232,11 @@
       <div class="note-box">
         <strong>(*)</strong>
         <span data-it=" Non sarà Servito il Sabato Sera, la Domenica a Pranzo e nei Festivi." data-fr=" Ne sera pas servi le Samedi Soir, le Dimanche à midi et les Jours de Fête." data-en=" Not served Saturday evenings, Sunday lunch & public holidays." data-de=" Wird am Samstagabend, Sonntagmittag und an Feiertagen nicht serviert."> Non sarà Servito il Sabato Sera, la Domenica a Pranzo e nei Festivi.</span>
-        <br>
+        <br><br>
         <span data-it="I Menù non sono Divisibili per più Persone." data-fr="Les Menus ne peuvent pas être partagés entre plusieurs personnes." data-en="Set menus cannot be shared between guests." data-de="Menüs können nicht auf mehrere Personen aufgeteilt werden.">I Menù non sono Divisibili per più Persone.</span>
       </div>
 
-      <!-- Piatti del Menu Box -->
+      <!-- Piatti del Menu Box (Integrated Luxury Design) -->
       <div class="piatti-box">
         <div class="piatti-box-title" data-it="Piatti inclusi nei Menù" data-fr="Plats inclus dans les Menus" data-en="Dishes included in the Menus" data-de="In den Menüs enthaltene Gerichte">Piatti inclusi nei Menù</div>
         <div class="piatti-box-subtitle" data-it="(Valido per Gastronomico e Degustazione)" data-fr="(Valable pour Gastronomique et Dégustation)" data-en="(Valid for Gastronomic and Tasting)" data-de="(Gültig für gastronomische und Verkostungsmenüs)">(Valido per Gastronomico e Degustazione)</div>
@@ -326,7 +328,7 @@
   <div class="section" id="sec-dolce">
     <h2 class="cat-title">🍰 <span data-it="I Nostri Dolci" data-fr="Desserts Artisanaux" data-en="Homemade Desserts" data-de="Dessertkarte">I Nostri Dolci</span></h2>
     <div class="dolce-banner">
-      <h3 data-it="I Dolci di Nostra Produzione" data-fr="Nos Desserts Fait Maison" data-en="Our Homemade Desserts" data-de="Hausgemachte Desserts">I Dolci di Nostra Produzione</h3>
+      <h3 data-it="I Dolci di Nostra Production" data-fr="Nos Desserts Fait Maison" data-en="Our Homemade Desserts" data-de="Hausgemachte Desserts">I Dolci di Nostra Produzione</h3>
       <p data-it="Tutti i nostri dolci sono preparati artigianalmente ogni giorno" data-fr="Tous nos desserts sont préparés avec amour chaque jour" data-en="All our desserts are handcrafted and freshly made every day" data-de="Alle unsere Desserts werden jeden Tag frisch handgemacht">Tutti i nostri dolci sono preparati artigianalmente ogni giorno</p>
     </div>
 
@@ -373,7 +375,7 @@
 
 </div>
 
-<!-- Footer -->
+<!-- Premium Footer -->
 <div class="footer">
   <div style="letter-spacing:2px" class="notranslate">✦ LAGO BIN ✦</div>
   <div class="note" data-it="I Menù non sono Divisibili per più Persone" data-fr="Les Menus ne peuvent pas être partagés" data-en="Set menus cannot be shared between multiple guests" data-de="Menüs können nicht auf mehrere Personen aufgeteilt werden">I Menù non sono Divisibili per più Persone</div>
@@ -396,14 +398,13 @@ function googleTranslateElementInit() {
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
     if(el) el.classList.add('active');
 
-    // Descriptions & Content Changes
     document.querySelectorAll('[data-' + lang + ']').forEach(item => {
       if (!item.classList.contains('sub-trans')) {
         item.textContent = item.getAttribute('data-' + lang);
       }
     });
 
-    // Custom Translations under Name
+    // Handle Big Custom Under-Name Translation
     document.querySelectorAll('.sub-trans').forEach(item => {
       item.removeAttribute('data-google-translated');
       let text = item.getAttribute('data-' + lang);
