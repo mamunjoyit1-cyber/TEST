@@ -43,11 +43,81 @@
   .translating-bar.show { display: block; }
 
   /* Sticky Tabs */
-  .tabs-wrap { background: #1a110e; border-bottom: 3px solid #d4af37; width: 100%; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
-  .tabs { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 12px; padding: 14px 16px; -webkit-overflow-scrolling: touch; justify-content: flex-start; }
-  .tabs::-webkit-scrollbar { display: none; }
-  .tab-btn { background: #2a1d19; border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; color: #d4af37; padding: 10px 20px; font-size: 14px; cursor: pointer; font-family: inherit; white-space: nowrap; transition: all 0.2s; font-weight: 600; }
-  .tab-btn.active { background: #d4af37; color: #150e0b; border-color: #d4af37; box-shadow: 0 4px 8px rgba(212,175,55,0.3); }
+  /* Desktop / Default */
+.tabs-wrap {
+  width: 100%;
+  overflow: visible;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  background: #fff;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #7a6a5a;
+  padding: 13px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tab-btn.active {
+  border-bottom-color: #8b1a1a;
+  color: #8b1a1a;
+  font-weight: bold;
+}
+
+/* MOBILE VERSION — vertical stacked menu buttons */
+@media (max-width: 600px) {
+
+  .tabs-wrap {
+    overflow: visible;
+  }
+
+  .tabs {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .tab-btn {
+    width: 100%;
+    text-align: center;
+    padding: 16px 14px;
+    font-size: 16px;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid #d4a870;
+    color: #2c1810;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tab-btn.active {
+    background: #8b1a1a;
+    color: #f5e6c8;
+    border-color: #8b1a1a;
+  }
+}
+
  
   /* Main Content Layout */
   .content { padding: 30px 16px 60px; max-width: 750px; margin: 0 auto; }
