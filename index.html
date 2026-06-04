@@ -23,12 +23,12 @@
   .translate-wrap { position: relative; display: inline-block; }
   .translate-btn { background: rgba(255,255,255,0.08); color: #f9f1e2; border: 1px dashed #d4af37; border-radius: 25px; padding: 9px 20px; font-size: 14px; cursor: pointer; font-family: inherit; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
   .translate-btn:hover { background: rgba(212,175,55,0.2); }
-  .lang-dropdown { display: none; position: absolute; top: 115%; left: 50%; transform: translateX(-50%); background: #221815; border: 2px solid #d4af37; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 999; min-width: 220px; max-height: 350px; overflow-y: auto; }
+  .lang-dropdown { display: none; position: absolute; top: 115%; left: 50%; transform: translateX(-50%); background: #221815; border: 2px solid #d4af37; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 999; min-width: 260px; max-height: 400px; overflow-y: auto; }
   .lang-dropdown.open { display: block; }
-  .lang-dropdown-item { padding: 12px 18px; font-size: 15px; cursor: pointer; color: #f9f1e2; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(212,175,55,0.1); transition: background 0.2s; font-family: inherit; }
+  .lang-dropdown-item { padding: 12px 18px; font-size: 14.5px; cursor: pointer; color: #f9f1e2; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(212,175,55,0.1); transition: background 0.2s; font-family: inherit; }
   .lang-dropdown-item:last-child { border-bottom: none; }
   .lang-dropdown-item:hover { background: #3d0b0b; color: #d4af37; font-weight: bold; }
-  .lang-dropdown-section { padding: 10px 18px 6px; font-size: 11px; font-weight: bold; color: #d4af37; text-transform: uppercase; letter-spacing: 2px; background: #1a110e; border-bottom: 1px solid rgba(212,175,55,0.2); }
+  .lang-dropdown-section { padding: 10px 18px 6px; font-size: 11px; font-weight: bold; color: #d4af37; text-transform: uppercase; letter-spacing: 2px; background: #1a110e; border-bottom: 1px solid rgba(212,175,55,0.2); position: sticky; top: 0; z-index: 10; }
 
   /* Quick Cards */
   .quick-cards { display: flex; gap: 16px; padding: 18px; background: #1f1512; border-bottom: 1px solid rgba(212,175,55,0.1); justify-content: center; flex-wrap: wrap; }
@@ -120,11 +120,40 @@
   <div class="translate-wrap">
     <button class="translate-btn" onclick="toggleDropdown(event)" id="translateBtn">🌐 More Languages ▾</button>
     <div class="lang-dropdown" id="langDropdown">
-      <div class="lang-dropdown-section">🇪🇺 Europa</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('es')">🇪🇸 Español – Spanish</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('pt')">🇵🇹 Português – Portuguese</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('ru')">🇷🇺 Русский – Russian</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('nl')">🇳🇱 Nederlands – Dutch</div>
+      <div class="lang-dropdown-section">🇪🇺 Europe</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('es')">🇪🇸 Español</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('pt')">🇵🇹 Português</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('ru')">🇷🇺 Русский</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('nl')">🇳🇱 Nederlands</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('pl')">🇵🇱 Polski</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('sv')">🇸🇪 Svenska</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('ro')">🇷🇴 Română</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('el')">🇬🇷 Ελληνικά</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('cs')">🇨🇿 Čeština</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('hu')">🇭🇺 Magyar</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('uk')">🇺🇦 Українська</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('da')">🇩🇰 Dansk</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('fi')">🇫🇮 Suomi</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('no')">🇳🇴 Norsk</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('sk')">🇸🇰 Slovenčina</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('bg')">🇧🇬 Български</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('hr')">🇭🇷 Hrvatski</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('sr')">🇷🇸 Српски</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('sq')">🇦🇱 Shqip</div>
+      
+      <div class="lang-dropdown-section">🌍 Other / World</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('ar')">🇦🇪 العربية</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('tr')">🇹🇷 Türkçe</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('zh-CN')">🇨🇳 中文</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('ja')">🇯🇵 日本語</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('ko')">🇰🇷 한국어</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('hi')">🇮🇳 हिन्दी</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('bn')">🇧🇩 বাংলা</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('th')">🇹🇭 ไทย</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('vi')">🇻🇳 Tiếng Việt</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('id')">🇮🇩 Bahasa Indonesia</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('fa')">🇮🇷 فارسی</div>
+      <div class="lang-dropdown-item" onclick="googleTranslate('iw')">🇮🇱 עברית</div>
     </div>
   </div>
 </div>
@@ -276,8 +305,6 @@
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Brandacujan</span><span class="sub-trans" data-it="" data-fr="(Brandacujan - Brandade de morue)" data-en="(Brandacujan - Traditional Stockfish Spread)" data-de="(Pürierter Stockfisch)"></span></div></div><div class="item-price">€15,00</div></div>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Tartare di Manzo al Coltello</span><span class="sub-trans" data-it="" data-fr="(Tartare de Bœuf)" data-en="(Hand-cut Beef Tartare)" data-de="(Rindertatar händisch geschnitten)"></span></div></div><div class="item-price">€20,00</div></div>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Tomino d'Alpeggio Caldo</span><span class="sub-trans" data-it="" data-fr="(Tomino d'Alpeggio Chaud)" data-en="(Warm Alpine Tomino Cheese)" data-de="(Warmer Alpen-Tomino-Käse)"></span></div></div><div class="item-price">€12,00</div></div>
-    
-    <!-- Added Seafood starters -->
     <div class="item">
       <div class="item-left">
         <div class="item-name"><span class="notranslate">Tartare di Pesce</span><span class="sub-trans" data-it="" data-fr="(Tartare de Poisson)" data-en="(Fish Tartare)" data-de="(Fisch-Tatar)"></span></div>
@@ -288,7 +315,7 @@
     <div class="item">
       <div class="item-left">
         <div class="item-name"><span class="notranslate">Antipasto Misto di Mare</span><span class="sub-trans" data-it="" data-fr="(Entrée de Mer Mixte)" data-en="(Mixed Seafood Starter)" data-de="(Gemischte Meeresfrüchte-Vorspeise)"></span></div>
-        <div class="item-desc" data-it="Secondo disponibilità" data-fr="Selon disponibilité" data-en="Subject to availability" data-de="Je nach Verfügbarkeit">Secondo disponibilità</div>
+        <div class="item-desc" data-it="Secondo disponibilità" data-fr="Selon availability" data-en="Subject to availability" data-de="Je nach Verfügbarkeit">Secondo disponibilità</div>
       </div>
       <div class="item-price">€25,00*</div>
     </div>
@@ -321,7 +348,7 @@
     <div class="item">
       <div class="item-left">
         <div class="item-name"><span class="notranslate">Tagliatelle ai Frutti di Mare</span><span class="sub-trans" data-it="" data-fr="(Tagliatelles aux Fruits de Mer)" data-en="(Seafood Tagliatelle)" data-de="(Tagliatelle mit Meeresfrüchten)"></span></div>
-        <div class="item-desc" data-it="Con frutti di mare freschi" data-fr="Avec fruits de mer frais" data-en="With fresh seafood" data-de="Mit frischen Meeresfrüchten">Con frutti di mare freschi</div>
+        <div class="item-desc" data-it="Con frutti di mare frescos" data-fr="Avec fruits de mer frais" data-en="With fresh seafood" data-de="Mit frischen Meeresfrüchten">Con frutti di mare freschi</div>
       </div>
       <div class="item-price">€18,00</div>
     </div>
