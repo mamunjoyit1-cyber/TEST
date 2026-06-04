@@ -3,279 +3,102 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lago Bin – Menu</title>
+<title>Lago Bin – Menu Premium</title>
 <style>
-  /* Base Reset & Core Clean Bright Theme */
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { 
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-    background: #fdfbf7; /* Elegant Warm Light Background */
-    color: #333333; 
-    top: 0 !important;
-  }
+  /* Deep Luxury Dark Theme Background */
+  body { font-family: 'Palatino Linotype', Palatino, serif; background: #150e0b; color: #f9f1e2; -webkit-font-smoothing: antialiased; }
 
-  /* Header Section */
-  .header { 
-    background: #ffffff; 
-    padding: 24px 20px 20px; 
-    text-align: center; 
-    border-bottom: 1px solid #eae5dc;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-  }
-  .header .subtitle { color: #8e703f; font-size: 11px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 8px; font-weight: bold; }
-  .header h1 { color: #222222; font-size: clamp(26px, 6vw, 38px); font-weight: 700; letter-spacing: 2px; }
-  .header .divider { width: 50px; height: 2px; background: #c5a880; margin: 12px auto 0; }
-
-  /* Language Bar Styling */
-  .lang-bar {
-    background: #f4f0e8;
-    padding: 10px;
-    border-bottom: 1px solid #eae5dc;
-    display: flex; 
-    justify-content: center; 
-    gap: 8px; 
-    flex-wrap: wrap;
-    max-width: 100%;
-  }
-  .lang-btn { 
-    background: #ffffff; 
-    color: #555555; 
-    border: 1px solid #d1c9bc; 
-    border-radius: 20px; 
-    padding: 6px 14px; 
-    font-size: 13px; 
-    cursor: pointer; 
-    font-family: inherit; 
-    transition: all 0.2s; 
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  }
-  .lang-btn.active { background: #8e703f; color: #ffffff; border-color: #8e703f; font-weight: bold; }
-
-  /* Dropdown Settings */
-  .translate-wrap { position: relative; display: inline-block; }
-  .translate-btn { 
-    background: #ffffff; 
-    color: #555555; 
-    border: 1px dashed #8e703f; 
-    border-radius: 20px; 
-    padding: 6px 14px; 
-    font-size: 13px; 
-    cursor: pointer; 
-    font-family: inherit; 
-    transition: all 0.2s; 
-    display: flex; 
-    align-items: center; 
-    gap: 6px; 
-  }
-  .translate-btn:hover { background: #fcfbfa; border-style: solid; }
+  /* Premium Luxury Header */
+  .header { background: linear-gradient(135deg, #0f0303 0%, #260707 50%, #0f0303 100%); padding: 40px 20px 30px; text-align: center; border-bottom: 4px solid #d4af37; }
+  .header .subtitle { color: #d4af37; font-size: 12px; letter-spacing: 6px; text-transform: uppercase; margin-bottom: 12px; font-weight: bold; }
+  .header h1 { color: #ffffff; font-size: clamp(34px, 8vw, 48px); font-weight: normal; letter-spacing: 5px; text-shadow: 2px 2px 6px rgba(0,0,0,0.8); }
+  .header .divider { width: 100px; height: 2px; background: #d4af37; margin: 15px auto 0; }
   
-  .lang-dropdown { 
-    display: none; 
-    position: absolute; 
-    top: 110%; 
-    left: 50%; 
-    transform: translateX(-50%); 
-    background: #ffffff; 
-    border: 1px solid #c5a880; 
-    border-radius: 10px; 
-    box-shadow: 0 5px 20px rgba(0,0,0,0.15); 
-    z-index: 999; 
-    min-width: 220px; 
-    max-height: 300px; 
-    overflow-y: auto; 
-  }
+  /* Navigation Bar */
+  .lang-bar { background: #0b0202; padding: 14px 10px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid rgba(212,175,55,0.2); }
+  .lang-btn { background: rgba(255,255,255,0.05); color: #f9f1e2; border: 1px solid #d4af37; border-radius: 25px; padding: 9px 20px; font-size: 14px; cursor: pointer; font-family: inherit; transition: all 0.3s ease; }
+  .lang-btn.active, .lang-btn:hover { background: #d4af37; color: #150e0b; font-weight: bold; box-shadow: 0 4px 12px rgba(212,175,55,0.4); }
+
+  /* Dropdown Styles */
+  .translate-wrap { position: relative; display: inline-block; }
+  .translate-btn { background: rgba(255,255,255,0.08); color: #f9f1e2; border: 1px dashed #d4af37; border-radius: 25px; padding: 9px 20px; font-size: 14px; cursor: pointer; font-family: inherit; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .translate-btn:hover { background: rgba(212,175,55,0.2); }
+  .lang-dropdown { display: none; position: absolute; top: 115%; left: 50%; transform: translateX(-50%); background: #221815; border: 2px solid #d4af37; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 999; min-width: 220px; max-height: 350px; overflow-y: auto; }
   .lang-dropdown.open { display: block; }
-  .lang-dropdown-item { 
-    padding: 10px 14px; 
-    font-size: 14px; 
-    cursor: pointer; 
-    color: #444444; 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    border-bottom: 1px solid #f4f0e8; 
-    transition: background 0.15s; 
-    font-family: inherit;
-    text-align: left;
-  }
+  .lang-dropdown-item { padding: 12px 18px; font-size: 15px; cursor: pointer; color: #f9f1e2; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(212,175,55,0.1); transition: background 0.2s; font-family: inherit; }
   .lang-dropdown-item:last-child { border-bottom: none; }
-  .lang-dropdown-item:hover { background: #f4f0e8; color: #8e703f; }
-  .lang-dropdown-section { 
-    padding: 6px 14px 4px; 
-    font-size: 11px; 
-    font-weight: bold; 
-    color: #8e703f; 
-    text-transform: uppercase; 
-    letter-spacing: 1px; 
-    background: #faf8f5; 
-    border-bottom: 1px solid #eae5dc; 
-    position: sticky;
-    top: 0;
-  }
+  .lang-dropdown-item:hover { background: #3d0b0b; color: #d4af37; font-weight: bold; }
+  .lang-dropdown-section { padding: 10px 18px 6px; font-size: 11px; font-weight: bold; color: #d4af37; text-transform: uppercase; letter-spacing: 2px; background: #1a110e; border-bottom: 1px solid rgba(212,175,55,0.2); }
 
-  /* Quick Cards */
-  .quick-cards { display: flex; gap: 10px; padding: 12px 16px; background: #fcfbfa; border-bottom: 1px solid #eae5dc; justify-content: center; flex-wrap: wrap; }
-  .quick-card { 
-    display: flex; 
-    align-items: center; 
-    gap: 8px; 
-    background: #ffffff; 
-    border: 1px solid #d1c9bc; 
-    border-radius: 8px; 
-    padding: 8px 16px; 
-    cursor: pointer; 
-    text-decoration: none; 
-    color: #444444; 
-    font-family: inherit; 
-    font-size: 14px; 
-    font-weight: 600; 
-    transition: all 0.2s; 
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04); 
-  }
-  .quick-card:hover { border-color: #8e703f; background: #faf8f5; transform: translateY(-1px); }
-  .quick-card .card-icon { font-size: 18px; }
-  .quick-card .card-text { display: flex; flex-direction: column; text-align: left; }
-  .quick-card .card-label { font-size: 11px; color: #888888; font-weight: normal; font-style: italic; }
+  /* Quick Navigation Cards */
+  .quick-cards { display: flex; gap: 16px; padding: 18px; background: #1f1512; border-bottom: 1px solid rgba(212,175,55,0.1); justify-content: center; flex-wrap: wrap; }
+  .quick-card { display: flex; align-items: center; gap: 12px; background: #2a1d19; border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 12px 24px; cursor: pointer; text-decoration: none; color: #f9f1e2; font-family: inherit; font-size: 15px; font-weight: bold; transition: all 0.3s ease; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+  .quick-card:hover { background: #d4af37; color: #150e0b; border-color: #d4af37; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(212,175,55,0.4); }
+  .quick-card .card-icon { font-size: 22px; }
+  .quick-card .card-text { display: flex; flex-direction: column; }
+  .quick-card .card-label { font-size: 12px; color: #bca07d; font-weight: normal; font-style: italic; margin-top: 1px; }
+  .quick-card:hover .card-label { color: #4a361c; }
 
-  /* Translating Alert Bar */
-  .translating-bar { display: none; background: #fff9e6; padding: 8px 20px; text-align: center; font-size: 13px; color: #b28500; border-bottom: 1px solid #ffe699; font-weight: 500; }
+  .translating-bar { display: none; background: #fff3cd; padding: 12px 20px; text-align: center; font-size: 14px; color: #856404; border-bottom: 1px solid #ffeeba; font-weight: bold; }
   .translating-bar.show { display: block; }
 
-  /* Tabs Navigation Setup */
-  .tabs-wrap {
-    background: #ffffff;
-    border-bottom: 1px solid #d1c9bc;
-    width: 100%;
-    max-width: 100vw;
-    box-sizing: border-box;
-    overflow: hidden;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-  }
-  .tabs {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2px;
-    padding: 6px;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  .tab-btn { 
-    background: none; 
-    border: none; 
-    border-bottom: 3px solid transparent; 
-    color: #666666; 
-    padding: 10px 12px; 
-    font-size: 13px; 
-    cursor: pointer; 
-    font-family: inherit; 
-    white-space: nowrap; 
-    transition: all 0.2s; 
-    font-weight: 500;
-  }
-  .tab-btn.active { border-bottom-color: #8e703f; color: #8e703f; font-weight: bold; background: #faf8f5; border-radius: 4px 4px 0 0; }
+  /* Sticky Category Tabs */
+  .tabs-wrap { background: #1a110e; border-bottom: 3px solid #d4af37; width: 100%; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
+  .tabs { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 12px; padding: 14px 16px; -webkit-overflow-scrolling: touch; justify-content: flex-start; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { background: #2a1d19; border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; color: #d4af37; padding: 10px 20px; font-size: 14px; cursor: pointer; font-family: inherit; white-space: nowrap; transition: all 0.2s; font-weight: 600; }
+  .tab-btn.active { background: #d4af37; color: #150e0b; border-color: #d4af37; box-shadow: 0 4px 8px rgba(212,175,55,0.3); }
  
-  /* Content & Menu Items Layout */
-  .content { padding: 20px 16px 40px; max-width: 700px; margin: 0 auto; }
-  .cat-title { text-align: center; color: #222222; font-weight: 700; font-size: 20px; margin-bottom: 20px; border-bottom: 2px solid #8e703f; padding-bottom: 8px; }
+  /* Main Container & Professional White/Cream Cards */
+  .content { padding: 30px 16px 60px; max-width: 750px; margin: 0 auto; }
+  .cat-title { text-align: center; color: #d4af37; font-weight: normal; font-size: 26px; letter-spacing: 3px; margin-bottom: 30px; border-bottom: 1px solid #d4af37; padding-bottom: 14px; text-transform: uppercase; }
 
-  .item { 
-    background: #ffffff; 
-    border-radius: 8px; 
-    padding: 14px 16px; 
-    margin-bottom: 10px; 
-    box-shadow: 0 2px 6px rgba(0,0,0,0.03); 
-    border: 1px solid #eae5dc; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: flex-start; 
-    gap: 10px; 
-  }
-  .item-left { flex: 1; text-align: left; }
-  .item-name { font-weight: 700; font-size: 15px; color: #222222; line-height: 1.4; }
-  .item-desc { font-size: 13px; color: #666666; line-height: 1.4; margin-top: 3px; }
-  .item-price { font-size: 15px; font-weight: 700; color: #8e703f; white-space: nowrap; flex-shrink: 0; }
+  /* Premium High-Contrast Food Cards */
+  .item { background: #fffbf4; border-radius: 14px; padding: 22px 24px; margin-bottom: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 1px solid #d4af37; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; transition: transform 0.2s; color: #1a0505; }
+  .item:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(212,175,55,0.2); }
+  .item-left { flex: 1; }
+  
+  /* খাবারের নাম */
+  .item-name { font-weight: 800; font-size: 18px; color: #110303; line-height: 1.4; letter-spacing: 0.3px; }
+  
+  /* অনূদিত টেক্সট ডিজাইন - অত্যন্ত স্পষ্ট ও বড় */
+  .sub-trans { font-size: 16px; color: #2d1b10; font-weight: bold; display: none; margin-top: 6px; font-style: italic; background: #f5ede0; padding: 4px 10px; border-radius: 6px; border-left: 4px solid #b31e1e; }
+  
+  .item-desc { font-size: 14.5px; color: #4f3f35; font-style: italic; line-height: 1.6; margin-top: 6px; font-weight: 500; }
+  .item-price { font-size: 18px; font-weight: 800; color: #b31e1e; white-space: nowrap; flex-shrink: 0; background: #fdf5e6; padding: 6px 12px; border-radius: 8px; border: 1px solid #d4af37; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-  /* SPECIAL PIATTI BOX (Set Menus Section) */
-  .piatti-box { 
-    background: #ffffff; 
-    border: 1px solid #c5a880; 
-    border-radius: 10px; 
-    padding: 18px; 
-    margin-top: 18px;
-    margin-bottom: 14px; 
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  }
-  .piatti-box-title { text-align: center; color: #8e703f; font-size: 18px; font-weight: bold; margin-bottom: 2px; }
-  .piatti-box-subtitle { text-align: center; color: #777777; font-size: 12px; font-style: italic; margin-bottom: 14px; }
-  .piatti-subhead { font-size: 13px; font-weight: bold; color: #c0392b; margin: 14px 0 6px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #f4e8e8; padding-bottom: 2px; text-align: left; }
-  .piatti-item { font-size: 13.5px; color: #333333; padding: 5px 0; border-bottom: 1px dashed #eae5dc; line-height: 1.4; text-align: left; }
+  /* Package Content Premium Box */
+  .piatti-box { background: linear-gradient(180deg, #1f1411, #120907); border: 2px solid #d4af37; border-radius: 14px; padding: 24px; margin-top: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.4); color: #f9f1e2; }
+  .piatti-box-title { text-align: center; color: #d4af37; font-size: 20px; font-weight: bold; margin-bottom: 4px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .piatti-box-subtitle { text-align: center; color: #bca07d; font-size: 14px; font-style: italic; margin-bottom: 22px; }
+  .piatti-subhead { font-size: 14px; font-weight: bold; color: #d4af37; margin: 18px 0 10px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 6px; }
+  .piatti-item { font-size: 15px; color: #f9f1e2; padding: 9px 0; border-bottom: 1px dotted rgba(212,175,55,0.2); line-height: 1.5; font-weight: 500; display: flex; flex-direction: column; }
   .piatti-item:last-child { border-bottom: none; }
-  .piatti-sauce { font-size: 12.5px; color: #666666; font-style: italic; font-weight: normal; }
+  .piatti-sauce { font-size: 14px; color: #d4af37; font-style: italic; font-weight: normal; display: block; margin-top: 3px; }
+  
+  /* Children Menu Grid */
+  .bambini-grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; margin-top: 14px; margin-bottom: 14px; }
+  .bambini-item { background: #fdf5e6; border: 1px solid #c5a880; border-radius: 8px; padding: 12px 14px; font-size: 15px; color: #1a0505; font-weight: bold; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; }
 
-  /* Children's Section Grid System */
-  .bambini-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-    margin-top: 12px;
-    margin-bottom: 4px;
-  }
-  .bambini-item { 
-    background: #faf8f5; 
-    border: 1px solid #eae5dc; 
-    border-radius: 6px; 
-    padding: 8px 10px; 
-    font-size: 13px; 
-    color: #444444; 
-    width: 100% !important;
-    display: block !important;
-    text-align: left;
-    font-weight: 500;
-  }
+  .note-box { background: rgba(212,175,55,0.08); border: 1px dashed #d4af37; border-radius: 12px; padding: 18px; margin-top: 18px; font-size: 14px; color: #e1c084; line-height: 1.6; }
+  .note-box strong { color: #d4af37; font-size: 16px; }
 
-  /* Note Alert Box */
-  .note-box { 
-    background: #fffdf6; 
-    border: 1px solid #dcd1b4; 
-    border-radius: 8px; 
-    padding: 12px 14px; 
-    margin-top: 14px;
-    margin-bottom: 14px; 
-    font-size: 13px; 
-    color: #7c6833; 
-    font-style: italic; 
-    line-height: 1.5; 
-    text-align: left;
-  }
-  .note-box strong { color: #222222; font-style: normal; }
+  .dolce-banner { background: linear-gradient(135deg, #2a1d19, #1a110e); border: 1px solid #d4af37; border-radius: 14px; padding: 24px; margin-bottom: 25px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+  .dolce-banner h3 { color: #d4af37; font-size: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .dolce-banner p { color: #bca07d; font-size: 14.5px; font-style: italic; }
 
-  /* Premium Dessert Banner Design */
-  .dolce-banner { 
-    background: #fdfaf4; 
-    border: 1px solid #eae2d3; 
-    border-radius: 10px; 
-    padding: 16px; 
-    margin-bottom: 14px; 
-    text-align: center; 
-  }
-  .dolce-banner h3 { color: #8e703f; font-size: 16px; margin-bottom: 4px; font-weight: bold; }
-  .dolce-banner p { color: #666666; font-size: 12.5px; font-style: italic; }
-
-  /* Tab View Logic visibility control */
   .section { display: none; }
   .section.active { display: block; }
 
-  /* Footer Style */
-  .footer { background: #ffffff; color: #8e703f; text-align: center; padding: 24px 16px; font-size: 12px; border-top: 1px solid #eae5dc; box-shadow: 0 -2px 10px rgba(0,0,0,0.02); }
-  .footer .note { color: #777777; font-size: 11px; font-style: italic; margin-top: 5px; }
+  /* Premium Luxury Footer */
+  .footer { background: #0b0202; color: #d4af37; text-align: center; padding: 30px 20px; font-size: 14px; border-top: 3px solid #d4af37; margin-top: 50px; }
+  .footer .note { color: #bca07d; font-size: 13px; font-style: italic; margin-top: 10px; }
 
-  /* Google Translate Default Banner Blocker */
+  /* Google Translate Protections */
   #google_translate_element { display: none; }
   .goog-te-banner-frame { display: none !important; }
+  body { top: 0 !important; }
   .skiptranslate { display: none !important; }
 </style>
 </head>
@@ -283,422 +106,279 @@
 
 <div id="google_translate_element"></div>
 
+<!-- Luxury Header -->
 <div class="header">
-  <div style="display:flex;align-items:center;justify-content:center;gap:14px;text-align:center;">
-    <img src="images.jpeg" alt="Logo" style="width:70px;height:70px;object-fit:contain;background:#fff;padding:4px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);border:1px solid #eae5dc;">
-    <div style="text-align: left;">
-      <div class="subtitle">✦ RISTORANTE ✦</div>
-      <h1>LAGO BIN</h1>
-      <div class="divider" style="margin:6px 0 0 0;"></div>
+  <div style="display:flex;align-items:center;justify-content:center;gap:18px;">
+    <img src="images.jpeg" style="width:85px;height:85px;object-fit:contain;background:#fff;padding:6px;border-radius:20px;box-shadow:0 4px 15px rgba(212,175,55,0.3); border: 2px solid #d4af37;">
+    <div>
+      <div class="subtitle">✦ RISTORANTE LUXURY ✦</div>
+      <h1 class="notranslate">LAGO BIN</h1>
+      <div class="divider"></div>
     </div>
   </div>
 </div>
 
+<!-- Navigation Bar -->
 <div class="lang-bar">
   <button class="lang-btn active" onclick="setLang('it', this)">🇮🇹 Italiano</button>
   <button class="lang-btn" onclick="setLang('fr', this)">🇫🇷 Français</button>
   <button class="lang-btn" onclick="setLang('en', this)">🇬🇧 English</button>
+  <button class="lang-btn" onclick="setLang('de', this)">🇩🇪 Deutsch</button>
   
   <div class="translate-wrap">
     <button class="translate-btn" onclick="toggleDropdown()" id="translateBtn">🌐 More Languages ▾</button>
     <div class="lang-dropdown" id="langDropdown">
       <div class="lang-dropdown-section">🇪🇺 Europa</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('de')">🇩🇪 Deutsch – German</div>
       <div class="lang-dropdown-item" onclick="googleTranslate('es')">🇪🇸 Español – Spanish</div>
       <div class="lang-dropdown-item" onclick="googleTranslate('pt')">🇵🇹 Português – Portuguese</div>
       <div class="lang-dropdown-item" onclick="googleTranslate('ru')">🇷🇺 Русский – Russian</div>
       <div class="lang-dropdown-item" onclick="googleTranslate('nl')">🇳🇱 Nederlands – Dutch</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('pl')">🇵🇱 Polski – Polish</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('sv')">🇸🇪 Svenska – Swedish</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('ro')">🇷🇴 Română – Romanian</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('el')">🇬🇷 Ελληνικά – Greek</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('cs')">🇨🇿 Čeština – Czech</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('hu')">🇭🇺 Magyar – Hungarian</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('uk')">🇺🇦 Українська – Ukrainian</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('da')">🇩🇰 Dansk – Danish</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('fi')">🇫🇮 Suomi – Finnish</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('no')">🇳🇴 Norsk – Norwegian</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('sk')">🇸🇰 Slovenčina – Slovak</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('bg')">🇧🇬 Български – Bulgarian</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('hr')">🇭🇷 Hrvatski – Croatian</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('sr')">🇷🇸 Српски – Serbian</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('sq')">🇦🇱 Shqip – Albanian</div>
-      <div class="lang-dropdown-section" style="margin-top:4px;">🌍 Altri / Other</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('ar')">🇸🇦 العربية – Arabic</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('tr')">🇹🇷 Türkçe – Turkish</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('zh-CN')">🇨🇳 中文 – Chinese</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('ja')">🇯🇵 日本語 – Japanese</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('ko')">🇰🇷 한국어 – Korean</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('hi')">🇮🇳 हिन्दी – Hindi</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('bn')">🇧🇩 বাংলা – Bengali</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('th')">🇹🇭 ไทย – Thai</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('vi')">🇻🇳 Tiếng Việt – Vietnamese</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('id')">🇮🇩 Bahasa Indonesia</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('fa')">🇮🇷 فارسی – Persian</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('he')">🇮🇱 עברית – Hebrew</div>
     </div>
   </div>
 </div>
 
+<!-- Quick Link Cards -->
 <div class="quick-cards">
   <a class="quick-card" href="https://www.wineappy.it/lago-bin/" target="_blank">
     <div class="card-icon">🍷</div>
     <div class="card-text">
-      <span data-it="Carta dei Vini" data-fr="Carte des Vins" data-en="Wine List">Carta dei Vini</span>
-      <span class="card-label" data-it="Carta dei Vini" data-fr="Carte des Vins" data-en="Our Wine List">Carta dei Vini</span>
+      <span data-it="Carta dei Vini" data-fr="Carte des Vins" data-en="Wine List" data-de="Weinkarte" data-es="Carta de Vinos" data-pt="Carta de Vinhos" data-ru="Винная карта" data-nl="Wijnkaart">Carta dei Vini</span>
+      <span class="card-label" data-it="I Nostri Vini" data-fr="Nos Vins" data-en="Our Wines" data-de="Unsere Weine" data-es="Nuestros Vinos" data-pt="Nossos Vinhos" data-ru="Наши вина" data-nl="Onze Wijnen">I Nostri Vini</span>
     </div>
   </a>
   <a class="quick-card" href="#" onclick="setTab('dolce', this); return false;">
     <div class="card-icon">🍰</div>
     <div class="card-text">
-       <span data-it="Dolce" data-fr="Desserts" data-en="Desserts">Dolce</span>
-       <span class="card-label" data-it="I Nostri Dessert" data-fr="Nos Desserts" data-en="Our Desserts">I Nostri Dessert</span>
+       <span data-it="Dolce" data-fr="Desserts" data-en="Desserts" data-de="Desserts" data-es="Postres" data-pt="Sobremesas" data-ru="Десерты" data-nl="Desserts">Dolce</span>
+      <span class="card-label" data-it="I Nostri Dessert" data-fr="Nos Desserts" data-en="Our Desserts" data-de="Unsere Desserts" data-es="Nuestros Postres" data-pt="Nossas Sobremesas" data-ru="Наши десерты" data-nl="Onze Desserts">I Nostri Dessert</span>
     </div>
   </a>
 </div>
 
 <div class="translating-bar" id="translatingBar">🌐 Translating menu... please wait a moment</div>
 
+<!-- Navigation Sticky Tabs -->
 <div class="tabs-wrap">
   <div class="tabs">
-    <button class="tab-btn active" onclick="setTab('menu_packages', this)">
-      🍽️ <span data-it="Menù" data-fr="Menus" data-en="Menu">Menù</span>
-    </button>
-    <button class="tab-btn" onclick="setTab('antipasti', this)">
-      🥗 <span data-it="Antipasti" data-fr="Entrées" data-en="Starters">Antipasti</span>
-    </button>
-    <button class="tab-btn" onclick="setTab('primi', this)">
-      🍝 <span data-it="Primi" data-fr="Plats principaux" data-en="First Courses">Primi</span>
-    </button>
-    <button class="tab-btn" onclick="setTab('secondi', this)">
-      🥩 <span data-it="Secondi" data-fr="Secondes" data-en="Main Courses">Secondi</span>
-    </button>
-    <button class="tab-btn" onclick="setTab('contorni', this)">
-      🥦 <span data-it="Contorni" data-fr="Accompagnements" data-en="Sides">Contorni</span>
-    </button>
-    <button class="tab-btn" onclick="setTab('dolce', this)">
-      🍰 <span data-it="Dolce" data-fr="Desserts" data-en="Desserts">Dolce</span>
-    </button>
-    <button class="tab-btn" onclick="setTab('gelato', this)">
-      🍦 <span data-it="Gelato" data-fr="Glace" data-en="Ice Cream">Gelato</span>
-    </button>
+    <button class="tab-btn active" onclick="setTab('menu_packages', this)">🍽️ <span data-it="Menù" data-fr="Menus" data-en="Menu" data-de="Menü" data-es="Menús" data-pt="Menus" data-ru="Меню" data-nl="Menu's">Menù</span></button>
+    <button class="tab-btn" onclick="setTab('antipasti', this)">🥗 <span data-it="Antipasti" data-fr="Entrées" data-en="Starters" data-de="Vorspeisen" data-es="Entrantes" data-pt="Entradas" data-ru="Закуски" data-nl="Voorgerechten">Antipasti</span></button>
+    <button class="tab-btn" onclick="setTab('primi', this)">🍝 <span data-it="Primi" data-fr="Plats principaux" data-en="First Courses" data-de="Erster Gang" data-es="Primeros Platos" data-pt="Primeiros Pratos" data-ru="Первые блюда" data-nl="Eerste Gangen">Primi</span></button>
+    <button class="tab-btn" onclick="setTab('secondi', this)">🥩 <span data-it="Secondi" data-fr="Secondes" data-en="Main Courses" data-de="Hauptgerichte" data-es="Segundos Platos" data-pt="Segundos Pratos" data-ru="Вторые блюда" data-nl="Hoofdgerechten">Secondi</span></button>
+    <button class="tab-btn" onclick="setTab('contorni', this)">🥦 <span data-it="Contorni" data-fr="Accompagnements" data-en="Sides" data-de="Beilagen" data-es="Guarniciones" data-pt="Acompanhamentos" data-ru="Гарниры" data-nl="Bijgerechten">Contorni</span></button>
+    <button class="tab-btn" onclick="setTab('dolce', this)">🍰 <span data-it="Dolce" data-fr="Desserts" data-en="Desserts" data-de="Desserts" data-es="Postres" data-pt="Sobremesas" data-ru="Десерты" data-nl="Desserts">Dolce</span></button>
+    <button class="tab-btn" onclick="setTab('gelato', this)">🍦 <span data-it="Gelato" data-fr="Glace" data-en="Ice Cream" data-de="Eiscreme" data-es="Helado" data-pt="Sorvete" data-ru="Мороженое" data-nl="IJs">Gelato</span></button>
   </div>
 </div>
 
 <div class="content">
 
-  <!-- MENU PACKAGES SECTION -->
+  <!-- 1. MENU PACKAGES SECTION -->
   <div class="section active" id="sec-menu_packages">
-    <h2 class="cat-title">🍽️ <span data-it="Menù" data-fr="Menus" data-en="Set Menus">Menù</span></h2>
+    <h2 class="cat-title">🍽️ <span data-it="I Nostri Menù" data-fr="Nos Menus" data-en="Our Set Menus" data-de="Unsere Menüs" data-es="Nuestros Menús" data-pt="Nossos Menus" data-ru="Наше меню" data-nl="Onze Menu's">I Nostri Menù</span></h2>
 
     <div class="item">
       <div class="item-left">
-        <div class="item-name" data-it="Menù del Lago Bin" data-fr="Menu du Lago Bin" data-en="Lago Bin Set Menu">Menù del Lago Bin</div>
-        <div class="item-desc" data-it='Con i nostri Piatti Tipici e la Formula "Tutto Compreso" (1 bott. di Vino della Casa ogni 4 pers.)' data-fr='Avec nos Plats Typiques et la Formule "Tout Inclus" (1 bott. de Vin de la Maison chaque 4 pers.)' data-en='"All Inclusive" Formula with Typical Dishes (1 bottle of House Wine per 4 persons)'>Con i nostri Piatti Tipici e la Formula "Tutto Compreso" (1 bott. di Vino della Casa ogni 4 pers.)</div>
+        <div class="item-name">
+          <span class="notranslate">Menù del Lago Bin</span>
+          <span class="sub-trans" data-it="" data-fr="(Menu du Lago Bin)" data-en="(Lago Bin Set Menu)" data-de="(Lago Bin Menü)" data-es="(Menú del Lago Bin)" data-pt="(Menu do Lago Bin)" data-ru="(Меню Лаго Бин)" data-nl="(Lago Bin Menu)"></span>
+        </div>
+        <div class="item-desc" data-it='Con i nostri Piatti Tipici e la Formula "Tutto Compreso" (1 bott. di Vino della Casa ogni 4 pers.)' data-fr='Avec nos Plats Typiques et la Formule "Tout Inclus" (1 bott. de Vin de la Maison chaque 4 pers.)' data-en='"All Inclusive" Formula with Typical Dishes (1 bottle of House Wine per 4 persons)' data-de='"Alles Inklusive" Formel mit typischen Gerichten (1 Flasche Hauswein für 4 Personen)' data-es='Con nuestros Platos Típicos y la Fórmula "Todo Incluido" (1 bot. de Vino de la Casa cada 4 pers.)' data-pt='Com nossos Pratos Típicos e a Fórmula "Tudo Incluído" (1 garrafa de Vinho da Casa para cada 4 pessoas)' data-ru='С нашими типичными блюдами и формулой "Все включено" (1 бут. домашнего вина на 4 человек)' data-nl='Met onze Typische Gerechten en de "All-Inclusive" Formule (1 fles Huiswijn per 4 personen)'>Con i nostri Piatti Tipici e la Formula "Tutto Compreso" (1 bott. di Vino della Casa ogni 4 pers.)</div>
       </div>
-      <div class="item-price">€45,00 p.p.</div>
-    </div>
-
-    <div class="item">
-      <div class="item-left">
-        <div class="item-name" data-it="Menù Gastronomico" data-fr="Menu Gastronomique" data-en="Gastronomic Menu">Menù Gastronomico</div>
-        <div class="item-desc" data-it="Aperitivo, 3 Portate a scelta, Dessert, Caffè e Digestivo. Bevande Escluse." data-fr="Apéritif, 3 Plats au Choix, Dessert, Café et Digestif. Boissons Exclues." data-en="Aperitif, 3 Courses of your choice, Dessert, Coffee & Digestif. Drinks not included.">Aperitivo, 3 Portate a scelta, Dessert, Caffè e Digestivo. Bevande Escluse.</div>
-      </div>
-      <div class="item-price">€40,00 p.p.</div>
+      <div class="item-price">€45,00</div>
     </div>
 
     <div class="item">
       <div class="item-left">
-        <div class="item-name" data-it="Menù Degustazione (*)" data-fr="Menu Dégustation (*)" data-en="Tasting Menu (*)">Menù Degustazione (*)</div>
-        <div class="item-desc" data-it="Aperitivo, 2 Portate a scelta, Dessert, Caffè e Digestivo. Bevande Escluse." data-fr="Apéritif, 2 Plats au Choix, Dessert, Café et Digestif. Boissons Exclues." data-en="Aperitif, 2 Courses of your choice, Dessert, Coffee & Digestif. Drinks not included.">Aperitivo, 2 Portate a scelta, Dessert, Caffè e Digestivo. Bevande Escluse.</div>
+        <div class="item-name">
+          <span class="notranslate">Menù Gastronomico</span>
+          <span class="sub-trans" data-it="" data-fr="(Menu Gastronomique)" data-en="(Gastronomic Menu)" data-de="(Gastronomisches Menü)" data-es="(Menú Gastronómico)" data-pt="(Menu Gastronômico)" data-ru="(Гастрономическое меню)" data-nl="(Gastronomisch Menu)"></span>
+        </div>
+        <div class="item-desc" data-it="Aperitivo, 3 Portate a scelta, Dessert, Caffè e Digestivo. Bevande Escluse." data-fr="Apéritif, 3 Plats au Choix, Dessert, Café et Digestif. Boissons Exclues." data-en="Aperitif, 3 Courses of your choice, Dessert, Coffee & Digestif. Drinks not included." data-de="Aperitif, 3 Gänge nach Wahl, Dessert, Kaffee und Digestif. Getränke nicht inbegriffen." data-es="Aperitivo, 3 Platos a elección, Postre, Café y Digestivo. Bebidas Excluidas." data-pt="Aperitivo, 3 Pratos à escolha, Sobremesa, Café e Digestivo. Bebidas Excluídas." data-ru="Аперитив, 3 блюда на выбор, десерт, кофе и дижестив. Напитки исключены." data-nl="Aperitief, 3 Gangen naar keuze, Dessert, Koffie en Digestief. Dranken Exclusief.">Aperitivo, 3 Portate a scelta, Dessert, Caffè e Digestivo. Bevande Escluse.</div>
       </div>
-      <div class="item-price">€30,00 p.p.</div>
+      <div class="item-price">€40,00</div>
     </div>
 
     <div class="item">
-      <div class="item-left" style="width:100%;">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-          <div class="item-name" data-it="Menù Bambini (4/10 Anni)" data-fr="Menù Baby (4/10 Ans)" data-en="Children's Menu (4–10 years)">Menù Bambini (4/10 Anni)</div>
-          <div class="item-price" style="flex-shrink:0;margin-left:12px;">€15,00 p.p.</div>
+      <div class="item-left">
+        <div class="item-name">
+          <span class="notranslate">Menù Degustazione (*)</span>
+          <span class="sub-trans" data-it="" data-fr="(Menu Dégustation *)" data-en="(Tasting Menu *)" data-de="(Verkostungsmenü *)" data-es="(Menú Degustación *)" data-pt="(Menu Degustação *)" data-ru="(Дегустационное меню *)" data-nl="(Proeverij Menu *)"></span>
         </div>
-        <div class="item-desc" style="margin-top:8px;" data-it="Un Piatto a scelta + Gelato Fatto in Casa + Bibita" data-fr="Un Plat au choix + Glaces Maison + Boisson" data-en="One dish of your choice + Homemade Ice Cream + Drink">Un Piatto a scelta + Gelato Fatto in Casa + Bibita</div>
-        
-        <div class="bambini-grid">
-          <div class="bambini-item" data-it="🍝 Ravioli" data-fr="🍝 Raviolis" data-en="🍝 Ravioli">🍝 Ravioli</div>
-          <div class="bambini-item" data-it="🍝 Tagliatelle" data-fr="🍝 Tagliatelles" data-en="🍝 Tagliatelle">🍝 Tagliatelle</div>
-          <div class="bambini-item" data-it="🍝 Gnocchi" data-fr="🍝 Gnocchis" data-en="🍝 Gnocchi">🍝 Gnocchi</div>
-          <div class="bambini-item" data-it="🥩 Milanese" data-fr="🥩 Escalope milanaise" data-en="🥩 Milanese cutlet">🥩 Milanese</div>
-          <div class="bambini-item" data-it="🥩 Bistecca" data-fr="🥩 Steak" data-en="🥩 Steak">🥩 Bistecca</div>
-          <div class="bambini-item" data-it="🥩 Rostelle" data-fr="🥩 Brochettes" data-en="🥩 Skewers">🥩 Rostelle</div>
-          <div class="bambini-item" data-it="🌭 Salsiccia" data-fr="🌭 Saucisse" data-en="🌭 Sausage">🌭 Salsiccia</div>
-        </div>
+        <div class="item-desc" data-it="Aperitivo, 2 Portate a scelta, Dessert, Caffè e Digestivo. Bevande Escluse." data-fr="Apéritif, 2 Plats au Choix, Dessert, Café et Digestif. Boissons Exclues." data-en="Aperitif, 2 Courses of your choice, Dessert, Coffee & Digestif. Drinks not included." data-de="Aperitif, 2 Gänge nach Wahl, Dessert, Kaffee und Digestif. Getränke nicht inbegriffen." data-es="Aperitivo, 2 Platos a elección, Postre, Café y Digestivo. Bebidas Excluidas." data-pt="Aperitivo, 2 Pratos à escolha, Sobremesa, Café e Digestivo. Bebidas Excluídas." data-ru="Аперитив, 2 блюда на выбор, десерт, кофе и дижестив. Напитки исключены." data-nl="Aperitief, 2 Gangen naar keuze, Dessert, Koffie en Digestief. Dranken Exclusief.">Aperitivo, 2 Portate a scelta, Dessert, Caffè e Digestivo. Bevande Escluse.</div>
       </div>
+      <div class="item-price">€30,00</div>
     </div>
 
-    <!-- NOTE BOX -->
-    <div class="note-box">
-      <strong>(*)</strong>
-      <span data-it=" Non sarà Servito il Sabato Sera, la Domenica a Pranzo e nei Festivi." data-fr=" Ne sera pas servi le Samedi Soir, le Dimanche à midi et les Jours de Fête." data-en=" Not served Saturday evenings, Sunday lunch & public holidays."> Non sarà Servito il Sabato Sera, la Domenica a Pranzo e nei Festivi.</span>
-      <br>
-      <span data-it="I Menù non sono Divisibili per più Persone." data-fr="Les Menus ne peuvent pas être partagés with plusieurs personnes." data-en="Set menus cannot be shared between guests.">I Menù non sono Divisibili per più Persone.</span>
-    </div>
-
-    <!-- PIATTI DEL MENU CONTAINER -->
-    <div class="piatti-box">
-      <div class="piatti-box-title" data-it="Piatti del Menù" data-fr="Plats du Menu" data-en="Menu Dishes">Piatti del Menù</div>
-      <div class="piatti-box-subtitle" data-it="(Gastronomico e Degustazione)" data-fr="(Gastronomique et Dégustation)" data-en="(Gastronomic and Tasting)">(Gastronomico e Degustazione)</div>
-
-      <div>
-        <div class="piatti-subhead" data-it="Antipasti" data-fr="Entrées" data-en="Starters">Antipasti</div>
-        <div class="piatti-item" data-it="Antipasto Tipico del Lago Bin" data-fr="Assortiment typique du Lago Bin" data-en="Typical Lago Bin starter">Antipasto Tipico del Lago Bin</div>
-        <div class="piatti-item" data-it="Assortimento del Salumiere" data-fr="Assiette de charcuterie" data-en="Mixed charcuterie platter">Assortimento del Salumiere</div>
-        <div class="piatti-item" data-it="Prosciutto di Parma con Melone o Grana" data-fr="Jambon de Parme avec melon ou Grana" data-en="Parma ham with melon or Grana cheese">Prosciutto di Parma con Melone o Grana</div>
-        <div class="piatti-item" data-it="Lumache in Umido" data-fr="Escargots braisés" data-en="Braised snails">Lumache in Umido</div>
-
-        <div class="piatti-subhead" data-it="Primi Piatti" data-fr="Pâtes" data-en="First Courses">Primi Piatti</div>
-        <div class="piatti-item">
-          <span data-it="Ravioli della Nonna" data-fr="Raviolis de grand-mère" data-en="Grandma's Ravioli">Ravioli della Nonna</span>
-          <span class="piatti-sauce" data-it=" al Pomodoro o Burro e Salvia" data-fr=" à la tomate ou beurre et sauge" data-en=" with tomato sauce or butter & sage"> al Pomodoro o Burro e Salvia</span>
+    <div class="item" style="display: block;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;width:100%;">
+        <div class="item-name">
+          <span class="notranslate">Menù Bambini (4/10 Anni)</span>
+          <span class="sub-trans" data-it="" data-fr="(Menu Enfant 4/10 Ans)" data-en="(Children's Menu 4–10 years)" data-de="(Kindermenü 4–10 Jahre)" data-es="(Menú Infantil 4/10 Años)" data-pt="(Menu Infantil 4/10 Anos)" data-ru="(Детское меню 4/10 лет)" data-nl="(Kindermenu 4/10 Jaar)"></span>
         </div>
-        <div class="piatti-item">
-          <span data-it="Tagliatelle di Pasta Fresca" data-fr="Tagliatelles fraîches" data-en="Fresh Tagliatelle">Tagliatelle di Pasta Fresca</span>
-          <span class="piatti-sauce" data-it=" alla Selvaggina o ai Funghi" data-fr=" au giber ou aux champignons" data-en=" with game sauce or mushrooms"> alla Selvaggina o ai Funghi</span>
-        </div>
-        <div class="piatti-item">
-          <span data-it="Gnocchi di Patate" data-fr="Gnocchis de pommes de terre" data-en="Potato Gnocchi">Gnocchi di Patate</span>
-          <span class="piatti-sauce" data-it=" ai Funghi o ai Formaggi con Gorgonzola" data-fr=" aux champignons ou aux fromages avec gorgonzola" data-en=" with mushrooms or cheese & gorgonzola"> ai Funghi o ai Formaggi con Gorgonzola</span>
-        </div>
+        <div class="item-price">€15,00</div>
+      </div>
+      <div class="item-desc" style="margin-top:8px;" data-it="Un Piatto a scelta + Gelato Fatto in Casa + Bibita" data-fr="Un Plat au choix + Glace Maison + Boisson" data-en="One dish of your choice + Homemade Ice Cream + Drink" data-de="Ein Gericht nach Wahl + Hausgemachtes Eis + Getränk" data-es="Un Plato a elección + Helado Casero + Bebida" data-pt="Um Prato à escolha + Sorvete Caseiro + Bebida" data-ru="Одно блюдо на выбор + Домашнее мороженое + Напиток" data-nl="Een gerecht naar keuze + Huisgemaakt IJs + Frisdrank">Un Piatto a scelta + Gelato Fatto in Casa + Bibita</div>
+      
+      <div class="bambini-grid">
+        <div class="bambini-item"><span class="notranslate">Ravioli</span> <span class="sub-trans" data-it="" data-fr="(Raviolis)" data-en="(Ravioli)" data-de="(Ravioli)" data-es="(Raviolis)" data-pt="(Ravioli)" data-ru="(Равиоли)" data-nl="(Ravioli)"></span></div>
+        <div class="bambini-item"><span class="notranslate">Tagliatelle</span> <span class="sub-trans" data-it="" data-fr="(Tagliatelles)" data-en="(Tagliatelle)" data-de="(Tagliatelle)" data-es="(Tallarines)" data-pt="(Tagliatelle)" data-ru="(Тальятелле)" data-nl="(Tagliatelle)"></span></div>
+        <div class="bambini-item"><span class="notranslate">Gnocchi</span> <span class="sub-trans" data-it="" data-fr="(Gnocchis)" data-en="(Gnocchi)" data-de="(Gnocchi)" data-es="(Noquis)" data-pt="(Nhoque)" data-ru="(Ньокки)" data-nl="(Gnocchi)"></span></div>
+        <div class="bambini-item"><span class="notranslate">Milanese</span> <span class="sub-trans" data-it="" data-fr="(Escalope milanaise)" data-en="(Milanese cutlet)" data-de="(Schnitzel Wiener Art)" data-es="(Milanesa)" data-pt="(Milanesa)" data-ru="(Миланезе)" data-nl="(Milanesa)"></span></div>
+        <div class="bambini-item"><span class="notranslate">Bistecca</span> <span class="sub-trans" data-it="" data-fr="(Steak)" data-en="(Steak)" data-de="(Steak)" data-es="(Filete)" data-pt="(Bife)" data-ru="(Стейк)" data-nl="(Biefstuk)"></span></div>
+        <div class="bambini-item"><span class="notranslate">Rostelle</span> <span class="sub-trans" data-it="" data-fr="(Brochettes)" data-en="(Skewers)" data-de="(Fleischspieße)" data-es="(Brochetas)" data-pt="(Espetinhos)" data-ru="(Шашлычки)" data-nl="(Spiezen)"></span></div>
+        <div class="bambini-item"><span class="notranslate">Salsiccia</span> <span class="sub-trans" data-it="" data-fr="(Saucisse)" data-en="(Sausage)" data-de="(Wurst)" data-es="(Salchicha)" data-pt="(Linguiça)" data-ru="(Колбаса)" data-nl="(Worst)"></span></div>
+      </div>
 
-        <div class="piatti-subhead" data-it="Secondi Piatti" data-fr="Plats principaux" data-en="Main Courses">Secondi Piatti</div>
-        <div class="piatti-item" data-it="Coniglio alla Rocchettina" data-fr="Lapin style Rocchettina" data-en="Rabbit Rocchettina style">Coniglio alla Rocchettina</div>
-        <div class="piatti-item" data-it="Selvaggina al Vino Rosso" data-fr="Gibier au vin rouge" data-en="Game in red wine">Selvaggina al Vino Rosso</div>
-        <div class="piatti-item" data-it="Grigliata Mista di Carne" data-fr="Grillade mixte de viande" data-en="Mixed grilled meat">Grigliata Mista di Carne</div>
-        <div class="piatti-item" data-it="Agnello alla Griglia" data-fr="Agneau grillé" data-en="Grilled lamb">Agnello alla Griglia</div>
-        <div class="piatti-item" data-it="Roast Beef" data-fr="Rosbif" data-en="Roast beef">Roast Beef</div>
+      <div class="note-box">
+        <strong>(*)</strong>
+        <span data-it=" Non sarà Servito il Sabato Sera, la Domenica a Pranzo e nei Festivi." data-fr=" Ne sera pas servi le Samedi Soir, le Dimanche à midi et les Jours de Fête." data-en=" Not served Saturday evenings, Sunday lunch & public holidays." data-de=" Wird am Samstagabend, Sonntagmittag und an Feiertagen nicht serviert." data-es=" No se servirá los sábados por la noche, domingos al almuerzo ni festivos." data-pt=" Não será servido aos sábados à noite, domingos no almoço e feriados." data-ru=" Не подается в субботу вечером, воскресенье в обед и праздничные дни." data-nl=" Wordt niet geserveerd op zaterdagavond, zondaglunch en feestdagen."> Non sarà Servito il Sabato Sera, la Domenica a Pranzo e nei Festivi.</span>
+        <br><br>
+        <span data-it="I Menù non sono Divisibili per più Persone." data-fr="Les Menus ne peuvent pas être partagés entre plusieurs personnes." data-en="Set menus cannot be shared between guests." data-de="Menüs können nicht auf mehrere Personen aufgeteilt werden." data-es="Los menús no se pueden compartir entre varias personas." data-pt="Os menus não podem ser compartilhados entre várias pessoas." data-ru="Меню не делятся на несколько человек." data-nl="Menu's kunnen nicht worden gedeeld met meerdere personen.">I Menù non sono Divisibili per più Persone.</span>
+      </div>
+
+      <!-- Piatti del Menu Box (Integrated Luxury Design) -->
+      <div class="piatti-box">
+        <div class="piatti-box-title" data-it="Piatti inclusi nei Menù" data-fr="Plats inclus dans les Menus" data-en="Dishes included in the Menus" data-de="In den Menüs enthaltene Gerichte" data-es="Platos incluidos en los Menús" data-pt="Pratos incluídos nos Menus" data-ru="Блюда, включенные в меню" data-nl="Gerechten inbegrepen in de Menu's">Piatti inclusi nei Menù</div>
+        <div class="piatti-box-subtitle" data-it="(Valido per Gastronomico e Degustazione)" data-fr="(Valable pour Gastronomique et Dégustation)" data-en="(Valid for Gastronomic and Tasting)" data-de="(Gültig für gastronomische und Verkostungsmenüs)" data-es="(Válido para Gastronómico y Degustación)" data-pt="(Válido para Gastronômico e Degustação)" data-ru="(Действительно для гастрономического и дегустационного)" data-nl="(Geldig voor Gastronomisch en Proeverij)">(Valido per Gastronomico e Degustazione)</div>
+
+        <div>
+          <div class="piatti-subhead" data-it="Antipasti" data-fr="Entrées" data-en="Starters" data-de="Vorspeisen" data-es="Entrantes" data-pt="Entradas" data-ru="Закуски" data-nl="Voorgerechten">Antipasti</div>
+          <div class="piatti-item"><span class="notranslate">Antipasto Tipico del Lago Bin</span> <span class="sub-trans" data-it="" data-fr="(Assortiment typique)" data-en="(Typical Lago Bin starter)" data-de="(Typische Lago Bin Vorspeise)" data-es="(Entrante típico)" data-pt="(Entrada típica)" data-ru="(Типичная закуска Лаго Бин)" data-nl="(Typisch voorgerecht)"></span></div>
+          <div class="piatti-item"><span class="notranslate">Assortimento del Salumiere</span> <span class="sub-trans" data-it="" data-fr="(Assiette de charcuterie)" data-en="(Mixed charcuterie platter)" data-de="(Gemischte Aufschnittplatte)" data-es="(Surtido de embutidos)" data-pt="(Sortimento de embutidos)" data-ru="(Мясное ассорти)" data-nl="(Assortiment vleeswaren)"></span></div>
+          <div class="piatti-item"><span class="notranslate">Prosciutto di Parma con Melone o Grana</span> <span class="sub-trans" data-it="" data-fr="(Jambon de Parme)" data-en="(Parma ham with melon/Grana)" data-de="(Parmaschinken mit Melone/Grana)" data-es="(Jamón de Parma con melón/Grana)" data-pt="(Presunto de Parma com melão/Grana)" data-ru="(Пармская ветчина с дыней/Грана)" data-nl="(Parmaham met meloen/Grana)"></span></div>
+          <div class="piatti-item"><span class="notranslate">Lumache in Umido</span> <span class="sub-trans" data-it="" data-fr="(Escargots braisés)" data-en="(Braised snails)" data-de="(Geschmorte Schnecken)" data-es="(Caracoles guisados)" data-pt="(Caracóis guisados)" data-ru="(Тушеные улитки)" data-nl="(Gestoofde slakken)"></span></div>
+
+          <div class="piatti-subhead" data-it="Primi Piatti" data-fr="Pâtes" data-en="First Courses" data-de="Erster Gang" data-es="Primeros Platos" data-pt="Primeiros Pratos" data-ru="Первые блюда" data-nl="Eerste Gangen">Primi Piatti</div>
+          <div class="piatti-item">
+            <span class="notranslate">Ravioli della Nonna</span>
+            <span class="piatti-sauce" data-it=" al Pomodoro o Burro e Salvia" data-fr=" à la tomate ou beurre et sauge" data-en=" with tomato sauce or butter & sage" data-de=" mit Tomatensauce oder Butter & Salbei" data-es=" соус томатный или сливочное масло и шалфей" data-pt=" ao molho de tomate ou manteiga e Sálvia" data-ru=" соус томатный или сливочное масло и шалфей" data-nl=" met tomatensaus of boter & salie"> al Pomodoro o Burro e Salvia</span>
+          </div>
+          <div class="piatti-item">
+            <span class="notranslate">Tagliatelle di Pasta Fresca</span>
+            <span class="piatti-sauce" data-it=" alla Selvaggina o ai Funghi" data-fr=" au gibier ou aux champignons" data-en=" with game sauce or mushrooms" data-de=" mit Wildsauce oder Pilzen" data-es=" con salsa de caza o champiñones" data-pt=" com molho de caça ou cogumelos" data-ru=" соус из дичи или грибы" data-nl=" met wildsaus of paddenstoelen"> alla Selvaggina o ai Funghi</span>
+          </div>
+          <div class="piatti-item">
+            <span class="notranslate">Gnocchi di Patate</span>
+            <span class="piatti-sauce" data-it=" ai Funghi o ai Formaggi con Gorgonzola" data-fr=" aux champignons ou aux fromages avec gorgonzola" data-en=" with mushrooms or cheese & gorgonzola" data-de=" mit Pilzen oder Käse & Gorgonzola" data-es=" con champiñones o quesos con gorgonzola" data-pt=" com cogumelos ou queijos com gorgonzola" data-ru=" с грибами или сырами с горгонзолой" data-nl=" met paddenstoelen of kaas met gorgonzola"> ai Funghi o ai Formaggi con Gorgonzola</span>
+          </div>
+
+          <div class="piatti-subhead" data-it="Secondi Piatti" data-fr="Plats principaux" data-en="Main Courses" data-de="Hauptgerichte" data-es="Segundos Platos" data-pt="Segundos Pratos" data-ru="Вторые блюда" data-nl="Hoofdgerechten">Secondi Piatti</div>
+          <div class="piatti-item"><span class="notranslate">Coniglio alla Rocchettina</span> <span class="sub-trans" data-it="" data-fr="(Lapin)" data-en="(Rabbit Rocchettina style)" data-de="(Kaninchen nach Rocchettina-Art)" data-es="(Conejo)" data-pt="(Coelho)" data-ru="(Кролик)" data-nl="(Konijn)"></span></div>
+          <div class="piatti-item"><span class="notranslate">Selvaggina al Vino Rosso</span> <span class="sub-trans" data-it="" data-fr="(Gibier)" data-en="(Game in red wine)" data-de="(Wildfleisch in Rotwein)" data-es="(Caza)" data-pt="(Caça)" data-ru="(Дичь)" data-nl="(Wild)"></span></div>
+          <div class="piatti-item"><span class="notranslate">Grigliata Mista di Carne</span> <span class="sub-trans" data-it="" data-fr="(Grillade)" data-en="(Mixed grilled meat)" data-de="(Gemischter Fleischteller)" data-es="(Parrillada)" data-pt="(Grelhado)" data-ru="(Гриль)" data-nl="(Grill)"></span></div>
+          <div class="piatti-item"><span class="notranslate">Agnello alla Griglia</span> <span class="sub-trans" data-it="" data-fr="(Agneau)" data-en="(Grilled lamb)" data-de="(Gegrilltes Lamm)" data-es="(Cordero)" data-pt="(Cordeiro)" data-ru="(Ягненок)" data-nl="(Lam)"></span></div>
+          <div class="piatti-item"><span class="notranslate">Roast Beef</span> <span class="sub-trans" data-it="" data-fr="(Rosbif)" data-en="(Roast beef)" data-de="(Roastbeef)" data-es="(Rosbif)" data-pt="(Rosbife)" data-ru="(Ростбиф)" data-nl="(Roastbeef)"></span></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ANTIPASTI SECTION -->
+  <!-- 2. ANTIPASTI -->
   <div class="section" id="sec-antipasti">
-    <h2 class="cat-title">🥗 <span data-it="Antipasti" data-fr="Hors d'Oeuvre" data-en="Starters">Antipasti</span></h2>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Antipasto Tipico del Lago Bin" data-fr="Assortiment Typique du Lago Bin" data-en="Typical Lago Bin Starter">Antipasto Tipico del Lago Bin</div></div><div class="item-price">€15,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Assortimento del Salumiere" data-fr="Assiette Mixte de Charcuterie" data-en="Mixed Charcuterie Platter">Assortimento del Salumiere</div></div><div class="item-price">€15,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Prosciutto di Parma con Melone o Grana" data-fr="Jambon de Parme avec Melon ou Grana" data-en="Parma Ham with Melon or Grana Cheese">Prosciutto di Parma con Melone o Grana</div></div><div class="item-price">€13,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it='Antipasto Misto "Caldo e Freddo" (per 2 pers.)' data-fr='Antipasto Mixte "Chaud et Froid" (pour 2 pers.)' data-en='Mixed Hot & Cold Antipasto (for 2 persons)'>Antipasto Misto "Caldo e Freddo" (per 2 pers.)</div></div><div class="item-price">€25,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Lumache in Umidio" data-fr="Escargot Typique" data-en="Braised Snails">Lumache in Umidio</div></div><div class="item-price">€18,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Brandacujan" data-fr="Brandacujan" data-en="Brandacujan (salt cod spread)">Brandacujan</div></div><div class="item-price">€15,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Tartare di Manzo al Coltello" data-fr="Tartare de Bœuf au Couteau" data-en="Hand-cut Beef Tartare">Tartare di Manzo al Coltello</div></div><div class="item-price">€20,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Tomino d'Alpeggio Caldo" data-fr="Tomino d'Alpage Chaud" data-en="Warm Alpine Tomino Cheese">Tomino d'Alpeggio Caldo</div></div><div class="item-price">€12,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Tartare di Pesce (*)" data-fr="Tartare de Poisson (*)" data-en="Fish Tartare (*)">Tartare di Pesce (*)</div><div class="item-desc" data-it="* Secondo disponibilità" data-fr="* Selon disponibilité" data-en="* Subject to availability">* Secondo disponibilità</div></div><div class="item-price">€18,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Antipasto Misto di Mare (*)" data-fr="Antipasto Mixte di Mer (*)" data-en="Mixed Seafood Antipasto (*)">Antipasto Misto di Mare (*)</div><div class="item-desc" data-it="* Secondo disponibilità" data-fr="* Selon disponibilité" data-en="* Subject to availability">* Secondo disponibilità</div></div><div class="item-price">€25,00</div></div>
+    <h2 class="cat-title">🥗 <span data-it="Antipasti à la Carte" data-fr="Entrées à la Carte" data-en="Starters à la Carte" data-de="Vorspeisen à la Carte" data-es="Entrantes à la Carte" data-pt="Entradas à la Carte" data-ru="Закуски а-ля карт" data-nl="Voorgerechten à la Carte">Antipasti à la Carte</span></h2>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Antipasto Tipico del Lago Bin</span><span class="sub-trans" data-it="" data-fr="(Assortiment Typique du Lago Bin)" data-en="(Typical Lago Bin Starter)" data-de="(Typische Lago Bin Vorspeise)" data-es="(Entrante Típico del Lago Bin)" data-pt="(Entrada Típica do Lago Bin)" data-ru="(Типичная закуска Лаго Бин)" data-nl="(Typisch Lago Bin Voorgerecht)"></span></div></div><div class="item-price">€15,00</div></div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Assortimento del Salumiere</span><span class="sub-trans" data-it="" data-fr="(Charcuterie fine sélectionnée)" data-en="(Mixed Premium Charcuterie Platter)" data-de="(Gemischte Aufschnittplatte)" data-es="(Surtido de embutidos premium)" data-pt="(Sortimento de embutidos premium)" data-ru="(Мясное ассорти премиум)" data-nl="(Luxe vleeswarenplank)"></span></div></div><div class="item-price">€15,00</div></div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Prosciutto di Parma con Melone o Grana</span><span class="sub-trans" data-it="" data-fr="(Jambon de Parme avec Melon ou Grana)" data-en="(Parma Ham with Melon or Grana Cheese)" data-de="(Parmaschinken mit Melone oder Grana-Käse)" data-es="(Jamón de Parma con Melón o Queso Grana)" data-pt="(Presunto de Parma com Melão ou Queijo Grana)" data-ru="(Пармская ветчина с дыней или Грана)" data-nl="(Parmaham met Meloen of Grana Kaas)"></span></div></div><div class="item-price">€13,00</div></div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Antipasto Misto "Caldo e Freddo"</span><span class="sub-trans" data-it="" data-fr="(Entrée Mixte Chaud et Froid)" data-en="(Mixed Hot and Cold Starter)" data-de="(Gemischte warme und kalte Vorspeise)" data-es="(Entrante Mixto Caliente y Frío)" data-pt="(Entrada Mista Quente e Fria)" data-ru="(Смешанная горячая и холодная закуска)" data-nl="(Gemengd Warm en Koud Voorgerecht)"></span></div></div><div class="item-price">€25,00</div></div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Lumache in Umido</span><span class="sub-trans" data-it="" data-fr="(Escargots braisés à l'italienne)" data-en="(Braised Snails Italian Style)" data-de="(Geschmorte Schnecken)" data-es="(Caracoles guisados al estilo italiano)" data-pt="(Caracóis guisados ao estilo italiano)" data-ru="(Улитки тушеные по-итальянски)" data-nl="(Gestoofde slakken op Italiaanse wijze)"></span></div></div><div class="item-price">€18,00</div></div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Brandacujan</span><span class="sub-trans" data-it="" data-fr="(Brandacujan - Brandade de morue)" data-en="(Brandacujan - Traditional Stockfish Spread)" data-de="(Pürierter Stockfisch nach traditioneller Art)" data-es="(Brandacujan - Bacalao tradicional)" data-pt="(Brandacujan - Bacalhau tradicional)" data-ru="(Брандакуджан - традиционная паста из трески)" data-nl="(Brandacujan - Traditionele Stokvispasta)"></span></div></div><div class="item-price">€15,00</div></div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Tartare di Manzo al Coltello</span><span class="sub-trans" data-it="" data-fr="(Tartare de Bœuf coupé au couteau)" data-en="(Hand-cut Beef Tartare)" data-de="(Frisches Rindertatar händisch geschnitten)" data-es="(Tartar de buey cortado a cuchillo)" data-pt="(Tartare de carne cortado à faca)" data-ru="(Татар из говядины ручной рубки)" data-nl="(Handgesneden rundertartaar)"></span></div></div><div class="item-price">€20,00</div></div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Tomino d'Alpeggio Caldo</span><span class="sub-trans" data-it="" data-fr="(Tomino d'Alpeggio Chaud)" data-en="(Warm Alpine Tomino Cheese)" data-de="(Warmer Alpen-Tomino-Käse)" data-es="(Queso Tomino alpino caliente)" data-pt="(Queijo Tomino alpino quente)" data-ru="(Теплый альпийский сыр Томино)" data-nl="(Warme Alpen Томино kaas)"></span></div></div><div class="item-price">€12,00</div></div>
   </div>
 
-  <!-- PRIMI SECTION -->
+  <!-- 3. PRIMI -->
   <div class="section" id="sec-primi">
-    <h2 class="cat-title">🍝 <span data-it="Primi Piatti" data-fr="Premier Plats" data-en="First Courses">Primi Piatti</span></h2>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Ravioli della Nonna" data-fr="Ravioli de la Grand-Mère" data-en="Grandma's Ravioli">Ravioli della Nonna</div><div class="item-desc" data-it="Al Pomodoro o al Burro e Salvia o al Burro e Timo o ai Funghi" data-fr="À la Tomate ou Beurre et Sauge ou Beurre et Thym ou aux Champignons" data-en="With Tomato, or Butter & Sage, or Butter & Thyme, or Mushrooms">Al Pomodoro o al Burro e Salvia o al Burro e Timo o ai Funghi</div></div><div class="item-price">€18,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Ravioli della Nonna al Coniglio" data-fr="Ravioli de la Grand-Mère au Lapin" data-en="Grandma's Rabbit Ravioli">Ravioli della Nonna al Coniglio</div></div><div class="item-price">€20,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Tagliatelle di Pasta Fresca" data-fr="Tagliatelles de Pâte Fraîche" data-en="Fresh Pasta Tagliatelle">Tagliatelle di Pasta Fresca</div><div class="item-desc" data-it="Alla Selvaggina o ai Funghi o al Pesto Fresco" data-fr="Au Gibier ou aux Cèpes ou au Pesto Frais" data-en="With Game, or Mushrooms, or Fresh Pesto">Alla Selvaggina o ai Funghi o al Pesto Fresco</div></div><div class="item-price">€15,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Tagliatelle di Pasta Fresca ai Frutti di Mare" data-fr="Tagliatelles aux Fruits de Mer" data-en="Fresh Tagliatelle with Seafood">Tagliatelle di Pasta Fresca ai Frutti di Mare</div></div><div class="item-price">€18,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Mezzelune di Magro" data-fr="Mezzelune Végétarien" data-en="Mezzelune Pasta (Vegetarian)">Mezzelune di Magro</div><div class="item-desc" data-it="Al Burro e Salvia o alle Noci" data-fr="Au Beurre et Sauge ou aux Noix" data-en="With Butter & Sage, or Walnuts">Al Burro e Salvia o alle Noci</div></div><div class="item-price">€15,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Troffie" data-fr="Troffie" data-en="Troffie Pasta">Troffie</div><div class="item-desc" data-it="Al Pesto Fresco o Primavera: Pomodoro, Ricotta, Pesto, Rucola" data-fr="Au Pesto Frais ou Printanier: Tomate, Ricotta, Pesto, Roquette" data-en="With Fresh Pesto or Spring style: Tomato, Ricotta, Pesto, Rocket">Al Pesto Fresco o Primavera: Pomodoro, Ricotta, Pesto, Rucola</div></div><div class="item-price">€15,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Troffie con Gamberetti e Zucchine" data-fr="Troffie aux Crevettes et Courgettes" data-en="Troffie with Prawns & Courgettes">Troffie con Gamberetti e Zucchine</div></div><div class="item-price">€18,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Gnocchi di Patate" data-fr="Gnocchi de Pomme de Terre" data-en="Potato Gnocchi">Gnocchi di Patate</div><div class="item-desc" data-it="Ai Funghi o ai Formaggi e Gorgonzola o al Burro e Salvia" data-fr="Aux Cèpes ou Fromages avec Gorgonzola ou Beurre et Sauge" data-en="With Mushrooms, or Cheese & Gorgonzola, or Butter & Sage">Ai Funghi o ai Formaggi e Gorgonzola o al Burro e Salvia</div></div><div class="item-price">€13,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Risotto ai Frutti di Mare (min. 2 pers.)" data-fr="Risotto aux Fruits de Mer (min. 2 pers.)" data-en="Seafood Risotto (min. 2 persons)">Risotto ai Frutti di Mare (min. 2 pers.)</div></div><div class="item-price">€20,00 p.</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it='Ravioli o Tagliatelle "Senza Glutine" (*)' data-fr='Ravioli ou Tagliatelles "Sans Gluten" (*)' data-en='Ravioli or Tagliatelle – Gluten Free (*)'>Ravioli o Tagliatelle "Senza Glutine" (*)</div><div class="item-desc" data-it="* Secondo disponibilità" data-fr="* Selon disponibilité" data-en="* Subject to availability">* Secondo disponibilità</div></div><div class="item-price">€20,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Duo di Primi (due piatti a scelta)" data-fr="Duo de Premiers Plats (deux plats au choix)" data-en="Duo of First Courses (two dishes of your choice)">Duo di Primi (due piatti a scelta)</div></div><div class="item-price">€25,00</div></div>
+    <h2 class="cat-title">🍝 <span data-it="Primi Piatti" data-fr="Premiers Plats" data-en="First Courses" data-de="Erster Gang" data-es="Primeros Platos" data-pt="Primeiros Pratos" data-ru="Первые блюда" data-nl="Eerste Gangen">Primi Piatti</span></h2>
+    <div class="item">
+      <div class="item-left">
+        <div class="item-name"><span class="notranslate">Ravioli della Nonna</span><span class="sub-trans" data-it="" data-fr="(Ravioli de la Grand-Mère)" data-en="(Grandma's Ravioli)" data-de="(Omas Ravioli)" data-es="(Raviolis de la abuela)" data-pt="(Ravioli da vovó)" data-ru="(Бабушкины равиоли)" data-nl="(Oma's Ravioli)"></span></div>
+        <div class="item-desc" data-it="Al Pomodoro o al Burro e Salvia o al Burro e Timo o ai Funghi" data-fr="À la sauce tomate, beurre et sauge, beurre et thym ou aux champignons" data-en="With Tomato, Butter & Sage, Butter & Thyme, or Mushrooms" data-de="Mit Tomatensauce, Butter & Salbei, Butter & Thymian oder Pilzen" data-es="Con tomate, mantequilla y salvia, mantequilla y tomillo o champiñones" data-pt="Com tomate, manteiga e sálvia, manteiga e tomilho ou cogumelos" data-ru="С томатами, маслом и шалфеем, маслом и тимьяном или грибами" data-nl="Met tomaat, boter & salie, boter & tijm, of paddenstoelen">Al Pomodoro o al Burro e Salvia o al Burro e Timo o ai Funghi</div>
+      </div>
+      <div class="item-price">€18,00</div>
+    </div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Ravioli della Nonna al Coniglio</span><span class="sub-trans" data-it="" data-fr="(Ravioli de la Grand-Mère au Lapin)" data-en="(Grandma's Ravioli with Rabbit Sauce)" data-de="(Omas Ravioli mit Kaninchensauce)" data-es="(Raviolis de la abuela con salsa de conejo)" data-pt="(Ravioli da vovó com molho de coelho)" data-ru="(Бабушкины равиоли с соусом из кролика)" data-nl="(Oma's Ravioli met konijnensaus)"></span></div></div><div class="item-price">€20,00</div></div>
+    <div class="item">
+      <div class="item-left">
+        <div class="item-name"><span class="notranslate">Tagliatelle di Pasta Fresca</span><span class="sub-trans" data-it="" data-fr="(Tagliatelles de Pâtes Fraîches)" data-en="(Fresh Pasta Tagliatelle)" data-de="(Frische Tagliatelle)" data-es="(Tallarines de pasta fresca)" data-pt="(Tagliatelle de massa fresca)" data-ru="(Тальятелле из свежей пасты)" data-nl="(Verse Tagliatelle)"></span></div>
+        <div class="item-desc" data-it="Alla Selvaggina o ai Funghi o al Pesto Fresco" data-fr="Au gibier, aux champignons ou au pesto frais" data-en="With Game sauce, Mushrooms, or Fresh Pesto" data-de="Mit Wildsauce, Pilzen oder frischem Pesto" data-es="Con salsa de caza, champiñones o pesto fresco" data-pt="Com molho de caça, cogumelos ou pesto fresco" data-ru="С соусом из дичи, грибами или свежим песто" data-nl="Met wildsaus, paddenstoelen of verse pesto">Alla Selvaggina o ai Funghi o al Pesto Fresco</div>
+      </div>
+      <div class="item-price">€15,00</div>
+    </div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Gnocchi di Patate</span><span class="sub-trans" data-it="" data-fr="(Gnocchi de Pommes de Terre)" data-en="(Potato Gnocchi)" data-de="(Kartoffelgnocchi)" data-es="(Ñoquis de patata)" data-pt="(Nhoque de batata)" data-ru="(Картофельные ньокки)" data-nl="(Aardappelgnocchi)"></span></div><div class="item-desc" data-it="Ai Funghi o ai Formaggi con Gorgonzola" data-fr="Aux champignons ou aux fromages avec gorgonzola" data-en="With Mushrooms or Mixed Cheese with Gorgonzola" data-de="Mit Pilzen oder Käsesauce und Gorgonzola" data-es="Con champiñones o quesos con gorgonzola" data-pt="Com cogumelos ou queijos com gorgonzola" data-ru="С грибами или сырами с горгонзолой" data-nl="Met paddenstoelen of kaassaus en gorgonzola">Ai Funghi o ai Formaggi con Gorgonzola</div></div><div class="item-price">€15,00</div></div>
   </div>
 
-  <!-- SECONDI SECTION -->
+  <!-- 4. SECONDI -->
   <div class="section" id="sec-secondi">
-    <h2 class="cat-title">🥩 <span data-it="Secondi Piatti" data-fr="Deuxième Plat" data-en="Main Courses">Secondi Piatti</span></h2>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Coniglio alla Rocchettina" data-fr="Lapin à la Rocchettina" data-en="Rabbit Rocchettina Style">Coniglio alla Rocchettina</div></div><div class="item-price">€15,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Selvaggina al Vino Rosso" data-fr="Gibier au Vin Rouge" data-en="Game in Red Wine">Selvaggina al Vino Rosso</div></div><div class="item-price">€18,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Costine di Agnello alla Griglia" data-fr="Côtes d'Agneau à la Grille" data-en="Grilled Lamb Ribs">Costine di Agnello alla Griglia</div></div><div class="item-price">€18,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Grigliata Mista di Carne" data-fr="Grillade Mixte de Viande" data-en="Mixed Meat Grill">Grigliata Mista di Carne</div></div><div class="item-price">€20,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Roast Beef" data-fr="Roast Beef" data-en="Roast Beef">Roast Beef</div></div><div class="item-price">€18,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Filetto di Manzo" data-fr="Filet de Bœuf" data-en="Beef Fillet">Filetto di Manzo</div><div class="item-desc" data-it="Al Pepe Verde, o al Gorgonzola o alla Griglia" data-fr="Au Poivre Vert ou au Gorgonzola ou à la Grille" data-en="With Green Pepper, or Gorgonzola, or Grilled">Al Pepe Verde, o al Gorgonzola o alla Griglia</div></div><div class="item-price">€25,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Pescato o Gamberoni (*)" data-fr="Poisson ou Gambas (*)" data-en="Fresh Fish or King Prawns (*)">Pescato o Gamberoni (*)</div><div class="item-desc" data-it="Al Forno o alla Griglia. * Secondo disponibilità" data-fr="Au Four ou à la Grille. * Selon disponibilité" data-en="Baked or Grilled. * Subject to availability">Al Forno o alla Griglia. * Secondo disponibilità</div></div><div class="item-price">€18,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Grigliata Mista di Pesce (*)" data-fr="Grillade Mixte de Poisson (*)" data-en="Mixed Fish Grill (*)">Grigliata Mista di Pesce (*)</div><div class="item-desc" data-it="* Secondo disponibilità" data-fr="* Selon disponibilité" data-en="* Subject to availability">* Secondo disponibilità</div></div><div class="item-price">€25,00</div></div>
-    <div style="text-align:center;font-size:12px;color:#666666;font-style:italic;margin-top:14px;" data-it="Tutti i Secondi Piatti sono accompagnati da Contorno" data-fr="Les Deuxièmes plats sono accompagnés par un Garnitures" data-en="All main courses are served with a side dish">Tutti i Secondi Piatti sono accompagnati da Contorno</div>
+    <h2 class="cat-title">🥩 <span data-it="Secondi Piatti" data-fr="Secondes Plats" data-en="Main Courses" data-de="Hauptgerichte" data-es="Segundos Platos" data-pt="Segundos Pratos" data-ru="Вторые блюда" data-nl="Hoofdgerechten">Secondi Piatti</span></h2>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Coniglio alla Rocchettina</span><span class="sub-trans" data-it="" data-fr="(Lapin à la Rocchettina)" data-en="(Rabbit Rocchettina Style)" data-de="(Kaninchen nach Rocchettina-Art)" data-es="(Conejo al estilo Rocchettina)" data-pt="(Coelho ao estilo Rocchettina)" data-ru="(Кролик по-роккеттински)" data-nl="(Konijn op Rocchettina-wijze)"></span></div></div><div class="item-price">€15,00</div></div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Selvaggina al Vino Rosso</span><span class="sub-trans" data-it="" data-fr="(Gibier au Vin Rouge)" data-en="(Game cooked in Red Wine)" data-de="(Wildfleisch in Rotwein)" data-es="(Caza al vino rosso)" data-pt="(Caça ao vinho tinto)" data-ru="(Дичь в красном вине)" data-nl="(Wild in rode wijn)"></span></div></div><div class="item-price">€18,00</div></div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Costine di Agnello alla Griglia</span><span class="sub-trans" data-it="" data-fr="(Côtes d'Agneau Grillées)" data-en="(Grilled Lamb Ribs)" data-de="(Gegrillte Lammrippchen)" data-es="(Costillas de cordero a la parrilla)" data-pt="(Costelinhas de cordeiro grelhadas)" data-ru="(Ребрышки ягненка на гриле)" data-nl="(Gegrilde lamskoteletjes)"></span></div></div><div class="item-price">€18,00</div></div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Grigliata Mista di Carne</span><span class="sub-trans" data-it="" data-fr="(Grillade de Viandes Mixtes)" data-en="(Mixed Premium Meat Grill)" data-de="(Gemischter Fleischteller)" data-es="(Parrillada mixta de carne)" data-pt="(Churrasco misto de carne)" data-ru="(Мясное ассорти на гриле)" data-nl="(Gemengde vleesgrill)"></span></div></div><div class="item-price">€20,00</div></div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Roast Beef</span><span class="sub-trans" data-it="" data-fr="(Rosbif Traditionnel)" data-en="(Traditional Roast Beef)" data-de="(Klassisches Roastbeef)" data-es="(Rosbif tradicional)" data-pt="(Rosbife tradicional)" data-ru="(Классический ростбиф)" data-nl="(Traditionele rosbief)"></span></div></div><div class="item-price">€18,00</div></div>
   </div>
 
-  <!-- CONTORNI SECTION -->
+  <!-- 5. CONTORNI -->
   <div class="section" id="sec-contorni">
-    <h2 class="cat-title">🥦 <span data-it="Contorni & Formaggi" data-fr="Garnitures & Fromages" data-en="Sides & Cheeses">Contorni & Formaggi</span></h2>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Assortimento Misto di Formaggi" data-fr="Assortiment Mixte de Fromages" data-en="Mixed Cheese Platter">Assortimento Misto di Formaggi</div></div><div class="item-price">€10,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Grigliata Mista di Verdure" data-fr="Grillade Mixte de Légumes" data-en="Mixed Grilled Vegetables">Grigliata Mista di Verdure</div></div><div class="item-price">€10,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name" data-it="Insalata Mista" data-fr="Salade Mixte" data-en="Mixed Salad">Insalata Mista</div></div><div class="item-price">€10,00</div></div>
+    <h2 class="cat-title">🥦 <span data-it="Contorni & Formaggi" data-fr="Accompagnements & Fromages" data-en="Sides & Cheeses" data-de="Beilagen & Käse" data-es="Guarniciones y Quesos" data-pt="Acompanhamentos e Queijos" data-ru="Гарниры и сыры" data-nl="Bijgerechten & Kazen">Contorni & Formaggi</span></h2>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Assortimento Misto di Formaggi</span><span class="sub-trans" data-it="" data-fr="(Sélection de Fromages)" data-en="(Mixed Cheese Platter)" data-de="(Gemischte Käseplatte)" data-es="(Tabla de quesos variados)" data-pt="(Tábua de queijos variados)" data-ru="(Сырное ассорти)" data-nl="(Gemengde kaasplank)"></span></div></div><div class="item-price">€10,00</div></div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Grigliata Mista di Verdure</span><span class="sub-trans" data-it="" data-fr="(Légumes Grillés)" data-en="(Mixed Grilled Vegetables)" data-de="(Gegrilltes Gemüse)" data-es="(Verduras a la parrilla)" data-pt="(Legumes grelhados)" data-ru="(Овощи на гриле)" data-nl="(Gegrilde groenten)"></span></div></div><div class="item-price">€10,00</div></div>
   </div>
 
-  <!-- DOLCE SECTION -->
+  <!-- 6. DOLCE -->
   <div class="section" id="sec-dolce">
-    <h2 class="cat-title">🍰 <span data-it="Carta dei Dolci" data-fr="Carte des Desserts" data-en="Dolce Card">Carta dei Dolci</span></h2>
+    <h2 class="cat-title">🍰 <span data-it="I Nostri Dolci" data-fr="Desserts Artisanaux" data-en="Homemade Desserts" data-de="Dessertkarte" data-es="Nuestros Postres" data-pt="Nossas Sobremesas" data-ru="Наши десерты" data-nl="Onze Desserts">I Nostri Dolci</span></h2>
     <div class="dolce-banner">
-      <h3 data-it="I Dolci di Nostra Produzione" data-fr="Nos Desserts Maison" data-en="Our Homemade Desserts">I Dolci di Nostra Produzione</h3>
-      <p data-it="Tutti i nostri dolci sono preparati artigianalmente ogni giorno" data-fr="Tous nos desserts sont préparés artisanalement chaque jour" data-en="All our desserts are handmade fresh every day">Tutti i nostri dolci sono preparati artigianalmente ogni giorno</p>
+      <h3 data-it="I Dolci di Nostra Produzione" data-fr="Nos Desserts Fait Maison" data-en="Our Homemade Desserts" data-de="Hausgemachte Desserts" data-es="Nuestros Postres Caseros" data-pt="Nossas Sobremesas Caseiras" data-ru="Десерты нашего производства" data-nl="Onze Huisgemaakte Desserts">I Dolci di Nostra Produzione</h3>
+      <p data-it="Tutti i nostri dolci sono preparati artigianalmente ogni giorno" data-fr="Tous nos desserts sont préparés avec amour chaque jour" data-en="All our desserts are handcrafted and freshly made every day" data-de="Alle unsere Desserts werden jeden Tag frisch handgemacht" data-es="Todos nuestros postres están hechos a mano cada día" data-pt="Todas as nossas sobremesas são feitas artesanalmente todos os dias" data-ru="Все наши десерты изготавливаются вручную каждый день" data-nl="Al onze desserts worden dagelijks ambachtelijk vers gemaakt">Tutti i nostri dolci sono preparati artigianalmente ogni giorno</p>
     </div>
 
     <div class="item">
       <div class="item-left">
-        <div class="item-name" data-it="Tiramisù" data-fr="Tiramisu" data-en="Tiramisu">Tiramisù</div>
-        <div class="item-desc" data-it="Dolce al caffè con mascarpone e cacao" data-fr="Dessert au café avec mascarpone et cacao" data-en="Coffee dessert with mascarpone and cocoa">Dolce al caffè con mascarpone e cacao</div>
+        <div class="item-name"><span class="notranslate">Tiramisù</span><span class="sub-trans" data-it="" data-fr="(Tiramisu Classique)" data-en="(Classic Tiramisu)" data-de="(Klassisches Tiramisu)" data-es="(Tiramisú Clásico)" data-pt="(Tiramisu Clássico)" data-ru="(Классический Тирамису)" data-nl="(Klassieke Tiramisu)"></span></div>
+        <div class="item-desc" data-it="Dolce al caffè con mascarpone e cacao" data-fr="Dessert au café avec mascarpone et cacao" data-en="Traditional coffee dessert with mascarpone cream and cocoa" data-de="Kaffeedessert mit Mascarpone und Kakao" data-es="Postre de café con mascarpone y cacao" data-pt="Sobremesa de café com mascarpone e cacau" data-ru="Кофейный десерт с маскарпоне и какао" data-nl="Koffiedessert met mascarpone en cacao">Dolce al caffè con mascarpone e cacao</div>
       </div>
       <div class="item-price">€6,00</div>
     </div>
 
     <div class="item">
       <div class="item-left">
-        <div class="item-name" data-it="Panna Cotta" data-fr="Panna Cotta" data-en="Panna Cotta">Panna Cotta</div>
-        <div class="item-desc" data-it="Dolce cremoso alla vaniglia con salsa di frutta" data-fr="Dessert crémeux à la vanille avec coulis de fruits" data-en="Creamy vanilla dessert with fruit sauce">Dolce cremoso alla vaniglia con salsa di frutta</div>
+        <div class="item-name"><span class="notranslate">Panna Cotta</span><span class="sub-trans" data-it="" data-fr="(Panna Cotta)" data-en="(Panna Cotta)" data-de="(Panna Cotta)" data-es="(Panna Cotta)" data-pt="(Panna Cotta)" data-ru="(Панна Котта)" data-nl="(Panna Cotta)"></span></div>
+        <div class="item-desc" data-it="Dolce cremoso alla vaniglia con salsa di frutta" data-fr="Dessert crémeux à la vanille avec coulis de fruits" data-en="Creamy vanilla pudding served with fruit coulis" data-de="Cremiges Vanilledessert mit Fruchtsauce" data-es="Postre cremoso de vainilla con salsa de frutas" data-pt="Sobremesa cremosa de baunilha com calda de frutas" data-ru="Сливочно-ванильный десерт с фруктовым соусом" data-nl="Romig vanilledessert met vruchtensaus">Dolce cremoso alla vaniglia con salsa di frutta</div>
       </div>
       <div class="item-price">€6,00</div>
-    </div>
-
-    <div class="item">
-      <div class="item-left">
-        <div class="item-name" data-it="Crème Caramel" data-fr="Crème Caramel" data-en="Crème Caramel">Crème Caramel</div>
-        <div class="item-desc" data-it="Budino al caramello fatto in casa" data-fr="Flan caramel maison" data-en="Homemade caramel custard pudding">Budino al caramello fatto in casa</div>
-      </div>
-      <div class="item-price">€6,00</div>
-    </div>
-
-    <div class="item">
-      <div class="item-left">
-        <div class="item-name" data-it="Crema Catalana" data-fr="Crème Catalane" data-en="Crema Catalana">Crema Catalana</div>
-        <div class="item-desc" data-it="Crema al forno con zucchero caramellato" data-fr="Crème cuite avec sucre caramélisé" data-en="Baked custard with caramelized sugar">Crema al forno con zucchero caramellato</div>
-      </div>
-      <div class="item-price">€6,00</div>
-    </div>
-
-    <div class="item">
-      <div class="item-left">
-        <div class="item-name" data-it="Semifreddo" data-fr="Semifreddo" data-en="Semifreddo">Semifreddo</div>
-        <div class="item-desc" data-it="Dessert freddo cremoso della casa" data-fr="Dessert glacé crémeux maison" data-en="Homemade creamy frozen dessert">Dessert freddo cremoso della casa</div>
-      </div>
-      <div class="item-price">€6,00</div>
-    </div>
-
-    <div class="item">
-      <div class="item-left">
-        <div class="item-name" data-it="Crumble di Mele con Gelato" data-fr="Crumble aux pommes avec glace" data-en="Apple crumble with ice cream">Crumble di Mele con Gelato</div>
-        <div class="item-desc" data-it="Crumble caldo servito con gelato alla vaniglia" data-fr="Crumble chaud servi avec glace vanille" data-en="Warm apple crumble served with vanilla ice cream">Crumble caldo servito con gelato alla vaniglia</div>
-      </div>
-      <div class="item-price">€6,00</div>
-    </div>
-
-    <div class="item">
-      <div class="item-left">
-        <div class="item-name" data-it="Bunet" data-fr="Bunet" data-en="Bunet">Bunet</div>
-        <div class="item-desc" data-it="Dolce tipico piemontese al cioccolato e amaretti" data-fr="Dessert piémontais au chocolat et amaretti" data-en="Traditional Piedmont chocolate and amaretti dessert">Dolce tipico piemontese al cioccolato e amaretti</div>
-      </div>
-      <div class="item-price">€6,00</div>
-    </div>
-
-    <div class="item">
-      <div class="item-left">
-        <div class="item-name" data-it="Macedonia di Frutta" data-fr="Macédoine de fruits" data-en="Fruit salad">Macedonia di Frutta</div>
-        <div class="item-desc" data-it="Frutta fresca di stagione" data-fr="Fruits frais de saison" data-en="Fresh seasonal fruit">Frutta fresca di stagione</div>
-      </div>
-      <div class="item-price">€6,00</div>
-    </div>
-
-    <div class="item">
-      <div class="item-left">
-        <div class="item-name" data-it="Assortimento Misto dei Dolci" data-fr="Assortiment de desserts" data-en="Mixed dessert platter">Assortimento Misto dei Dolci</div>
-        <div class="item-desc" data-it="Selezione dei nostri dolci della casa" data-fr="Sélection de desserts maison" data-en="Selection of homemade desserts">Selezione dei nostri dolci della casa</div>
-      </div>
-      <div class="item-price">€8,00</div>
     </div>
   </div>
 
-  <!-- GELATO SECTION -->
+  <!-- 7. GELATO -->
   <div class="section" id="sec-gelato">
-    <h2 class="cat-title">🍦 <span data-it="Gelato Artigianale" data-fr="Glace Artisanale" data-en="Artisan Ice Cream">Gelato Artigianale</span></h2>
-
-    <div class="dolce-banner">
-      <h3 data-it="Fatto in Casa ogni Giorno" data-fr="Fait Maison chaque Jour" data-en="Homemade Every Day">Fatto in Casa ogni Giorno</h3>
-      <p data-it="Il nostro gelato è preparato artigianalmente con ingredienti frescos" data-fr="Notre glace est préparée artisanalement avec des ingrédients frais" data-en="Our ice cream is handcrafted daily with fresh ingredients">Il nostro gelato è preparato artigianalmente con ingredienti freschi</p>
-    </div>
-
+    <h2 class="cat-title">🍦 <span data-it="Gelato Artigianale" data-fr="Glace Artisanale" data-en="Artisan Ice Cream" data-de="Hausgemachtes Eis" data-es="Helado Artesanal" data-pt="Sorvete Artesanal" data-ru="Крафтовое мороженое" data-nl="Ambachtelijk IJs">Gelato Artigianale</span></h2>
+    
     <div class="item">
       <div class="item-left">
-        <div class="item-name">🍦 <span data-it="Vaniglia" data-fr="Vanille" data-en="Vanilla">Vaniglia</span></div>
-        <div class="item-desc" data-it="Classico gusto alla vaniglia" data-fr="Saveur classique à la vanille" data-en="Classic vanilla flavour">Classico gusto alla vaniglia</div>
+        <div class="item-name">🍦 <span class="notranslate">Vaniglia</span><span class="sub-trans" data-it="" data-fr="(Glace Vanille)" data-en="(Vanilla Ice Cream)" data-de="(Vanilleeis)" data-es="(Helado de Vainilla)" data-pt="(Sorvete de Baunilha)" data-ru="(Ванильное мороженое)" data-nl="(Vanille-ijs)"></span></div>
       </div>
+      <div class="item-price">€5,00</div>
     </div>
-
     <div class="item">
       <div class="item-left">
-        <div class="item-name">🥛 <span data-it="Fiore di Latte" data-fr="Lait" data-en="Milk Cream">Fiore di Latte</span></div>
-        <div class="item-desc" data-it="Gelato al latte fresco" data-fr="Glace au lait frais" data-en="Fresh milk ice cream">Gelato al latte fresco</div>
+        <div class="item-name">🥛 <span class="notranslate">Fiore di Latte</span><span class="sub-trans" data-it="" data-fr="(Crème de Lait)" data-en="(Sweet Milk Cream Ice Cream)" data-de="(Milcheis)" data-es="(Helado de crema de leche)" data-pt="(Sorvete de creme de leite)" data-ru="(Молочное мороженое)" data-nl="(Roomijs)"></span></div>
       </div>
+      <div class="item-price">€5,00</div>
     </div>
-
     <div class="item">
       <div class="item-left">
-        <div class="item-name">🍓 <span data-it="Fragola" data-fr="Fraise" data-en="Strawberry">Fragola</span></div>
-        <div class="item-desc" data-it="Gelato alla fragola fresca" data-fr="Glace à la fraise fraîche" data-en="Fresh strawberry ice cream">Gelato alla fragola fresca</div>
+        <div class="item-name">🍫 <span class="notranslate">Cioccolata</span><span class="sub-trans" data-it="" data-fr="(Chocolat)" data-en="(Chocolate Ice Cream)" data-de="(Schokoladeneis)" data-es="(Helado de Chocolate)" data-pt="(Sorvete de Chocolate)" data-ru="(Шоколадное мороженое)" data-nl="(Chocolade-ijs)"></span></div>
       </div>
-    </div>
-
-    <div class="item">
-      <div class="item-left">
-        <div class="item-name">🌰 <span data-it="Nocciola" data-fr="Noisette" data-en="Hazelnut">Nocciola</span></div>
-        <div class="item-desc" data-it="Crema di nocciola piemontese" data-fr="Crème de noisette du Piémont" data-en="Piedmont hazelnut cream">Crema di nocciola piemontese</div>
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="item-left">
-        <div class="item-name">🍋 <span data-it="Limone" data-fr="Citron" data-en="Lemon">Limone</span></div>
-        <div class="item-desc" data-it="Sorbetto fresco al limone" data-fr="Sorbet au citron" data-en="Fresh lemon sorbet">Sorbetto fresco al limone</div>
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="item-left">
-        <div class="item-name">🥭 <span data-it="Mango" data-fr="Mangue" data-en="Mango">Mango</span></div>
-        <div class="item-desc" data-it="Gelato esotico al mango" data-fr="Glace exotic à la mangue" data-en="Exotic mango ice cream">Gelato esotico al mango</div>
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="item-left">
-        <div class="item-name">🍫 <span data-it="Cioccolata" data-fr="Chocolat" data-en="Chocolate">Cioccolata</span></div>
-        <div class="item-desc" data-it="Gelato al cioccolato fondente" data-fr="Glace au chocolat noir" data-en="Dark chocolate ice cream">Gelato al cioccolato fondente</div>
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="item-left">
-        <div class="item-name">☕ <span data-it="Caffè" data-fr="Café" data-en="Coffee">Caffè</span></div>
-        <div class="item-desc" data-it="Gelato al caffè intenso" data-fr="Glace au café intense" data-en="Strong coffee ice cream">Gelato al caffè intenso</div>
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="item-left">
-        <div class="item-name">🍧 <span data-it="Sorbetto" data-fr="Sorbet" data-en="Sorbet">Sorbetto</span></div>
-        <div class="item-desc" data-it="Sorbetto leggero di frutta" data-fr="Sorbet léger aux fruits" data-en="Light fruit sorbet">Sorbetto leggero di frutta</div>
-      </div>
-    </div>
-
-    <div class="item" style="margin-top:16px;">
-      <div class="item-left">
-        <div class="item-name" data-it="Gelato Artigianale" data-fr="Glace Artisanale" data-en="Artisan Ice Cream">Gelato Artigianale</div>
-        <div class="item-desc" data-it="Scegli il tuo gusto preferito" data-fr="Choisissez votre parfum préféré" data-en="Choose your favourite flavour">Scegli il tuo gusto preferito</div>
-      </div>
-      <div class="item-price">€6,00</div>
+      <div class="item-price">€5,00</div>
     </div>
   </div>
 
 </div>
 
+<!-- Premium Footer -->
 <div class="footer">
-  <div style="letter-spacing:1px; font-weight: bold;">✦ LAGO BIN ✦</div>
-  <div class="note" data-it="I Menù non sono Divisibili per più Persone" data-fr="Les Menus ne peuvent pas être partagés avec plusieurs personnes" data-en="Set menus cannot be shared between guests">I Menù non sono Divisibili per più Persone</div>
+  <div style="letter-spacing:2px" class="notranslate">✦ LAGO BIN ✦</div>
+  <div class="note" data-it="I Menù non sono Divisibili per più Persone" data-fr="Les Menus ne peuvent pas être partagés" data-en="Set menus cannot be shared between multiple guests" data-de="Menüs können nicht auf mehrere Personen aufgeteilt werden" data-es="Los menús no se pueden compartir" data-pt="Os menus não podem ser compartilhados" data-ru="Меню не делятся на несколько человек" data-nl="Menu's kunnen niet worden gedeeld">I Menù non sono Divisibili per più Persone</div>
 </div>
 
 <script type="text/javascript">
@@ -715,14 +395,28 @@ function googleTranslateElementInit() {
     currentLang = lang;
     resetGoogleTranslate();
 
-    document.querySelectorAll('.lang-btn').forEach(b => {
-      b.classList.remove('active');
-    });
-
-    el.classList.add('active');
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    if(el) el.classList.add('active');
 
     document.querySelectorAll('[data-' + lang + ']').forEach(item => {
-      item.textContent = item.getAttribute('data-' + lang);
+      if (!item.classList.contains('sub-trans')) {
+        item.textContent = item.getAttribute('data-' + lang);
+      }
+    });
+
+    // Handle Big Custom Under-Name Translation
+    document.querySelectorAll('.sub-trans').forEach(item => {
+      item.removeAttribute('data-google-translated');
+      let text = item.getAttribute('data-' + lang);
+      if(text && text.trim() !== "") {
+        item.textContent = text;
+        item.style.display = "block";
+        item.classList.add('notranslate'); 
+      } else {
+        item.textContent = "";
+        item.style.display = "none";
+        item.classList.remove('notranslate');
+      }
     });
 
     document.getElementById('translateBtn').textContent = '🌐 More Languages ▾';
@@ -735,39 +429,30 @@ function googleTranslateElementInit() {
     if (btn) btn.classList.add('active');
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.getElementById('sec-' + tab).classList.add('active');
-    
-    // Smooth scrolling to tabs
-    const headerHeight = document.querySelector('.tabs-wrap').offsetTop;
-    window.scrollTo({ top: headerHeight - 10, behavior: 'smooth' });
+    window.scrollTo({ top: document.querySelector('.tabs-wrap').offsetTop - 10, behavior: 'smooth' });
   }
 
-  function toggleDropdown() {
-    document.getElementById('langDropdown').classList.toggle('open');
-  }
-
-  function closeDropdown() {
-    document.getElementById('langDropdown').classList.remove('open');
-  }
+  function toggleDropdown() { document.getElementById('langDropdown').classList.toggle('open'); }
+  function closeDropdown() { document.getElementById('langDropdown').classList.remove('open'); }
 
   document.addEventListener('click', function(e) {
     if (!e.target.closest('.translate-wrap')) closeDropdown();
   });
 
   function googleTranslate(langCode) {
-    const langNames = {
-      'de':'🇩🇪 Deutsch','es':'🇪🇸 Español','pt':'🇵🇹 Português','ru':'🇷🇺 Русский',
-      'nl':'🇳🇱 Nederlands','pl':'🇵🇱 Polski','sv':'🇸🇪 Svenska','ro':'🇷🇴 Română',
-      'el':'🇬🇷 Ελληνικά','cs':'🇨🇿 Čeština','hu':'🇭🇺 Magyar','uk':'🇺🇦 Українська',
-      'da':'🇩🇰 Dansk','fi':'🇫🇮 Suomi','no':'🇳🇴 Norsk','sk':'🇸🇰 Slovenčina',
-      'bg':'🇧🇬 Български','hr':'🇭🇷 Hrvatski','sr':'🇷🇸 Срপски','sq':'🇦🇱 Shqip',
-      'ar':'🇸🇦 العربية','tr':'🇹🇷 Türkçe','zh-CN':'🇨🇳 中文','ja':'🇯🇵 日本語',
-      'ko':'🇰🇷 한국어','hi':'🇮🇳 हिन्दी','bn':'🇧🇩 বাংলা','th':'🇹🇭 ไทย',
-      'vi':'🇻🇳 Tiếng Việt','id':'🇮🇩 Indonesia','fa':'🇮🇷 فارسی','he':'🇮🇱 עברית'
-    };
     closeDropdown();
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('translateBtn').textContent = langNames[langCode] + ' ✓';
     document.getElementById('translatingBar').classList.add('show');
+    
+    document.querySelectorAll('.sub-trans').forEach(item => {
+      item.classList.remove('notranslate');
+      let defaultTrans = item.getAttribute('data-' + langCode) || item.getAttribute('data-en') || item.getAttribute('data-fr');
+      if(defaultTrans) {
+        item.textContent = defaultTrans;
+        item.style.display = "block";
+      }
+    });
+
     const select = document.querySelector('.goog-te-combo');
     if (select) {
       select.value = langCode;
@@ -775,14 +460,17 @@ function googleTranslateElementInit() {
       setTimeout(() => document.getElementById('translatingBar').classList.remove('show'), 2000);
     } else {
       document.cookie = "googtrans=/it/" + langCode + "; path=/";
-      document.cookie = "googtrans=/it/" + langCode + "; path=/; domain=" + window.location.hostname;
       setTimeout(() => { window.location.reload(); }, 500);
     }
   }
 
   function resetGoogleTranslate() {
     document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + window.location.hostname;
+    const select = document.querySelector('.goog-te-combo');
+    if (select && select.value !== "") {
+      select.value = "";
+      select.dispatchEvent(new Event('change'));
+    }
   }
 </script>
 </body>
