@@ -42,14 +42,6 @@
   .translating-bar { display: none; background: #fff3cd; padding: 12px 20px; text-align: center; font-size: 14px; color: #856404; border-bottom: 1px solid #ffeeba; font-weight: bold; }
   .translating-bar.show { display: block; }
 
-  /* Search Bar Styling */
-  .search-container { max-width: 700px; margin: 16px auto 0; padding: 0 16px; position: relative; }
-  .search-box-wrap { position: relative; background: #fff; border: 2px solid #d4af37; border-radius: 50px; display: flex; align-items: center; padding: 8px 16px; box-shadow: 0 4px 12px rgba(212,175,55,0.2); transition: all 0.3s ease; }
-  .search-box-wrap:focus-within { border-color: #d4af37; box-shadow: 0 6px 20px rgba(212,175,55,0.3); }
-  .search-icon { font-size: 18px; color: #d4af37; margin-right: 10px; }
-  .search-input { width: 100%; border: none; outline: none; padding: 10px 0; font-size: 15px; font-family: inherit; color: #150e0b; background: transparent; }
-  .search-input::placeholder { color: #bca07d; }
-
   /* Sticky Tabs */
   .tabs-wrap { background: #1a110e; border-bottom: 3px solid #d4af37; width: 100%; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
   .tabs { display: flex; flex-wrap: wrap; overflow-x: auto; gap: 12px; padding: 14px 16px; -webkit-overflow-scrolling: touch; justify-content: flex-start; }
@@ -122,11 +114,28 @@
     </div>
   </div>
 </div>
-<div class="search-container">
-  <div class="search-box-wrap">
-    <span class="search-icon">🔍</span>
-    <input type="text" class="search-input" id="menuSearch" placeholder="Cerca nel menu... (es: Tartar, Ravioli)" onkeyup="searchMenu()">
-  </div>
+<!-- Add this section to your HTML where you want the search button/bar -->
+<div class="search-container" style="padding: 10px 16px; background: #0b0202; text-align: center;">
+  <input type="text" id="menuSearch" placeholder="Cerca nel menù..." onkeyup="searchMenu()" 
+         style="padding: 10px; border-radius: 20px; border: 1px solid #d4af37; background: #1a110e; color: #f9f1e2; width: 100%; max-width: 400px; text-align: center;">
+</div>
+
+<script>
+function searchMenu() {
+  const input = document.getElementById('menuSearch');
+  const filter = input.value.toUpperCase();
+  const items = document.querySelectorAll('.item');
+  
+  items.forEach(item => {
+    const text = item.textContent || item.innerText;
+    if (text.toUpperCase().indexOf(filter) > -1) {
+      item.style.display = "";
+    } else {
+      item.style.display = "none";
+    }
+  });
+}
+</script>
 </div>
 <!-- Language Navigation Bar -->
 <div class="lang-bar">
