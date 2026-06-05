@@ -101,6 +101,10 @@
   .goog-te-banner-frame { display: none !important; }
   body { top: 0 !important; }
   .skiptranslate { display: none !important; }
+
+  /* Search result message */
+  .search-notice { display: none; text-align: center; padding: 20px; color: #d4af37; font-size: 16px; font-weight: bold; }
+  .search-notice.show { display: block; }
 </style>
 </head>
 <body>
@@ -121,7 +125,7 @@
 <div class="search-container">
   <div class="search-box-wrap">
     <span class="search-icon">🔍</span>
-    <input type="text" class="search-input" id="menuSearch" placeholder="Cerca nel menu..." onkeyup="searchMenu()">
+    <input type="text" class="search-input" id="menuSearch" placeholder="Cerca nel menu... (es: Tartar, Ravioli)" onkeyup="searchMenu()">
   </div>
 </div>
 <!-- Language Navigation Bar -->
@@ -206,6 +210,7 @@
 </div>
 
 <div class="content">
+  <div class="search-notice" id="searchNotice"></div>
 
   <!-- 1. MENU PACKAGES SECTION -->
   <div class="section active" id="sec-menu_packages">
@@ -682,18 +687,38 @@ function googleTranslateElementInit() {
   }
 
   function searchMenu() {
-    let input = document.getElementById("menuSearch").value.toLowerCase();
+    let input = document.getElementById("menuSearch").value.toLowerCase().trim();
     let items = document.querySelectorAll(".item");
+    let notice = document.getElementById("searchNotice");
+    let visibleCount = 0;
 
-    items.forEach(function(item) {
-      let text = item.textContent.toLowerCase();
-
-      if (text.includes(input)) {
+    if (input === "") {
+      // Show all items if search is empty
+      items.forEach(function(item) {
         item.style.display = "";
+      });
+      notice.classList.remove("show");
+    } else {
+      // Filter items
+      items.forEach(function(item) {
+        let text = item.textContent.toLowerCase();
+        
+        if (text.includes(input)) {
+          item.style.display = "";
+          visibleCount++;
+        } else {
+          item.style.display = "none";
+        }
+      });
+
+      // Show notice message
+      if (visibleCount === 0) {
+        notice.textContent = `❌ No items found for "${input}". Try searching for: Ravioli, Tartar, Tiramisu, etc.`;
       } else {
-        item.style.display = "none";
+        notice.textContent = `✓ Found ${visibleCount} item${visibleCount !== 1 ? 's' : ''} matching "${input}"`;
       }
-    });
+      notice.classList.add("show");
+    }
   }
 </script>
 </body>
