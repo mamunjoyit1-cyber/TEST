@@ -120,7 +120,12 @@
     </div>
   </div>
 </div>
-
+<div class="search-container">
+  <div class="search-box-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" id="menuSearch" placeholder="Cerca nel menu..." onkeyup="searchMenu()">
+  </div>
+</div>
 <!-- Language Navigation Bar -->
 <div class="lang-bar">
   <button class="lang-btn active" onclick="setLang('it', this)">🇮🇹 Italiano</button>
@@ -677,6 +682,20 @@ function googleTranslateElementInit() {
       select.dispatchEvent(new Event('change'));
     }
   }
+ function searchMenu() {
+  let input = document.getElementById("menuSearch").value.toLowerCase();
+  let items = document.querySelectorAll(".item");
+
+  items.forEach(function(item) {
+    let text = item.textContent.toLowerCase();
+
+    if (text.includes(input)) {
+      item.style.display = "";
+    } else {
+      item.style.display = "none";
+    }
+  });
+}
 </script>
 </body>
 </html>
