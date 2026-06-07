@@ -704,14 +704,17 @@ function googleTranslateElementInit() {
     setLang('it', document.querySelector('.lang-btn'));
   });
 
-  // ── Language switch (IT / FR / EN / DE) ──────────────────────────────────
-  function setLang(lang, el) {
-    currentLang = lang;
-    resetGoogleTranslate();
-    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-    if (el) el.classList.add('active');
+  // ── Core language apply — strips Google <font> tags first, then sets text ──
+  function applyLang(lang) {
+    // 1. Remove all <font> tags Google Translate injects (unwrap their content)
+    document.querySelectorAll('font').forEach(font => {
+      const parent = font.parentNode;
+      if (!parent) return;
+      while (font.firstChild) parent.insertBefore(font.firstChild, font);
+      parent.removeChild(font);
+    });
 
-    // Update every element that carries data-{lang} except sub-trans / piatti-sauce
+    // 2. Update all data-lang elements except sub-trans / piatti-sauce
     document.querySelectorAll('[data-' + lang + ']').forEach(item => {
       if (!item.classList.contains('sub-trans') && !item.classList.contains('piatti-sauce')) {
         const val = item.getAttribute('data-' + lang);
@@ -719,7 +722,7 @@ function googleTranslateElementInit() {
       }
     });
 
-    // sub-trans: show only when non-empty
+    // 3. sub-trans
     document.querySelectorAll('.sub-trans').forEach(item => {
       const text = item.getAttribute('data-' + lang) || '';
       if (text.trim() !== '') {
@@ -733,27 +736,49 @@ function googleTranslateElementInit() {
       }
     });
 
-    // piatti-sauce: show only when non-empty
+    // 4. piatti-sauce
     document.querySelectorAll('.piatti-sauce').forEach(item => {
       const text = item.getAttribute('data-' + lang) || '';
       item.textContent = text;
       item.style.display = text.trim() ? 'block' : 'none';
     });
 
-    // Also update cocktail-name elements that have data-lang attributes
+    // 5. cocktail-name items with data-lang
     document.querySelectorAll('.cocktail-name[data-' + lang + ']').forEach(item => {
       const val = item.getAttribute('data-' + lang);
       if (val) item.textContent = val;
     });
+  }
 
+  // ── Language switch (IT / FR / EN / DE) ──────────────────────────────────
+  function setLang(lang, el) {
+    currentLang = lang;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    if (el) el.classList.add('active');
     document.getElementById('translateBtn').textContent = '🌐 More Languages ▾';
     closeDropdown();
 
-    // Rebuild search index for new language
+    const select = document.querySelector('.goog-te-combo');
+    const googleWasActive = select && select.value !== '';
+
+    if (googleWasActive) {
+      // Reset Google Translate first (select = ""), then wait for Google
+      // to finish un-translating the DOM before we apply our lang
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      select.value = '';
+      select.dispatchEvent(new Event('change'));
+
+      // Give Google ~600ms to revert DOM, then apply our language on top
+      setTimeout(() => applyLang(lang), 650);
+    } else {
+      // Google was not active — apply immediately
+      applyLang(lang);
+    }
+
+    // Rebuild search index
     _searchIdx = null;
-    // Re-run search if box is non-empty
     const q = document.getElementById('searchInput').value;
-    if (q && q.trim().length >= 2) searchMenu(q);
+    if (q && q.trim().length >= 2) setTimeout(() => searchMenu(q), googleWasActive ? 700 : 0);
   }
 
   // ── Tab navigation ────────────────────────────────────────────────────────
@@ -851,35 +876,14 @@ function googleTranslateElementInit() {
   }
 
   function resetGoogleTranslate() {
+    // Called only from googleTranslate() — just resets the cookie/select
+    // setLang() handles full DOM restoration via applyLang()
     document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     const select = document.querySelector('.goog-te-combo');
     if (select && select.value !== '') {
       select.value = '';
       select.dispatchEvent(new Event('change'));
     }
-    // Restore notranslate on sub-trans for IT/FR/EN/DE mode
-    document.querySelectorAll('.sub-trans').forEach(item => {
-      const text = item.getAttribute('data-' + currentLang) || '';
-      if (text.trim() !== '') {
-        item.textContent = text;
-        item.style.display = 'block';
-        item.classList.add('notranslate');
-      } else {
-        item.textContent = '';
-        item.style.display = 'none';
-        item.classList.remove('notranslate');
-      }
-    });
-    document.querySelectorAll('.piatti-sauce').forEach(item => {
-      const text = item.getAttribute('data-' + currentLang) || '';
-      item.textContent = text;
-      item.style.display = text.trim() ? 'block' : 'none';
-    });
-    // Restore cocktail-name items that have data-lang
-    document.querySelectorAll('.cocktail-name[data-' + currentLang + ']').forEach(item => {
-      const val = item.getAttribute('data-' + currentLang);
-      if (val) item.textContent = val;
-    });
   }
 
   // ── Multilingual search ───────────────────────────────────────────────────
