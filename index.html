@@ -113,11 +113,14 @@
   .goog-te-banner-frame { display: none !important; }
   body { top: 0 !important; }
   .skiptranslate { display: none !important; }
+
+  /* Digital Wine Button */
+  .digital-wine-btn { display: flex; align-items: center; justify-content: center; gap: 14px; background: linear-gradient(135deg,#3d0b0b,#5a1010); border: 2px solid #d4af37; border-radius: 14px; padding: 22px 28px; text-decoration: none; color: #ffffff; box-shadow: 0 5px 20px rgba(0,0,0,0.5); font-size: 18px; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 20px; }
+  .digital-wine-btn:hover { background: linear-gradient(135deg,#5a1010,#7a1515); }
+  .btn-arrow { background: #d4af37; color: #150e0b; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
 </style>
 </head>
 <body>
-
-<div id="google_translate_element"></div>
 
 <!-- Header -->
 <div class="header">
@@ -137,54 +140,15 @@
   <button class="lang-btn" onclick="setLang('fr', this)">🇫🇷 Français</button>
   <button class="lang-btn" onclick="setLang('en', this)">🇬🇧 English</button>
   <button class="lang-btn" onclick="setLang('de', this)">🇩🇪 Deutsch</button>
-
-  <div class="translate-wrap">
-    <button class="translate-btn" onclick="toggleDropdown(event)" id="translateBtn">🌐 More Languages ▾</button>
-    <div class="lang-dropdown" id="langDropdown">
-      <div class="lang-dropdown-section">🇪🇺 Europe</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('es')">🇪🇸 Español</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('pt')">🇵🇹 Português</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('ru')">🇷🇺 Русский</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('nl')">🇳🇱 Nederlands</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('pl')">🇵🇱 Polski</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('sv')">🇸🇪 Svenska</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('ro')">🇷🇴 Română</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('el')">🇬🇷 Ελληνικά</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('cs')">🇨🇿 Čeština</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('hu')">🇭🇺 Magyar</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('uk')">🇺🇦 Українська</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('da')">🇩🇰 Dansk</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('fi')">🇫🇮 Suomi</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('no')">🇳🇴 Norsk</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('sk')">🇸🇰 Slovenčina</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('bg')">🇧🇬 Български</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('hr')">🇭🇷 Hrvatski</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('sr')">🇷🇸 Српски</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('sq')">🇦🇱 Shqip</div>
-      <div class="lang-dropdown-section">🌍 Other / World</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('ar')">🇦🇪 العربية</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('tr')">🇹🇷 Türkçe</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('zh-CN')">🇨🇳 中文</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('ja')">🇯🇵 日本語</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('ko')">🇰🇷 한국어</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('hi')">🇮🇳 हिन्दी</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('bn')">🇧🇩 বাংলা</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('th')">🇹🇭 ไทย</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('vi')">🇻🇳 Tiếng Việt</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('id')">🇮🇩 Bahasa Indonesia</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('fa')">🇮🇷 فارسی</div>
-      <div class="lang-dropdown-item" onclick="googleTranslate('iw')">🇮🇱 עברית</div>
-    </div>
-  </div>
 </div>
 
 <!-- Quick Cards -->
 <div class="quick-cards">
-  <a class="quick-card" href="https://mamunjoyit1-cyber.github.io/carta-dei-vini/" target="_blank">
+  <a class="quick-card" href="#" onclick="setTab('vini'); return false;">
     <div class="card-icon">🍷</div>
     <div class="card-text">
       <span data-it="Carta dei Vini" data-fr="Carte des Vins" data-en="Wine List" data-de="Weinkarte">Carta dei Vini</span>
-      <span class="card-label" data-it="I Nostri Vini" data-fr="Nos Vins" data-en="Our Wines" data-de="Unsere Weine">I Nostri Vini</span>
+      <span class="card-label" data-it="Apri Lista Digitale" data-fr="Ouvrir la Liste" data-en="Open Digital List" data-de="Digitale Liste öffnen">Apri Lista Digitale</span>
     </div>
   </a>
   <div class="quick-card" onclick="setTab('dolce')">
@@ -194,7 +158,6 @@
       <span class="card-label" data-it="I Nostri Dessert" data-fr="Nos Desserts" data-en="Our Desserts" data-de="Unsere Desserts">I Nostri Dessert</span>
     </div>
   </div>
-
   <div class="quick-card" onclick="setTab('bar')">
     <div class="card-icon">🥂</div>
     <div class="card-text">
@@ -211,8 +174,6 @@
   </div>
   <div id="searchResults"></div>
 </div>
-
-<div class="translating-bar" id="translatingBar">🌐 Translating menu... please wait a moment</div>
 
 <!-- Navigation Sticky Tabs -->
 <div class="tabs-wrap">
@@ -276,14 +237,9 @@
       </div>
       <div class="item-desc" style="margin-top:8px;" data-it="Un Piatto a scelta + Gelato Fatto in Casa + Bibita" data-fr="Un Plat au choix + Glace Maison + Boisson" data-en="One dish of your choice + Homemade Ice Cream + Drink" data-de="Ein Gericht nach Wahl + Hausgemachtes Eis + Getränk">Un Piatto a scelta + Gelato Fatto in Casa + Bibita</div>
 
-      <div class="bambini-grid">
-        <div class="bambini-item"><span class="notranslate">Ravioli</span> <span class="sub-trans" data-it="" data-fr="(Raviolis)" data-en="(Ravioli)" data-de="(Ravioli)"></span></div>
-        <div class="bambini-item"><span class="notranslate">Tagliatelle</span> <span class="sub-trans" data-it="" data-fr="(Tagliatelles)" data-en="(Tagliatelle)" data-de="(Tagliatelle)"></span></div>
-        <div class="bambini-item"><span class="notranslate">Gnocchi</span> <span class="sub-trans" data-it="" data-fr="(Gnocchis)" data-en="(Gnocchi)" data-de="(Gnocchi)"></span></div>
-        <div class="bambini-item"><span class="notranslate">Milanese</span> <span class="sub-trans" data-it="" data-fr="(Escalope milanaise)" data-en="(Milanese cutlet)" data-de="(Schnitzel Wiener Art)"></span></div>
-        <div class="bambini-item"><span class="notranslate">Bistecca</span> <span class="sub-trans" data-it="" data-fr="(Steak)" data-en="(Steak)" data-de="(Steak)"></span></div>
-        <div class="bambini-item"><span class="notranslate">Rostelle</span> <span class="sub-trans" data-it="" data-fr="(Brochettes)" data-en="(Skewers)" data-de="(Fleischspieße)"></span></div>
-        <div class="bambini-item"><span class="notranslate">Salsiccia</span> <span class="sub-trans" data-it="" data-fr="(Saucisse)" data-en="(Sausage)" data-de="(Wurst)"></span></div>
+      <div style="margin-top:10px;padding:10px 14px;background:#fdf5e6;border:1px solid #c5a880;border-radius:8px;font-size:14px;color:#4f3f35;line-height:1.8;">
+        <span class="notranslate">Ravioli · Tagliatelle · Gnocchi · Milanese · Bistecca · Rostelle · Salsiccia</span>
+        <span class="sub-trans" data-it="" data-fr="Ravioli · Tagliatelles · Gnocchi · Escalope · Steak · Brochettes · Saucisse" data-en="Ravioli · Tagliatelle · Gnocchi · Milanese · Steak · Skewers · Sausage" data-de="Ravioli · Tagliatelle · Gnocchi · Schnitzel · Steak · Spieße · Wurst" style="border-left:none;background:none;padding:0;display:none;"></span>
       </div>
 
       <div class="note-box">
@@ -522,14 +478,13 @@
 
   <!-- 8. VINI -->
   <div class="section" id="sec-vini">
-    <h2 class="cat-title">🍷 <span data-it="I Nostri Vini" data-fr="Nos Vins" data-en="Our Wines" data-de="Unsere Weine">I Nostri Vini</span></h2>
-    <div style="margin-bottom:20px;">
-      <a href="https://mamunjoyit1-cyber.github.io/carta-dei-vini/" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:14px;background:linear-gradient(135deg,#3d0b0b,#5a1010);border:2px solid #d4af37;border-radius:14px;padding:22px 28px;text-decoration:none;color:#ffffff;box-shadow:0 5px 20px rgba(0,0,0,0.5);transition:all 0.3s;font-size:18px;font-weight:bold;letter-spacing:0.5px;">
-        <span>🍷</span>
-        <span data-it="Clicca qui per la Carta dei Vini Digitale" data-fr="Cliquez ici pour la Carte des Vins Digitale" data-en="Click here for the Digital Wine List" data-de="Hier klicken für die digitale Weinkarte">Clicca qui per la Carta dei Vini Digitale</span>
-        <span style="background:#d4af37;color:#150e0b;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">➔</span>
-      </a>
-    </div>
+    <h2 class="cat-title">🍷 <span data-it="Carta dei Vini" data-fr="Carte des Vins" data-en="Wine List" data-de="Weinkarte">Carta dei Vini</span></h2>
+
+    <a href="https://mamunjoyit1-cyber.github.io/carta-dei-vini/" target="_blank" class="digital-wine-btn">
+      <span>🍷 <span data-it="Clicca qui per la Carta dei Vini Digitale" data-fr="Cliquez pour la Carte des Vins" data-en="Click for the Digital Wine List" data-de="Hier für die digitale Weinkarte klicken">Clicca qui per la Carta dei Vini Digitale</span></span>
+      <span class="btn-arrow">➔</span>
+    </a>
+
     <div style="text-align:center;color:#bca07d;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin:20px 0 14px;" data-it="Vini al Calice" data-fr="Vins au Verre" data-en="Wines by the Glass" data-de="Weine im Glas">Vini al Calice</div>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Vino Rosso della Casa</span><span class="sub-trans" data-it="" data-fr="(Vin Rouge Maison)" data-en="(House Red Wine)" data-de="(Hauswein Rot)"></span></div><div class="item-desc" data-it="Calice" data-fr="Au verre" data-en="Glass" data-de="Glas">Calice</div></div><div class="item-price">€5,00</div></div>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Vino Bianco della Casa</span><span class="sub-trans" data-it="" data-fr="(Vin Blanc Maison)" data-en="(House White Wine)" data-de="(Hauswein Weiß)"></span></div><div class="item-desc" data-it="Calice" data-fr="Au verre" data-en="Glass" data-de="Glas">Calice</div></div><div class="item-price">€5,00</div></div>
@@ -682,19 +637,11 @@
   <div class="note" data-it="I Menù non sono Divisibili per più Persone" data-fr="Les Menus ne peuvent pas être partagés" data-en="Set menus cannot be shared between multiple guests" data-de="Menüs können nicht auf mehrere Personen aufgeteilt werden">I Menù non sono Divisibili per più Persone</div>
 </div>
 
-<script type="text/javascript">
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({ pageLanguage: 'it', autoDisplay: false }, 'google_translate_element');
-}
-</script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
 <script>
   let currentLang = 'it';
 
   function setLang(lang, el) {
     currentLang = lang;
-    resetGoogleTranslate();
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
     if(el) el.classList.add('active');
     document.querySelectorAll('[data-' + lang + ']').forEach(item => {
@@ -715,8 +662,6 @@ function googleTranslateElementInit() {
         item.classList.remove('notranslate');
       }
     });
-    document.getElementById('translateBtn').textContent = '🌐 More Languages ▾';
-    closeDropdown();
   }
 
   function setTab(tab, el) {
@@ -741,72 +686,6 @@ function googleTranslateElementInit() {
     if(target) target.classList.add('active');
   }
 
-  function toggleDropdown(event) {
-    if(event) event.stopPropagation();
-    document.getElementById('langDropdown').classList.toggle('open');
-  }
-
-  function closeDropdown() {
-    document.getElementById('langDropdown').classList.remove('open');
-  }
-
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('.translate-wrap')) closeDropdown();
-  });
-
-  function googleTranslate(langCode) {
-    closeDropdown();
-    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('translatingBar').classList.add('show');
-
-    // sub-trans: English text বসাও এবং notranslate সরাও
-    document.querySelectorAll('.sub-trans').forEach(item => {
-      item.classList.remove('notranslate');
-      let defaultTrans = item.getAttribute('data-en') || item.getAttribute('data-fr');
-      if(defaultTrans && defaultTrans.trim() !== '') {
-        item.textContent = defaultTrans;
-        item.style.display = "block";
-      }
-    });
-
-    // data-en আছে এমন সব elements: English text বসাও, notranslate সরাও
-    document.querySelectorAll('[data-en]').forEach(item => {
-      if(item.classList.contains('sub-trans')) return;
-      let enText = item.getAttribute('data-en');
-      if(enText && enText.trim() !== '') {
-        item.classList.remove('notranslate');
-        item.textContent = enText;
-      }
-    });
-
-    // piatti-item, cocktail-name, price-row span এর notranslate সরাও
-    document.querySelectorAll('.piatti-item .notranslate, .piatti-sauce, .cocktail-name.notranslate, .price-row span.notranslate, .cocktail-group').forEach(item => {
-      item.classList.remove('notranslate');
-    });
-
-    const select = document.querySelector('.goog-te-combo');
-    if (select) {
-      select.value = langCode;
-      select.dispatchEvent(new Event('change'));
-      setTimeout(() => document.getElementById('translatingBar').classList.remove('show'), 2000);
-    } else {
-      document.cookie = "googtrans=/it/" + langCode + "; path=/";
-      setTimeout(() => { window.location.reload(); }, 500);
-    }
-  }
-
-  function resetGoogleTranslate() {
-    document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    const select = document.querySelector('.goog-te-combo');
-    if (select && select.value !== "") {
-      select.value = "";
-      select.dispatchEvent(new Event('change'));
-    }
-    // notranslate ফিরিয়ে দাও
-    document.querySelectorAll('.piatti-item span, .cocktail-name, .price-row span:first-child').forEach(item => {
-      item.classList.add('notranslate');
-    });
-  }
 
   function searchMenu(query) {
     const resultsBox = document.getElementById('searchResults');
