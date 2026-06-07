@@ -225,25 +225,37 @@ cat > /home/claude/menu_fixed.html << 'ENDOFFILE'
       <div class="item-price">€30,00</div>
     </div>
 
-    <!-- MENU BAMBINI — FIX: desc and label fully translated, dish names stay notranslate -->
-    <div class="item" style="display:block;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;width:100%;">
-        <div class="item-name">
-          <span class="notranslate">Menù Bambini (4/10 Anni)</span>
-          <span class="sub-trans" data-it="" data-fr="(Menu Enfant 4/10 Ans)" data-en="(Children's Menu 4–10 years)" data-de="(Kindermenü 4–10 Jahre)"></span>
+    <div class="section" id="sec-bambini">
+  <h2 class="cat-title">👶 <span class="notranslate">Menù Bambini</span></h2>
+
+  <div class="item" style="display:block; padding:15px 20px; border-bottom:1px solid rgba(212,175,55,0.1);">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; width:100%;">
+      <div class="item-name">
+        <span class="notranslate" style="font-weight:bold;">Menù Bambini (4-10 Anni)</span>
+        <div class="sub-trans" style="font-size:12px; color:#d4af37; font-style:italic; margin-top:2px;">
+          <span class="lang-en" style="display:none;">(Children's Menu 4-10 years)</span>
+          <span class="lang-fr" style="display:none;">(Menu Enfant 4-10 ans)</span>
+          <span class="lang-de" style="display:none;">(Kindermenü 4-10 Jahre)</span>
         </div>
-        <div class="item-price">€15,00</div>
       </div>
-      <div class="item-desc" style="margin-top:8px;"
-        data-it="Un Piatto a scelta + Gelato Fatto in Casa + Bibita"
-        data-fr="Un Plat au choix + Glace Maison + Boisson"
-        data-en="One dish of your choice + Homemade Ice Cream + Drink"
-        data-de="Ein Gericht nach Wahl + Hausgemachtes Eis + Getränk">Un Piatto a scelta + Gelato Fatto in Casa + Bibita</div>
-      <div class="bambini-dish-box">
-        <div style="font-size:11px;font-weight:bold;color:#b31e1e;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;"
-          data-it="Piatti disponibili:" data-fr="Plats disponibles:" data-en="Available dishes:" data-de="Verfügbare Gerichte:">Piatti disponibili:</div>
-        <span class="notranslate">Ravioli · Tagliatelle · Gnocchi · Milanese · Bistecca · Rostelle · Salsiccia</span>
+      <div class="item-price" style="color:#d4af37; font-weight:bold;">€15,00</div>
+    </div>
+
+    <div class="item-desc" style="margin-top:8px; font-size:14px;">
+      <span class="notranslate">Un Piatto a scelta + Gelato Fatto in Casa + Bibita</span>
+      <div class="sub-trans" style="font-size:12px; color:#aaa; font-style:italic;">
+        <span class="lang-en" style="display:none;">(One dish of your choice + Homemade Ice Cream + Drink)</span>
+        <span class="lang-fr" style="display:none;">(Un plat au choix + Glace maison + Boisson)</span>
+        <span class="lang-de" style="display:none;">(Ein Gericht nach Wahl + Hausgemachtes Eis + Getränk)</span>
       </div>
+    </div>
+
+    <div class="bambini-dish-box" style="margin-top:10px;">
+      <div style="font-size:11px; font-weight:bold; color:#b31e1e; text-transform:uppercase; margin-bottom:4px;">Piatti disponibili:</div>
+      <span class="notranslate" style="font-size: 13px;">Ravioli · Tagliatelle · Gnocchi · Milanese · Bistecca · Rostelle · Salsiccia</span>
+    </div>
+  </div>
+</div>
       <div class="note-box">
         <strong>⚠️ (*)</strong>
         <span data-it=" Non sarà Servito il Sabato Sera, la Domenica a Pranzo e nei Festivi." data-fr=" Ne sera pas servi le Samedi Soir, le Dimanche à midi et les Jours de Fête." data-en=" Not served Saturday evenings, Sunday lunch & public holidays." data-de=" Wird am Samstagabend, Sonntagmittag und an Feiertagen nicht serviert."> Non sarà Servito il Sabato Sera, la Domenica a Pranzo e nei Festivi.</span>
@@ -614,11 +626,34 @@ function googleTranslateElementInit() {
     }
     box.style.display = 'block';
   }
+ <div class="bambini-dish-box" style="margin-top:10px;">
+      <div style="font-size:11px; font-weight:bold; color:#b31e1e; text-transform:uppercase; margin-bottom:4px;">Piatti disponibili:</div>
+      <span class="notranslate" style="font-size: 13px;">Ravioli · Tagliatelle · Gnocchi · Milanese · Bistecca · Rostelle · Salsiccia</span>
+    </div>
+  </div>
+</div>
+
+<script>
+function updateSubtitles() {
+    const lang = document.querySelector('.goog-te-combo')?.value;
+    
+    // প্রথমে সব লুকিয়ে ফেলা
+    document.querySelectorAll('[class^="lang-"]').forEach(el => el.style.display = 'none');
+    
+    // সিলেক্ট করা ল্যাঙ্গুয়েজ অনুযায়ী দেখানো
+    if (lang === 'en') document.querySelectorAll('.lang-en').forEach(el => el.style.display = 'inline');
+    else if (lang === 'fr') document.querySelectorAll('.lang-fr').forEach(el => el.style.display = 'inline');
+    else if (lang === 'de') document.querySelectorAll('.lang-de').forEach(el => el.style.display = 'inline');
+}
+
+// ল্যাঙ্গুয়েজ পরিবর্তন হলে ফাংশনটি কল করা
+document.querySelector('.goog-te-combo')?.addEventListener('change', updateSubtitles);
+
+// পেজ লোড হলে একবার রান করা
+window.addEventListener('load', updateSubtitles);
 </script>
 </body>
 </html>
-ENDOFFILE
-echo "Done, size: $(wc -c < /home/claude/menu_fixed.html) bytes"
-Output
-
-Done, size: 68661 bytes
+</script>
+</body>
+</html>
