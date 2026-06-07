@@ -108,11 +108,16 @@
   .footer { background: #0b0202; color: #d4af37; text-align: center; padding: 30px 20px; font-size: 14px; border-top: 3px solid #d4af37; margin-top: 50px; }
   .footer .note { color: #bca07d; font-size: 13px; font-style: italic; margin-top: 10px; }
 
-  /* Google Translate Overrides */
-  #google_translate_element { display: none; }
+  /* Google Translate Overrides — hide ALL Google UI chrome */
+  #google_translate_element { display: none !important; }
   .goog-te-banner-frame { display: none !important; }
-  body { top: 0 !important; }
+  .goog-te-menu-frame { display: none !important; }
+  iframe.skiptranslate { display: none !important; }
   .skiptranslate { display: none !important; }
+  body { top: 0 !important; }
+  #goog-gt-tt, .goog-te-balloon-frame, .goog-tooltip { display: none !important; }
+  /* Force remove bottom padding Google injects */
+  html body { margin-bottom: 0 !important; }
 
   /* Digital Wine Button */
   .digital-wine-btn { display: flex; align-items: center; justify-content: center; gap: 14px; background: linear-gradient(135deg,#3d0b0b,#5a1010); border: 2px solid #d4af37; border-radius: 14px; padding: 22px 28px; text-decoration: none; color: #ffffff; box-shadow: 0 5px 20px rgba(0,0,0,0.5); font-size: 18px; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 20px; }
@@ -666,8 +671,8 @@
           <div class="cocktail-name notranslate">Negroni Sbagliato</div>
           <div class="cocktail-name notranslate">Americano</div>
           <div class="cocktail-group" data-it="⭐ Premium Cocktails — €8,00" data-fr="⭐ Cocktails Premium — €8,00" data-en="⭐ Premium Cocktails — €8,00" data-de="⭐ Premium Cocktails — €8,00">⭐ Premium Cocktails — €8,00</div>
-          <div class="cocktail-name notranslate">Whisky & Coca / Rhum & Coca</div>
-          <div class="cocktail-name notranslate">Gin Tonic / Gin Lemon</div>
+          <div class="cocktail-name" data-it="Whisky & Coca / Rhum & Coca" data-fr="Whisky Coca / Rhum Coca" data-en="Whisky & Coke / Rum & Coke" data-de="Whisky & Cola / Rum & Cola">Whisky & Coca / Rhum & Coca</div>
+          <div class="cocktail-name" data-it="Gin Tonic / Gin Lemon" data-fr="Gin Tonic / Gin Citron" data-en="Gin & Tonic / Gin & Lemon" data-de="Gin Tonic / Gin Zitrone">Gin Tonic / Gin Lemon</div>
         </div>
       </div>
     </div>
@@ -690,6 +695,14 @@ function googleTranslateElementInit() {
 
 <script>
   let currentLang = 'it';
+
+  // On page load: force clean Italian state (fixes "Italian not stable" bug)
+  document.addEventListener('DOMContentLoaded', function() {
+    // Reset any leftover Google Translate cookie
+    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    // Apply Italian language cleanly
+    setLang('it', document.querySelector('.lang-btn'));
+  });
 
   // ── Language switch (IT / FR / EN / DE) ──────────────────────────────────
   function setLang(lang, el) {
@@ -725,6 +738,12 @@ function googleTranslateElementInit() {
       const text = item.getAttribute('data-' + lang) || '';
       item.textContent = text;
       item.style.display = text.trim() ? 'block' : 'none';
+    });
+
+    // Also update cocktail-name elements that have data-lang attributes
+    document.querySelectorAll('.cocktail-name[data-' + lang + ']').forEach(item => {
+      const val = item.getAttribute('data-' + lang);
+      if (val) item.textContent = val;
     });
 
     document.getElementById('translateBtn').textContent = '🌐 More Languages ▾';
@@ -794,6 +813,13 @@ function googleTranslateElementInit() {
       }
     });
 
+    // Strip notranslate from cocktail-name items that have data-lang (Whisky, Gin etc)
+    document.querySelectorAll('.cocktail-name[data-en]').forEach(item => {
+      item.classList.remove('notranslate');
+      const itText = item.getAttribute('data-it') || item.textContent;
+      if (itText.trim()) item.textContent = itText;
+    });
+
     // Also make sure piatti-sauce elements are translatable
     document.querySelectorAll('.piatti-sauce').forEach(item => {
       item.classList.remove('notranslate');
@@ -848,6 +874,11 @@ function googleTranslateElementInit() {
       const text = item.getAttribute('data-' + currentLang) || '';
       item.textContent = text;
       item.style.display = text.trim() ? 'block' : 'none';
+    });
+    // Restore cocktail-name items that have data-lang
+    document.querySelectorAll('.cocktail-name[data-' + currentLang + ']').forEach(item => {
+      const val = item.getAttribute('data-' + currentLang);
+      if (val) item.textContent = val;
     });
   }
 
