@@ -73,13 +73,39 @@
   .bambini-grid, .gelato-grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; margin-top: 14px; margin-bottom: 14px; }
   .bambini-item, .gelato-item { background: #fdf5e6; border: 1px solid #c5a880; border-radius: 8px; padding: 12px 14px; font-size: 15px; color: #1a0505; font-weight: bold; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-  .piatti-box { background: linear-gradient(180deg, #1f1411, #120907); border: 2px solid #d4af37; border-radius: 14px; padding: 24px; margin-top: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.4); color: #f9f1e2; }
-  .piatti-box-title { text-align: center; color: #d4af37; font-size: 20px; font-weight: bold; margin-bottom: 4px; letter-spacing: 1.5px; text-transform: uppercase; }
-  .piatti-box-subtitle { text-align: center; color: #bca07d; font-size: 14px; font-style: italic; margin-bottom: 22px; }
-  .piatti-subhead { font-size: 14px; font-weight: bold; color: #d4af37; margin: 18px 0 10px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 6px; }
-  .piatti-item { font-size: 15px; color: #f9f1e2; padding: 9px 0; border-bottom: 1px dotted rgba(212,175,55,0.2); line-height: 1.5; font-weight: 500; }
+  .piatti-box { background: #fffbf4; border: 1px solid #d4af37; border-radius: 14px; padding: 24px; margin-top: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); color: #1a0505; }
+  .piatti-box-title { text-align: center; color: #b31e1e; font-size: 18px; font-weight: 800; margin-bottom: 4px; letter-spacing: 1.5px; text-transform: uppercase; }
+  .piatti-box-subtitle { text-align: center; color: #7a5a3a; font-size: 13px; font-style: italic; margin-bottom: 22px; }
+  .piatti-subhead { font-size: 13px; font-weight: bold; color: #b31e1e; margin: 18px 0 10px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid rgba(212,175,55,0.5); padding-bottom: 6px; }
+  .piatti-item { font-size: 15px; color: #2d1b10; padding: 9px 0; border-bottom: 1px dotted rgba(212,175,55,0.4); line-height: 1.5; font-weight: 500; }
   .piatti-item:last-child { border-bottom: none; }
-  .piatti-sauce { font-size: 14px; color: #d4af37; font-style: italic; font-weight: normal; display: block; margin-top: 3px; }
+  .piatti-sauce { font-size: 13px; color: #7a5a3a; font-style: italic; font-weight: normal; display: block; margin-top: 3px; }
+
+  /* sub-trans and piatti-sauce inside piatti-box — match item card highlight style */
+  .piatti-box .sub-trans {
+    display: none;
+    font-size: 13px;
+    color: #2d1b10;
+    font-weight: 600;
+    font-style: italic;
+    background: #f5ede0;
+    padding: 3px 9px;
+    border-radius: 5px;
+    border-left: 3px solid #b31e1e;
+    margin-top: 4px;
+  }
+  .piatti-box .piatti-sauce {
+    font-size: 13px;
+    color: #2d1b10;
+    font-weight: 600;
+    font-style: italic;
+    background: #f5ede0;
+    padding: 3px 9px;
+    border-radius: 5px;
+    border-left: 3px solid #b31e1e;
+    margin-top: 4px;
+    display: none;
+  }
 
   .note-box { background: rgba(179,30,30,0.12); border: 2px solid #b31e1e; border-radius: 12px; padding: 18px; margin-top: 18px; font-size: 14px; color: #b31e1e; font-weight: bold; line-height: 1.6; }
   .note-box strong { color: #b31e1e; font-size: 18px; }
