@@ -1,3 +1,6 @@
+bash
+
+cat > /mnt/user-data/outputs/lago-bin-menu.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -81,7 +84,6 @@
   .piatti-item:last-child { border-bottom: none; }
   .piatti-sauce { font-size: 13px; color: #7a5a3a; font-style: italic; font-weight: normal; display: block; margin-top: 3px; }
 
-  /* sub-trans and piatti-sauce inside piatti-box — match item card highlight style */
   .piatti-box .sub-trans {
     display: none;
     font-size: 13px;
@@ -134,7 +136,6 @@
   .footer { background: #0b0202; color: #d4af37; text-align: center; padding: 30px 20px; font-size: 14px; border-top: 3px solid #d4af37; margin-top: 50px; }
   .footer .note { color: #bca07d; font-size: 13px; font-style: italic; margin-top: 10px; }
 
-  /* Google Translate Overrides — hide ALL Google UI chrome */
   #google_translate_element { display: none !important; }
   .goog-te-banner-frame { display: none !important; }
   .goog-te-menu-frame { display: none !important; }
@@ -142,7 +143,6 @@
   .skiptranslate { display: none !important; }
   body { top: 0 !important; }
   #goog-gt-tt, .goog-te-balloon-frame, .goog-tooltip { display: none !important; }
-  /* Force remove bottom padding Google injects */
   html body { margin-bottom: 0 !important; }
 
   /* Digital Wine Button */
@@ -165,7 +165,6 @@
   </div>
 </div>
 
-<!-- Google Translate hidden element -->
 <div id="google_translate_element" style="display:none;"></div>
 
 <!-- Language Navigation Bar -->
@@ -231,11 +230,12 @@
       <span class="card-label" data-it="I Nostri Dessert" data-fr="Nos Desserts" data-en="Our Desserts" data-de="Unsere Desserts">I Nostri Dessert</span>
     </div>
   </div>
+  <!-- CHANGE 1: Bar quick card renamed to Bevande -->
   <div class="quick-card" onclick="setTab('bar')">
-    <div class="card-icon">🥂</div>
+    <div class="card-icon">🍹</div>
     <div class="card-text">
-      <span data-it="Bar" data-fr="Bar" data-en="Bar" data-de="Bar">Bar</span>
-      <span class="card-label" data-it="Caffè & Cocktails" data-fr="Café & Cocktails" data-en="Coffee & Cocktails" data-de="Kaffee & Cocktails">Caffè & Cocktails</span>
+      <span data-it="Bevande" data-fr="Bevande" data-en="Bevande" data-de="Bevande">Bevande</span>
+      <span class="card-label" data-it="Bibite, Caffè & Cocktails" data-fr="Bibite, Caffè & Cocktails" data-en="Bibite, Caffè & Cocktails" data-de="Bibite, Caffè & Cocktails">Bibite, Caffè & Cocktails</span>
     </div>
   </div>
 </div>
@@ -280,17 +280,42 @@
       <div class="item-price">€45,00</div>
     </div>
 
+    <!-- CHANGE 3a: Menù Gastronomico with accordion button -->
     <div class="item">
       <div class="item-left">
         <div class="item-name">
           <span class="notranslate">Menù Gastronomico</span>
           <span class="sub-trans" data-it="" data-fr="(Menu Gastronomique)" data-en="(Gastronomic Menu)" data-de="(Gastronomisches Menü)"></span>
         </div>
-        <div class="item-desc" data-it="Aperitivo, 3 Portate a scelta, Dessert, Caffè e Digestivo. Bevande Escluse." data-fr="Apéritif, 3 Plats au Choix, Dessert, Café et Digestif. Boissons Exclues." data-en="Aperitif, 2 Courses of your choice, Dessert, Coffee & Digestif. Drinks not included." data-de="Aperitif, 3 Gänge nach Wahl, Dessert, Kaffee und Digestif. Getränke nicht inbegriffen.">Aperitivo, 3 Portate a scelta, Dessert, Caffè e Digestivo. Bevande Escluse.</div>
+        <div class="item-desc" data-it="Aperitivo, 3 Portate a scelta, Dessert, Caffè e Digestivo. Bevande Escluse." data-fr="Apéritif, 3 Plats au Choix, Dessert, Café et Digestif. Boissons Exclues." data-en="Aperitif, 3 Courses of your choice, Dessert, Coffee & Digestif. Drinks not included." data-de="Aperitif, 3 Gänge nach Wahl, Dessert, Kaffee und Digestif. Getränke nicht inbegriffen.">Aperitivo, 3 Portate a scelta, Dessert, Caffè e Digestivo. Bevande Escluse.</div>
       </div>
-      <div class="item-price">€40,00</div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+        <div class="item-price">€40,00</div>
+        <button onclick="togglePiatti('gastro')" id="btn-gastro"
+          style="background:rgba(212,175,55,0.12);border:1px solid #d4af37;border-radius:20px;color:#b31e1e;font-size:11px;padding:4px 12px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.2s;">
+          <span data-it="📋 Vedi piatti ▾" data-fr="📋 Voir les plats ▾" data-en="📋 View dishes ▾" data-de="📋 Gerichte sehen ▾">📋 Vedi piatti ▾</span>
+        </button>
+      </div>
+    </div>
+    <div id="acc-gastro" style="display:none;background:#fffbf4;border:1px solid #d4af37;border-top:none;border-radius:0 0 12px 12px;margin-top:-14px;margin-bottom:16px;padding:14px 18px;font-size:13px;color:#2d1b10;">
+      <div style="font-weight:bold;color:#b31e1e;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;" data-it="Antipasti" data-fr="Entrées" data-en="Starters" data-de="Vorspeisen">Antipasti</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Antipasto Tipico del Lago Bin</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Assortimento del Salumiere</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Prosciutto di Parma con Melone o Grana</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Lumache in Umido</div>
+      <div style="font-weight:bold;color:#b31e1e;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin:10px 0 6px;" data-it="Primi Piatti" data-fr="Pâtes" data-en="First Courses" data-de="Erster Gang">Primi Piatti</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Ravioli della Nonna al Pomodoro o Burro e Salvia</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Tagliatelle di Pasta Fresca alla Selvaggina o ai Funghi</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Gnocchi di Patate ai Funghi o ai Formaggi con Gorgonzola</div>
+      <div style="font-weight:bold;color:#b31e1e;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin:10px 0 6px;" data-it="Secondi Piatti" data-fr="Plats principaux" data-en="Main Courses" data-de="Hauptgerichte">Secondi Piatti</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Coniglio alla Rocchettina</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Selvaggina al Vino Rosso</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Grigliata Mista di Carne</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Agnello alla Griglia</div>
+      <div style="padding:4px 0;" class="notranslate">Roast Beef</div>
     </div>
 
+    <!-- CHANGE 3b: Menù Degustazione with accordion button -->
     <div class="item">
       <div class="item-left">
         <div class="item-name">
@@ -299,7 +324,30 @@
         </div>
         <div class="item-desc" data-it="Aperitivo, 2 Portate a scelta, Dessert, Caffè e Digestivo. Bevande Escluse." data-fr="Apéritif, 2 Plats au Choix, Dessert, Café et Digestif. Boissons Exclues." data-en="Aperitif, 2 Courses of your choice, Dessert, Coffee & Digestif. Drinks not included." data-de="Aperitif, 2 Gänge nach Wahl, Dessert, Kaffee und Digestif. Getränke nicht inbegriffen.">Aperitivo, 2 Portate a scelta, Dessert, Caffè e Digestivo. Bevande Escluse.</div>
       </div>
-      <div class="item-price">€30,00</div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+        <div class="item-price">€30,00</div>
+        <button onclick="togglePiatti('degu')" id="btn-degu"
+          style="background:rgba(212,175,55,0.12);border:1px solid #d4af37;border-radius:20px;color:#b31e1e;font-size:11px;padding:4px 12px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.2s;">
+          <span data-it="📋 Vedi piatti ▾" data-fr="📋 Voir les plats ▾" data-en="📋 View dishes ▾" data-de="📋 Gerichte sehen ▾">📋 Vedi piatti ▾</span>
+        </button>
+      </div>
+    </div>
+    <div id="acc-degu" style="display:none;background:#fffbf4;border:1px solid #d4af37;border-top:none;border-radius:0 0 12px 12px;margin-top:-14px;margin-bottom:16px;padding:14px 18px;font-size:13px;color:#2d1b10;">
+      <div style="font-weight:bold;color:#b31e1e;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;" data-it="Antipasti" data-fr="Entrées" data-en="Starters" data-de="Vorspeisen">Antipasti</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Antipasto Tipico del Lago Bin</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Assortimento del Salumiere</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Prosciutto di Parma con Melone o Grana</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Lumache in Umido</div>
+      <div style="font-weight:bold;color:#b31e1e;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin:10px 0 6px;" data-it="Primi Piatti" data-fr="Pâtes" data-en="First Courses" data-de="Erster Gang">Primi Piatti</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Ravioli della Nonna al Pomodoro o Burro e Salvia</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Tagliatelle di Pasta Fresca alla Selvaggina o ai Funghi</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Gnocchi di Patate ai Funghi o ai Formaggi con Gorgonzola</div>
+      <div style="font-weight:bold;color:#b31e1e;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;margin:10px 0 6px;" data-it="Secondi Piatti" data-fr="Plats principaux" data-en="Main Courses" data-de="Hauptgerichte">Secondi Piatti</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Coniglio alla Rocchettina</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Selvaggina al Vino Rosso</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Grigliata Mista di Carne</div>
+      <div style="padding:4px 0;border-bottom:1px dotted rgba(212,175,55,0.3);" class="notranslate">Agnello alla Griglia</div>
+      <div style="padding:4px 0;" class="notranslate">Roast Beef</div>
     </div>
 
     <div class="item" style="display: block;">
@@ -467,9 +515,17 @@
     </div>
   </div>
 
-  <!-- 4. SECONDI -->
+  <!-- 4. SECONDI — CHANGE 2: contorno note under title -->
   <div class="section" id="sec-secondi">
-    <h2 class="cat-title">🥩 <span data-it="Secondi Piatti" data-fr="Secondes Plats" data-en="Main Courses" data-de="Hauptgerichte">Secondi Piatti</span></h2>
+    <h2 class="cat-title">🥩 <span data-it="Secondi Piatti" data-fr="Secondes Plats" data-en="Main Courses" data-de="Hauptgerichte">Secondi Piatti</span><br>
+      <span style="font-size:13px;font-weight:normal;color:#bca07d;letter-spacing:0;text-transform:none;font-style:italic;">
+        (<span data-it="Contorno incluso: Patate fritte, patate al forno (secondo disponibilità) oppure verdure alla griglia"
+               data-fr="Accompagnement inclus : Frites, pommes de terre au four (selon disponibilité) ou légumes grillés"
+               data-en="Side included: French fries, baked potatoes (subject to availability) or grilled vegetables"
+               data-de="Beilage inbegriffen: Pommes frites, Ofenkartoffeln (je nach Verfügbarkeit) oder gegrilltes Gemüse"
+        >Contorno incluso: Patate fritte, patate al forno (secondo disponibilità) oppure verdure alla griglia</span>)
+      </span>
+    </h2>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Coniglio alla Rocchettina</span><span class="sub-trans" data-it="" data-fr="(Lapin)" data-en="(Rabbit Rocchettina Style)" data-de="(Kaninchen)"></span></div></div><div class="item-price">€15,00</div></div>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Selvaggina al Vino Rosso</span><span class="sub-trans" data-it="" data-fr="(Gibier au Vin Rouge)" data-en="(Game in Red Wine)" data-de="(Wildfleisch)"></span></div></div><div class="item-price">€18,00</div></div>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Costine di Agnello alla Griglia</span><span class="sub-trans" data-it="" data-fr="(Côtes d'Agneau)" data-en="(Grilled Lamb Ribs)" data-de="(Gegrillte Lammrippchen)"></span></div></div><div class="item-price">€18,00</div></div>
@@ -554,42 +610,20 @@
   <!-- 8. VINI -->
   <div class="section" id="sec-vini">
     <h2 class="cat-title">🍷 <span data-it="Carta dei Vini" data-fr="Carte des Vins" data-en="Wine List" data-de="Weinkarte">Carta dei Vini</span></h2>
-
     <a href="https://mamunjoyit1-cyber.github.io/carta-dei-vini/" target="_blank" class="digital-wine-btn">
       <span>🍷 <span data-it="Clicca qui per la Carta dei Vini Digitale" data-fr="Cliquez pour la Carte des Vins" data-en="Click for the Digital Wine List" data-de="Hier für die digitale Weinkarte klicken">Clicca qui per la Carta dei Vini Digitale</span></span>
       <span class="btn-arrow">➔</span>
     </a>
-
     <div style="text-align:center;color:#bca07d;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin:20px 0 14px;" data-it="Vini al Calice" data-fr="Vins au Verre" data-en="Wines by the Glass" data-de="Weine im Glas">Vini al Calice</div>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Vino Rosso della Casa</span><span class="sub-trans" data-it="" data-fr="(Vin Rouge Maison)" data-en="(House Red Wine)" data-de="(Hauswein Rot)"></span></div><div class="item-desc" data-it="Calice" data-fr="Au verre" data-en="Glass" data-de="Glas">Calice</div></div><div class="item-price">€3,00</div></div>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Vino Bianco della Casa</span><span class="sub-trans" data-it="" data-fr="(Vin Blanc Maison)" data-en="(House White Wine)" data-de="(Hauswein Weiß)"></span></div><div class="item-desc" data-it="Calice" data-fr="Au verre" data-en="Glass" data-de="Glas">Calice</div></div><div class="item-price">€3,00</div></div>
-  <div class="item">
-  <div class="item-left">
-    <div class="item-name">
-      <span class="notranslate">Vino Rosato della Casa</span>
-      <span class="sub-trans"
-            data-it=""
-            data-fr="(Vin Rosé Maison)"
-            data-en="(House Rosé Wine)"
-            data-de="(Hauswein Rosé)">
-      </span>
-    </div>
-    <div class="item-desc"
-         data-it="Calice"
-         data-fr="Au verre"
-         data-en="Glass"
-         data-de="Glas">
-      Calice
-    </div>
-  </div>
-  <div class="item-price">€3,00</div>
-</div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Vino Rosato della Casa</span><span class="sub-trans" data-it="" data-fr="(Vin Rosé Maison)" data-en="(House Rosé Wine)" data-de="(Hauswein Rosé)"></span></div><div class="item-desc" data-it="Calice" data-fr="Au verre" data-en="Glass" data-de="Glas">Calice</div></div><div class="item-price">€3,00</div></div>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Prosecco DOC</span></div><div class="item-desc" data-it="Calice" data-fr="Au verre" data-en="Glass" data-de="Glas">Calice</div></div><div class="item-price">€5,00</div></div>
   </div>
 
   <!-- 9. BAR -->
   <div class="section" id="sec-bar">
-    <h2 class="cat-title">🥂 <span data-it="Il Nostro Bar" data-fr="Notre Bar" data-en="Our Bar" data-de="Unsere Bar">Il Nostro Bar</span></h2>
+    <h2 class="cat-title">🍹 <span data-it="Il Nostro Bar" data-fr="Notre Bar" data-en="Our Bar" data-de="Unsere Bar">Il Nostro Bar</span></h2>
     <div class="sub-tabs">
       <button class="sub-tab-btn active" onclick="setSubTab('caffetteria', this)">☕ <span data-it="Caffetteria" data-fr="Cafétéria" data-en="Coffee" data-de="Kaffee">Caffetteria</span></button>
       <button class="sub-tab-btn" onclick="setSubTab('bibite', this)">🥤 <span data-it="Bibite" data-fr="Boissons" data-en="Drinks" data-de="Getränke">Bibite</span></button>
@@ -600,46 +634,16 @@
     <div class="sub-section active" id="subsec-caffetteria">
       <div class="item" style="display:block;">
         <div class="cocktail-list">
-          <div class="price-row">
-            <span data-it="Caffè Espresso" data-fr="Café Espresso" data-en="Espresso Coffee" data-de="Espresso">Caffè Espresso</span>
-            <span style="font-weight:800;color:#b31e1e;">€1,50</span>
-          </div>
-          <div class="price-row">
-            <span data-it="Caffè Decaffeinato" data-fr="Café Décaféiné" data-en="Decaf Coffee" data-de="Entkoffeinierter Kaffee">Caffè Decaffeinato</span>
-            <span style="font-weight:800;color:#b31e1e;">€1,80</span>
-          </div>
-          <div class="price-row">
-            <span data-it="Caffè D'Orzo (Piccolo / Grande)" data-fr="Café d'Orge (Petit / Grand)" data-en="Barley Coffee (Small / Large)" data-de="Gerstenkaffee (Klein / Groß)">Caffè D'Orzo (Piccolo / Grande)</span>
-            <span style="font-weight:800;color:#b31e1e;">€2,00</span>
-          </div>
-          <div class="price-row">
-            <span data-it="Caffè Ginseng Piccolo" data-fr="Café Ginseng Petit" data-en="Ginseng Coffee Small" data-de="Ginseng Kaffee Klein">Caffè Ginseng Piccolo</span>
-            <span style="font-weight:800;color:#b31e1e;">€2,00</span>
-          </div>
-          <div class="price-row">
-            <span data-it="Caffè Ginseng Grande" data-fr="Café Ginseng Grand" data-en="Ginseng Coffee Large" data-de="Ginseng Kaffee Groß">Caffè Ginseng Grande</span>
-            <span style="font-weight:800;color:#b31e1e;">€3,00</span>
-          </div>
-          <div class="price-row">
-            <span data-it="Caffè Corretto" data-fr="Café Corretto" data-en="Coffee with Grappa" data-de="Kaffee mit Schnaps">Caffè Corretto</span>
-            <span style="font-weight:800;color:#b31e1e;">€2,50</span>
-          </div>
-          <div class="price-row">
-            <span data-it="Cappuccino" data-fr="Cappuccino" data-en="Cappuccino" data-de="Cappuccino">Cappuccino</span>
-            <span style="font-weight:800;color:#b31e1e;">€2,00</span>
-          </div>
-          <div class="price-row">
-            <span data-it="Caffè Latte / Latte Macchiato" data-fr="Café Latte / Latte Macchiato" data-en="Café Latte / Latte Macchiato" data-de="Café Latte / Latte Macchiato">Caffè Latte / Latte Macchiato</span>
-            <span style="font-weight:800;color:#b31e1e;">€2,50</span>
-          </div>
-          <div class="price-row">
-            <span data-it="Thè Caldo / Infusi" data-fr="Thé Chaud / Infusions" data-en="Hot Tea / Herbal Tea" data-de="Heißer Tee / Kräutertee">Thè Caldo / Infusi</span>
-            <span style="font-weight:800;color:#b31e1e;">€2,50</span>
-          </div>
-          <div class="price-row">
-            <span data-it="Cioccolata Calda" data-fr="Chocolat Chaud" data-en="Hot Chocolate" data-de="Heiße Schokolade">Cioccolata Calda</span>
-            <span style="font-weight:800;color:#b31e1e;">€2,50</span>
-          </div>
+          <div class="price-row"><span data-it="Caffè Espresso" data-fr="Café Espresso" data-en="Espresso Coffee" data-de="Espresso">Caffè Espresso</span><span style="font-weight:800;color:#b31e1e;">€1,50</span></div>
+          <div class="price-row"><span data-it="Caffè Decaffeinato" data-fr="Café Décaféiné" data-en="Decaf Coffee" data-de="Entkoffeinierter Kaffee">Caffè Decaffeinato</span><span style="font-weight:800;color:#b31e1e;">€1,80</span></div>
+          <div class="price-row"><span data-it="Caffè D'Orzo (Piccolo / Grande)" data-fr="Café d'Orge (Petit / Grand)" data-en="Barley Coffee (Small / Large)" data-de="Gerstenkaffee (Klein / Groß)">Caffè D'Orzo (Piccolo / Grande)</span><span style="font-weight:800;color:#b31e1e;">€2,00</span></div>
+          <div class="price-row"><span data-it="Caffè Ginseng Piccolo" data-fr="Café Ginseng Petit" data-en="Ginseng Coffee Small" data-de="Ginseng Kaffee Klein">Caffè Ginseng Piccolo</span><span style="font-weight:800;color:#b31e1e;">€2,00</span></div>
+          <div class="price-row"><span data-it="Caffè Ginseng Grande" data-fr="Café Ginseng Grand" data-en="Ginseng Coffee Large" data-de="Ginseng Kaffee Groß">Caffè Ginseng Grande</span><span style="font-weight:800;color:#b31e1e;">€3,00</span></div>
+          <div class="price-row"><span data-it="Caffè Corretto" data-fr="Café Corretto" data-en="Coffee with Grappa" data-de="Kaffee mit Schnaps">Caffè Corretto</span><span style="font-weight:800;color:#b31e1e;">€2,50</span></div>
+          <div class="price-row"><span data-it="Cappuccino" data-fr="Cappuccino" data-en="Cappuccino" data-de="Cappuccino">Cappuccino</span><span style="font-weight:800;color:#b31e1e;">€2,00</span></div>
+          <div class="price-row"><span data-it="Caffè Latte / Latte Macchiato" data-fr="Café Latte / Latte Macchiato" data-en="Café Latte / Latte Macchiato" data-de="Café Latte / Latte Macchiato">Caffè Latte / Latte Macchiato</span><span style="font-weight:800;color:#b31e1e;">€2,50</span></div>
+          <div class="price-row"><span data-it="Thè Caldo / Infusi" data-fr="Thé Chaud / Infusions" data-en="Hot Tea / Herbal Tea" data-de="Heißer Tee / Kräutertee">Thè Caldo / Infusi</span><span style="font-weight:800;color:#b31e1e;">€2,50</span></div>
+          <div class="price-row"><span data-it="Cioccolata Calda" data-fr="Chocolat Chaud" data-en="Hot Chocolate" data-de="Heiße Schokolade">Cioccolata Calda</span><span style="font-weight:800;color:#b31e1e;">€2,50</span></div>
         </div>
       </div>
     </div>
@@ -648,39 +652,15 @@
     <div class="sub-section" id="subsec-bibite">
       <div class="item" style="display:block;">
         <div class="cocktail-list">
-          <div class="price-row">
-            <span data-it="Acqua 50 cl" data-fr="Eau 50 cl" data-en="Water 50 cl" data-de="Wasser 50 cl">Acqua 50 cl</span>
-            <span style="font-weight:800;color:#b31e1e;">€1,50</span>
-          </div>
-          <div class="price-row">
-            <span data-it="Acqua 1 lt" data-fr="Eau 1 lt" data-en="Water 1 lt" data-de="Wasser 1 lt">Acqua 1 lt</span>
-            <span style="font-weight:800;color:#b31e1e;">€3,00</span>
-          </div>
-          <div class="price-row">
-            <span class="notranslate">Coca Cola / Coca Cola Zero</span>
-            <span style="font-weight:800;color:#b31e1e;">€4,00</span>
-          </div>
-          <div class="price-row">
-            <span class="notranslate">Fanta / Sprite</span>
-            <span style="font-weight:800;color:#b31e1e;">€4,00</span>
-          </div>
-          <div class="price-row">
-            <span class="notranslate">Estathé Limone / Pesca</span>
-            <span style="font-weight:800;color:#b31e1e;">€4,00</span>
-          </div>
-          <div class="price-row">
-            <span class="notranslate">Schweppes / Schweppes Lemon</span>
-            <span style="font-weight:800;color:#b31e1e;">€3,00</span>
-          </div>
-          <div class="price-row">
-            <span class="notranslate">Crodino / Sanbitter</span>
-            <span style="font-weight:800;color:#b31e1e;">€3,00</span>
-          </div>
+          <div class="price-row"><span data-it="Acqua 50 cl" data-fr="Eau 50 cl" data-en="Water 50 cl" data-de="Wasser 50 cl">Acqua 50 cl</span><span style="font-weight:800;color:#b31e1e;">€1,50</span></div>
+          <div class="price-row"><span data-it="Acqua 1 lt" data-fr="Eau 1 lt" data-en="Water 1 lt" data-de="Wasser 1 lt">Acqua 1 lt</span><span style="font-weight:800;color:#b31e1e;">€3,00</span></div>
+          <div class="price-row"><span class="notranslate">Coca Cola / Coca Cola Zero</span><span style="font-weight:800;color:#b31e1e;">€4,00</span></div>
+          <div class="price-row"><span class="notranslate">Fanta / Sprite</span><span style="font-weight:800;color:#b31e1e;">€4,00</span></div>
+          <div class="price-row"><span class="notranslate">Estathé Limone / Pesca</span><span style="font-weight:800;color:#b31e1e;">€4,00</span></div>
+          <div class="price-row"><span class="notranslate">Schweppes / Schweppes Lemon</span><span style="font-weight:800;color:#b31e1e;">€3,00</span></div>
+          <div class="price-row"><span class="notranslate">Crodino / Sanbitter</span><span style="font-weight:800;color:#b31e1e;">€3,00</span></div>
           <div class="bar-divider" data-it="Succhi di Frutta" data-fr="Jus de Fruits" data-en="Fruit Juices" data-de="Fruchtsäfte">Succhi di Frutta</div>
-          <div class="price-row">
-            <span data-it="Pesca · Ananas · Arancia · Albicocca · ACE · Pera" data-fr="Pêche · Ananas · Orange · Abricot · ACE · Poire" data-en="Peach · Pineapple · Orange · Apricot · ACE · Pear" data-de="Pfirsich · Ananas · Orange · Aprikose · ACE · Birne" style="font-size:13px;color:#666;">Pesca · Ananas · Arancia · Albicocca · ACE · Pera</span>
-            <span style="font-weight:800;color:#b31e1e;">€3,00</span>
-          </div>
+          <div class="price-row"><span data-it="Pesca · Ananas · Arancia · Albicocca · ACE · Pera" data-fr="Pêche · Ananas · Orange · Abricot · ACE · Poire" data-en="Peach · Pineapple · Orange · Apricot · ACE · Pear" data-de="Pfirsich · Ananas · Orange · Aprikose · ACE · Birne" style="font-size:13px;color:#666;">Pesca · Ananas · Arancia · Albicocca · ACE · Pera</span><span style="font-weight:800;color:#b31e1e;">€3,00</span></div>
         </div>
       </div>
     </div>
@@ -690,26 +670,11 @@
       <div class="item" style="display:block;">
         <div class="cocktail-list">
           <div class="cocktail-group" data-it="🍺 Birre & Aperitivi Base" data-fr="🍺 Bières & Apéritifs de Base" data-en="🍺 Beers & Basic Aperitifs" data-de="🍺 Biere & Basis-Aperitifs">🍺 Birre & Aperitivi Base</div>
-          <div class="price-row">
-            <span data-it="Birra Bottiglia 33 cl" data-fr="Bière Bouteille 33 cl" data-en="Beer Bottle 33 cl" data-de="Bier Flasche 33 cl">Birra Bottiglia 33 cl</span>
-            <span style="font-weight:800;color:#b31e1e;">€4,00</span>
-          </div>
-          <div class="price-row">
-            <span class="notranslate">Panaché / Monaco</span>
-            <span style="font-weight:800;color:#b31e1e;">€5,00</span>
-          </div>
-          <div class="price-row">
-            <span class="notranslate">Martini Bianco e Rosso</span>
-            <span style="font-weight:800;color:#b31e1e;">€5,00</span>
-          </div>
-          <div class="price-row">
-            <span data-it="Digestivi / Distillati" data-fr="Digestifs / Distillats" data-en="Digestifs / Spirits" data-de="Digestifs / Destillate">Digestivi / Distillati</span>
-            <span style="font-weight:800;color:#b31e1e;">€4,00</span>
-          </div>
-          <div class="price-row">
-            <span data-it="Shot Alcolici" data-fr="Shots Alcoolisés" data-en="Alcohol Shots" data-de="Alkohol-Shots">Shot Alcolici</span>
-            <span style="font-weight:800;color:#b31e1e;">€4,00</span>
-          </div>
+          <div class="price-row"><span data-it="Birra Bottiglia 33 cl" data-fr="Bière Bouteille 33 cl" data-en="Beer Bottle 33 cl" data-de="Bier Flasche 33 cl">Birra Bottiglia 33 cl</span><span style="font-weight:800;color:#b31e1e;">€4,00</span></div>
+          <div class="price-row"><span class="notranslate">Panaché / Monaco</span><span style="font-weight:800;color:#b31e1e;">€5,00</span></div>
+          <div class="price-row"><span class="notranslate">Martini Bianco e Rosso</span><span style="font-weight:800;color:#b31e1e;">€5,00</span></div>
+          <div class="price-row"><span data-it="Digestivi / Distillati" data-fr="Digestifs / Distillats" data-en="Digestifs / Spirits" data-de="Digestifs / Destillate">Digestivi / Distillati</span><span style="font-weight:800;color:#b31e1e;">€4,00</span></div>
+          <div class="price-row"><span data-it="Shot Alcolici" data-fr="Shots Alcoolisés" data-en="Alcohol Shots" data-de="Alkohol-Shots">Shot Alcolici</span><span style="font-weight:800;color:#b31e1e;">€4,00</span></div>
           <div class="cocktail-group" data-it="🥂 Spritz & Cocktails Classici — €6,00" data-fr="🥂 Spritz & Cocktails Classiques — €6,00" data-en="🥂 Spritz & Classic Cocktails — €6,00" data-de="🥂 Spritz & Klassische Cocktails — €6,00">🥂 Spritz & Cocktails Classici — €6,00</div>
           <div class="cocktail-name notranslate">Aperol Spritz</div>
           <div class="cocktail-name notranslate">Campari Spritz</div>
@@ -743,17 +708,12 @@ function googleTranslateElementInit() {
 <script>
   let currentLang = 'it';
 
-  // On page load: force clean Italian state (fixes "Italian not stable" bug)
   document.addEventListener('DOMContentLoaded', function() {
-    // Reset any leftover Google Translate cookie
     document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    // Apply Italian language cleanly
     setLang('it', document.querySelector('.lang-btn'));
   });
 
-  // ── Core language apply — strips Google <font> tags first, then sets text ──
   function applyLang(lang) {
-    // 1. Remove all <font> tags Google Translate injects (unwrap their content)
     document.querySelectorAll('font').forEach(font => {
       const parent = font.parentNode;
       if (!parent) return;
@@ -761,7 +721,6 @@ function googleTranslateElementInit() {
       parent.removeChild(font);
     });
 
-    // 2. Update all data-lang elements except sub-trans / piatti-sauce
     document.querySelectorAll('[data-' + lang + ']').forEach(item => {
       if (!item.classList.contains('sub-trans') && !item.classList.contains('piatti-sauce')) {
         const val = item.getAttribute('data-' + lang);
@@ -769,7 +728,6 @@ function googleTranslateElementInit() {
       }
     });
 
-    // 3. sub-trans
     document.querySelectorAll('.sub-trans').forEach(item => {
       const text = item.getAttribute('data-' + lang) || '';
       if (text.trim() !== '') {
@@ -783,21 +741,35 @@ function googleTranslateElementInit() {
       }
     });
 
-    // 4. piatti-sauce
     document.querySelectorAll('.piatti-sauce').forEach(item => {
       const text = item.getAttribute('data-' + lang) || '';
       item.textContent = text;
       item.style.display = text.trim() ? 'block' : 'none';
     });
 
-    // 5. cocktail-name items with data-lang
     document.querySelectorAll('.cocktail-name[data-' + lang + ']').forEach(item => {
       const val = item.getAttribute('data-' + lang);
       if (val) item.textContent = val;
     });
+
+    // Re-sync accordion button labels if open
+    ['gastro','degu'].forEach(id => {
+      const acc = document.getElementById('acc-' + id);
+      const btn = document.getElementById('btn-' + id);
+      if (!acc || !btn) return;
+      const spanEl = btn.querySelector('span');
+      if (!spanEl) return;
+      const isOpen = acc.style.display === 'block';
+      const labels = {
+        it: isOpen ? '📋 Chiudi piatti ▴' : '📋 Vedi piatti ▾',
+        fr: isOpen ? '📋 Fermer ▴' : '📋 Voir les plats ▾',
+        en: isOpen ? '📋 Close ▴' : '📋 View dishes ▾',
+        de: isOpen ? '📋 Schließen ▴' : '📋 Gerichte sehen ▾'
+      };
+      spanEl.textContent = labels[lang] || labels.it;
+    });
   }
 
-  // ── Language switch (IT / FR / EN / DE) ──────────────────────────────────
   function setLang(lang, el) {
     currentLang = lang;
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
@@ -809,26 +781,19 @@ function googleTranslateElementInit() {
     const googleWasActive = select && select.value !== '';
 
     if (googleWasActive) {
-      // Reset Google Translate first (select = ""), then wait for Google
-      // to finish un-translating the DOM before we apply our lang
       document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       select.value = '';
       select.dispatchEvent(new Event('change'));
-
-      // Give Google ~600ms to revert DOM, then apply our language on top
       setTimeout(() => applyLang(lang), 650);
     } else {
-      // Google was not active — apply immediately
       applyLang(lang);
     }
 
-    // Rebuild search index
     _searchIdx = null;
     const q = document.getElementById('searchInput').value;
     if (q && q.trim().length >= 2) setTimeout(() => searchMenu(q), googleWasActive ? 700 : 0);
   }
 
-  // ── Tab navigation ────────────────────────────────────────────────────────
   function setTab(tab, el) {
     let btn = el;
     if (!btn) btn = document.querySelector('.tab-btn[onclick*="' + tab + '"]');
@@ -849,7 +814,6 @@ function googleTranslateElementInit() {
     if (target) target.classList.add('active');
   }
 
-  // ── More-languages dropdown ───────────────────────────────────────────────
   function toggleDropdown(event) {
     if (event) event.stopPropagation();
     document.getElementById('langDropdown').classList.toggle('open');
@@ -861,21 +825,16 @@ function googleTranslateElementInit() {
     if (!e.target.closest('.translate-wrap')) closeDropdown();
   });
 
-  // ── Google Translate (for extra languages) ────────────────────────────────
   function googleTranslate(langCode) {
     closeDropdown();
     document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('translatingBar').classList.add('show');
 
-    // For Google Translate: remove notranslate so Google CAN translate sub-trans content.
-    // Set the Italian text as content — Google will translate it from Italian.
     document.querySelectorAll('.sub-trans').forEach(item => {
       item.classList.remove('notranslate');
-      // Use Italian text as source for Google to translate
       const itText = item.getAttribute('data-it') || '';
       const enText = item.getAttribute('data-en') || '';
       const frText = item.getAttribute('data-fr') || '';
-      // Pick best source: prefer Italian (natural for Google), fallback to English
       const sourceText = itText.trim() !== '' ? itText : (enText || frText);
       if (sourceText.trim() !== '') {
         item.textContent = sourceText;
@@ -885,14 +844,12 @@ function googleTranslateElementInit() {
       }
     });
 
-    // Strip notranslate from cocktail-name items that have data-lang (Whisky, Gin etc)
     document.querySelectorAll('.cocktail-name[data-en]').forEach(item => {
       item.classList.remove('notranslate');
       const itText = item.getAttribute('data-it') || item.textContent;
       if (itText.trim()) item.textContent = itText;
     });
 
-    // Also make sure piatti-sauce elements are translatable
     document.querySelectorAll('.piatti-sauce').forEach(item => {
       item.classList.remove('notranslate');
       const itText = item.getAttribute('data-it') || '';
@@ -904,7 +861,6 @@ function googleTranslateElementInit() {
       }
     });
 
-    // Make item-desc elements translatable (they may have been set to a fixed lang)
     document.querySelectorAll('.item-desc').forEach(item => {
       item.classList.remove('notranslate');
       const itText = item.getAttribute('data-it') || '';
@@ -922,66 +878,58 @@ function googleTranslateElementInit() {
     }
   }
 
-  function resetGoogleTranslate() {
-    // Called only from googleTranslate() — just resets the cookie/select
-    // setLang() handles full DOM restoration via applyLang()
-    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    const select = document.querySelector('.goog-te-combo');
-    if (select && select.value !== '') {
-      select.value = '';
-      select.dispatchEvent(new Event('change'));
+  // ── Accordion for Piatti inclusi ─────────────────────────────────────────
+  function togglePiatti(id) {
+    const acc = document.getElementById('acc-' + id);
+    const btn = document.getElementById('btn-' + id);
+    const spanEl = btn ? btn.querySelector('span') : null;
+    const isOpen = acc.style.display === 'block';
+    acc.style.display = isOpen ? 'none' : 'block';
+    if (spanEl) {
+      const lang = currentLang;
+      const labels = {
+        it: isOpen ? '📋 Vedi piatti ▾' : '📋 Chiudi piatti ▴',
+        fr: isOpen ? '📋 Voir les plats ▾' : '📋 Fermer ▴',
+        en: isOpen ? '📋 View dishes ▾' : '📋 Close ▴',
+        de: isOpen ? '📋 Gerichte sehen ▾' : '📋 Schließen ▴'
+      };
+      spanEl.textContent = labels[lang] || labels.it;
+      spanEl.setAttribute('data-it', isOpen ? '📋 Vedi piatti ▾' : '📋 Chiudi piatti ▴');
+      spanEl.setAttribute('data-fr', isOpen ? '📋 Voir les plats ▾' : '📋 Fermer ▴');
+      spanEl.setAttribute('data-en', isOpen ? '📋 View dishes ▾' : '📋 Close ▴');
+      spanEl.setAttribute('data-de', isOpen ? '📋 Gerichte sehen ▾' : '📋 Schließen ▴');
     }
   }
 
   // ── Multilingual search ───────────────────────────────────────────────────
-  // Builds an index that includes:
-  //   • Italian dish name (always, from .notranslate)
-  //   • Translation of the name via sub-trans data-{lang}
-  //   • Description text via item-desc data-{lang}
-  // So "Grandma's Ravioli" works in EN, "Ravioli fait maison" in FR, etc.
-
   let _searchIdx = null;
 
   function buildSearchIndex(lang) {
     const idx = [];
-
     document.querySelectorAll('.item').forEach(item => {
       const nameEl   = item.querySelector('.item-name');
       const priceEl  = item.querySelector('.item-price');
       const descEl   = item.querySelector('.item-desc');
       const transEl  = item.querySelector('.sub-trans');
       if (!nameEl) return;
-
-      // Italian name (always present, inside .notranslate span)
       const ntSpan = nameEl.querySelector('.notranslate');
       const itName = (ntSpan ? ntSpan.textContent : nameEl.childNodes[0]?.textContent || '').trim();
-
-      // Translated name (sub-trans for current lang)
       const transName = transEl ? (transEl.getAttribute('data-' + lang) || '').replace(/[()]/g, '').trim() : '';
-
-      // Description in current language
       const desc = descEl ? (descEl.getAttribute('data-' + lang) || '').trim() : '';
-
       const price = priceEl ? priceEl.textContent.trim() : '';
-
-      if (itName.length > 1) {
-        idx.push({ itName, transName, desc, price });
-      }
+      if (itName.length > 1) idx.push({ itName, transName, desc, price });
     });
 
-    // Also index bar price-rows (caffetteria / bibite items with data-lang spans)
     document.querySelectorAll('.price-row').forEach(row => {
       const nameSpan  = row.querySelector('span:first-child');
       const priceSpan = row.querySelector('span:last-child');
       if (!nameSpan || nameSpan === priceSpan) return;
-      // Name span may carry data-lang or be plain text
       const itName = (nameSpan.getAttribute('data-it') || nameSpan.textContent || '').trim();
       const transName = (nameSpan.getAttribute('data-' + lang) || '').trim();
       const price = priceSpan ? priceSpan.textContent.trim() : '';
       if (itName.length > 1) idx.push({ itName, transName, desc: '', price });
     });
 
-    // cocktail-name items (no price column, fixed price in group header)
     document.querySelectorAll('.cocktail-name').forEach(cn => {
       const name = cn.textContent.trim();
       if (name.length > 1) idx.push({ itName: name, transName: '', desc: '', price: '' });
@@ -998,27 +946,17 @@ function googleTranslateElementInit() {
     }
     if (!_searchIdx) _searchIdx = buildSearchIndex(currentLang);
     const q = query.toLowerCase();
-
     const hits = _searchIdx.filter(e =>
       e.itName.toLowerCase().includes(q) ||
       e.transName.toLowerCase().includes(q) ||
       e.desc.toLowerCase().includes(q)
     );
-
     if (!hits.length) {
-      // "No results" in current language
-      const noResult = {
-        it: 'Nessun risultato trovato',
-        fr: 'Aucun résultat trouvé',
-        en: 'No results found',
-        de: 'Keine Ergebnisse gefunden'
-      }[currentLang] || 'Nessun risultato trovato';
+      const noResult = { it: 'Nessun risultato trovato', fr: 'Aucun résultat trouvé', en: 'No results found', de: 'Keine Ergebnisse gefunden' }[currentLang] || 'Nessun risultato trovato';
       resultsBox.innerHTML = '<div style="padding:12px 16px;color:#bca07d;font-size:13px;font-style:italic;">' + noResult + '</div>';
     } else {
       resultsBox.innerHTML = hits.map(e => {
-        // Show translated name if available, otherwise Italian
         const displayName = e.transName || e.itName;
-        // Show Italian name as subtitle if they differ
         const subtitle = e.transName && e.transName !== e.itName
           ? '<span style="display:block;font-size:11px;color:#bca07d;font-style:italic;margin-top:2px;" class="notranslate">' + e.itName + '</span>'
           : '';
@@ -1033,3 +971,5 @@ function googleTranslateElementInit() {
 </script>
 </body>
 </html>
+You are out of free messages until 5:20 AM
+Keep working
