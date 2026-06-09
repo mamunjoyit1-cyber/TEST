@@ -1,6 +1,3 @@
-bash
-
-cat > /home/claude/index.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -85,12 +82,10 @@ cat > /home/claude/index.html << 'HTMLEOF'
   .digital-wine-btn { display: flex; align-items: center; justify-content: center; gap: 14px; background: linear-gradient(135deg,#3d0b0b,#5a1010); border: 2px solid #d4af37; border-radius: 14px; padding: 22px 28px; text-decoration: none; color: #ffffff; box-shadow: 0 5px 20px rgba(0,0,0,0.5); font-size: 18px; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 20px; }
   .digital-wine-btn:hover { background: linear-gradient(135deg,#5a1010,#7a1515); }
   .btn-arrow { background: #d4af37; color: #150e0b; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-  /* Accordion dish rows */
   .acc-dish-row { padding: 7px 0; border-bottom: 1px dotted rgba(212,175,55,0.3); color: #2d1b10; font-size: 13.5px; font-weight: 500; }
   .acc-dish-row:last-child { border-bottom: none; }
   .acc-dish-name { font-weight: 700; color: #110303; display: block; }
   .acc-dish-trans { display: none; font-size: 14px; color: #2d1b10; font-weight: bold; font-style: italic; margin-top: 5px; background: #f5ede0; padding: 5px 11px; border-radius: 6px; border-left: 4px solid #b31e1e; }
-  /* Kitchen selection banner */
   .kitchen-selection-banner { background: linear-gradient(135deg, #1e0d05, #2a1205); border: 2px solid #d4af37; border-radius: 14px; padding: 14px 20px; margin-bottom: 22px; display: flex; align-items: center; gap: 14px; box-shadow: 0 4px 16px rgba(212,175,55,0.15); }
   .kitchen-selection-icon { font-size: 26px; flex-shrink: 0; }
   .kitchen-selection-text { flex: 1; }
@@ -209,6 +204,7 @@ cat > /home/claude/index.html << 'HTMLEOF'
   <div class="section active" id="sec-menu_packages">
     <h2 class="cat-title">🍽️ <span data-it="I Nostri Menù" data-fr="Nos Menus" data-en="Our Set Menus" data-de="Unsere Menüs">I Nostri Menù</span></h2>
 
+    <!-- Lago Bin -->
     <div class="item">
       <div class="item-left">
         <div class="item-name">
@@ -216,8 +212,9 @@ cat > /home/claude/index.html << 'HTMLEOF'
           <span class="sub-trans" data-it="" data-fr="(Menu du Lago Bin)" data-en="(Lago Bin Set Menu)" data-de="(Lago Bin Menü)"></span>
         </div>
         <div class="item-desc" data-it='Con i nostri Piatti Tipici e la Formula "Tutto Compreso" (1 bott. di Vino della Casa ogni 4 pers.)' data-fr='Avec nos Plats Typiques et la Formule "Tout Inclus" (1 bott. de Vin de la Maison chaque 4 pers.)' data-en='"All Inclusive" Formula with Typical Dishes (1 bottle of House Wine per 4 persons)' data-de='"Alles Inklusive" Formel mit typischen Gerichten (1 Flasche Hauswein für 4 Personen)'>Con i nostri Piatti Tipici e la Formula "Tutto Compreso" (1 bott. di Vino della Casa ogni 4 pers.)</div>
-        <div style="margin-top:10px;font-size:13px;color:#7a5a2a;font-style:italic;font-weight:600;">
-          🍽️ <span data-it="Piatti selezionati dalla cucina" data-fr="Plats sélectionnés par la cuisine" data-en="Dishes selected by the kitchen" data-de="Von der Küche ausgewählte Gerichte">Piatti selezionati dalla cucina</span>
+        <div style="margin-top:10px;display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#fff8e7,#fdf0d0);border:1.5px solid #d4af37;border-radius:20px;padding:6px 14px;box-shadow:0 2px 8px rgba(212,175,55,0.2);">
+          <span style="font-size:16px;">🍽️</span>
+          <span style="font-size:12.5px;color:#7a4a10;font-style:italic;font-weight:700;letter-spacing:0.3px;" data-it="Piatti selezionati dalla cucina" data-fr="Plats sélectionnés par la cuisine" data-en="Dishes selected by the kitchen" data-de="Von der Küche ausgewählte Gerichte">Piatti selezionati dalla cucina</span>
         </div>
       </div>
       <div class="item-price">€45,00</div>
@@ -235,7 +232,7 @@ cat > /home/claude/index.html << 'HTMLEOF'
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
         <div class="item-price">€40,00</div>
         <button onclick="togglePiatti('gastro')" id="btn-gastro" style="background:rgba(212,175,55,0.12);border:1px solid #d4af37;border-radius:20px;color:#b31e1e;font-size:11px;padding:4px 12px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.2s;">
-          <span data-it="📋 Vedi piatti ▾" data-fr="📋 Voir les plats ▾" data-en="📋 View dishes ▾" data-de="📋 Gerichte sehen ▾">📋 Vedi piatti ▾</span>
+          <span data-it="🍽️ Vedi piatti ▾" data-fr="🍽️ Voir les plats ▾" data-en="🍽️ View dishes ▾" data-de="🍽️ Gerichte sehen ▾">🍽️ Vedi piatti ▾</span>
         </button>
       </div>
     </div>
@@ -274,7 +271,7 @@ cat > /home/claude/index.html << 'HTMLEOF'
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
         <div class="item-price">€30,00</div>
         <button onclick="togglePiatti('degu')" id="btn-degu" style="background:rgba(212,175,55,0.12);border:1px solid #d4af37;border-radius:20px;color:#b31e1e;font-size:11px;padding:4px 12px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.2s;">
-          <span data-it="📋 Vedi piatti ▾" data-fr="📋 Voir les plats ▾" data-en="📋 View dishes ▾" data-de="📋 Gerichte sehen ▾">📋 Vedi piatti ▾</span>
+          <span data-it="🍽️ Vedi piatti ▾" data-fr="🍽️ Voir les plats ▾" data-en="🍽️ View dishes ▾" data-de="🍽️ Gerichte sehen ▾">🍽️ Vedi piatti ▾</span>
         </button>
       </div>
     </div>
@@ -308,7 +305,7 @@ cat > /home/claude/index.html << 'HTMLEOF'
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
           <div class="item-price">€15,00</div>
           <button onclick="togglePiatti('bambini')" id="btn-bambini" style="background:rgba(212,175,55,0.12);border:1px solid #d4af37;border-radius:20px;color:#b31e1e;font-size:11px;padding:4px 12px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.2s;">
-            <span data-it="📋 Vedi piatti ▾" data-fr="📋 Voir les plats ▾" data-en="📋 View dishes ▾" data-de="📋 Gerichte sehen ▾">📋 Vedi piatti ▾</span>
+            <span data-it="🍽️ Vedi piatti ▾" data-fr="🍽️ Voir les plats ▾" data-en="🍽️ View dishes ▾" data-de="🍽️ Gerichte sehen ▾">🍽️ Vedi piatti ▾</span>
           </button>
         </div>
       </div>
@@ -316,46 +313,46 @@ cat > /home/claude/index.html << 'HTMLEOF'
     </div>
     <div id="acc-bambini" style="display:none;background:#fffbf4;border:1px solid #d4af37;border-top:none;border-radius:0 0 12px 12px;margin-top:-14px;margin-bottom:16px;padding:16px 18px;">
       <div class="acc-section-head" data-it="Piatti a scelta" data-fr="Plats au choix" data-en="Dishes to choose from" data-de="Gerichte zur Auswahl">Piatti a scelta</div>
-      <div class="acc-dish-row">
-        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;">
-          <span class="acc-dish-name notranslate" style="font-size:15px;">Ravioli</span>
-          <div class="acc-dish-trans" data-it="" data-fr="Ravioli" data-en="Ravioli" data-de="Ravioli"></div>
+      <div class="acc-dish-row" style="border:none;">
+        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:10px;">
+          <span class="acc-dish-name notranslate" style="font-size:15px;margin:0;">Ravioli</span>
+          <div class="acc-dish-trans" data-it="" data-fr="Ravioli" data-en="Ravioli" data-de="Ravioli" style="margin:0;border-left:none;background:none;padding:0;font-size:13px;"></div>
         </div>
       </div>
       <div class="acc-dish-row" style="border:none;">
-        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;">
-          <span class="acc-dish-name notranslate" style="font-size:15px;">Tagliatelle</span>
-          <div class="acc-dish-trans" data-it="" data-fr="Tagliatelles" data-en="Tagliatelle" data-de="Tagliatelle"></div>
+        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:10px;">
+          <span class="acc-dish-name notranslate" style="font-size:15px;margin:0;">Tagliatelle</span>
+          <div class="acc-dish-trans" data-it="" data-fr="Tagliatelles" data-en="Tagliatelle" data-de="Tagliatelle" style="margin:0;border-left:none;background:none;padding:0;font-size:13px;"></div>
         </div>
       </div>
       <div class="acc-dish-row" style="border:none;">
-        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;">
-          <span class="acc-dish-name notranslate" style="font-size:15px;">Gnocchi</span>
-          <div class="acc-dish-trans" data-it="" data-fr="Gnocchi" data-en="Gnocchi" data-de="Gnocchi"></div>
+        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:10px;">
+          <span class="acc-dish-name notranslate" style="font-size:15px;margin:0;">Gnocchi</span>
+          <div class="acc-dish-trans" data-it="" data-fr="Gnocchi" data-en="Gnocchi" data-de="Gnocchi" style="margin:0;border-left:none;background:none;padding:0;font-size:13px;"></div>
         </div>
       </div>
       <div class="acc-dish-row" style="border:none;">
-        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;">
-          <span class="acc-dish-name notranslate" style="font-size:15px;">Milanese</span>
-          <div class="acc-dish-trans" data-it="" data-fr="Escalope Milanaise" data-en="Milanese Cutlet" data-de="Mailänder Schnitzel"></div>
+        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:10px;">
+          <span class="acc-dish-name notranslate" style="font-size:15px;margin:0;">Milanese</span>
+          <div class="acc-dish-trans" data-it="" data-fr="Escalope Milanaise" data-en="Milanese Cutlet" data-de="Mailänder Schnitzel" style="margin:0;border-left:none;background:none;padding:0;font-size:13px;"></div>
         </div>
       </div>
       <div class="acc-dish-row" style="border:none;">
-        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;">
-          <span class="acc-dish-name notranslate" style="font-size:15px;">Bistecca</span>
-          <div class="acc-dish-trans" data-it="" data-fr="Steak" data-en="Steak" data-de="Steak"></div>
+        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:10px;">
+          <span class="acc-dish-name notranslate" style="font-size:15px;margin:0;">Bistecca</span>
+          <div class="acc-dish-trans" data-it="" data-fr="Steak" data-en="Steak" data-de="Steak" style="margin:0;border-left:none;background:none;padding:0;font-size:13px;"></div>
         </div>
       </div>
       <div class="acc-dish-row" style="border:none;">
-        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;">
-          <span class="acc-dish-name notranslate" style="font-size:15px;">Rostelle</span>
-          <div class="acc-dish-trans" data-it="" data-fr="Brochettes" data-en="Skewers" data-de="Spieße"></div>
+        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:10px;">
+          <span class="acc-dish-name notranslate" style="font-size:15px;margin:0;">Rostelle</span>
+          <div class="acc-dish-trans" data-it="" data-fr="Brochettes" data-en="Skewers" data-de="Spieße" style="margin:0;border-left:none;background:none;padding:0;font-size:13px;"></div>
         </div>
       </div>
       <div class="acc-dish-row" style="border:none;">
-        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:0;">
-          <span class="acc-dish-name notranslate" style="font-size:15px;">Salsiccia</span>
-          <div class="acc-dish-trans" data-it="" data-fr="Saucisse" data-en="Sausage" data-de="Wurst"></div>
+        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:0;display:flex;justify-content:space-between;align-items:center;gap:10px;">
+          <span class="acc-dish-name notranslate" style="font-size:15px;margin:0;">Salsiccia</span>
+          <div class="acc-dish-trans" data-it="" data-fr="Saucisse" data-en="Sausage" data-de="Wurst" style="margin:0;border-left:none;background:none;padding:0;font-size:13px;"></div>
         </div>
       </div>
     </div>
@@ -432,7 +429,7 @@ cat > /home/claude/index.html << 'HTMLEOF'
     </div>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Tiramisù</span><span class="sub-trans" data-it="" data-fr="(Tiramisu)" data-en="(Classic Tiramisu)" data-de="(Klassisches Tiramisu)"></span></div><div class="item-desc" data-it="Dolce al caffè con mascarpone e cacao" data-fr="Dessert au café avec mascarpone et cacao" data-en="Traditional coffee dessert with mascarpone cream and cocoa" data-de="Kaffeedessert mit Mascarpone und Kakao">Dolce al caffè con mascarpone e cacao</div></div><div class="item-price">€6,00</div></div>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Panna Cotta</span><span class="sub-trans" data-it="" data-fr="(Panna Cotta)" data-en="(Panna Cotta)" data-de="(Panna Cotta)"></span></div><div class="item-desc" data-it="Dolce cremoso alla vaniglia con salsa di frutta" data-fr="Dessert crémeux à la vanille avec coulis de fruits" data-en="Creamy vanilla pudding served with fruit coulis" data-de="Cremiges Vanilledessert mit Fruchtsauce">Dolce cremoso alla vaniglia con salsa di frutta</div></div><div class="item-price">€6,00</div></div>
-    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Crème Caramel</span></div><div class="item-desc" data-it="Budino al caramello fatto in casa" data-fr="Flan au caramel fait maison" data-en="Homemade caramel pudding" data-de="Hausgemachter Karamellpudding">Budino al caramello fatto in casa</div></div><div class="item-price">€6,00</div></div>
+    <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Crème Caramel</span><span class="sub-trans" data-it="" data-fr="(Crème Caramel)" data-en="(Crème Caramel)" data-de="(Crème Caramel)"></span></div><div class="item-desc" data-it="Budino al caramello fatto in casa" data-fr="Flan au caramel fait maison" data-en="Homemade caramel pudding" data-de="Hausgemachter Karamellpudding">Budino al caramello fatto in casa</div></div><div class="item-price">€6,00</div></div>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Crema Catalana</span><span class="sub-trans" data-it="" data-fr="(Crème Catalane)" data-en="(Crème Brûlée Style)" data-de="(Katalanische Creme)"></span></div><div class="item-desc" data-it="Crema al forno con zucchero caramellato" data-fr="Crème cuite au four avec sucre caramélisé" data-en="Baked custard topped with caramelized sugar" data-de="Gebackene Creme mit karamellisiertem Zucker">Crema al forno con zucchero caramellato</div></div><div class="item-price">€6,00</div></div>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Semifreddo</span><span class="sub-trans" data-it="" data-fr="(Parfait Semifreddo)" data-en="(Homemade Semifreddo)" data-de="(Semifreddo)"></span></div><div class="item-desc" data-it="Dessert freddo cremoso della casa" data-fr="Dessert glacé crémeux de la maison" data-en="Creamy cold house dessert" data-de="Cremiges, halbgefrorenes Hausdessert">Dessert freddo cremoso della casa</div></div><div class="item-price">€6,00</div></div>
     <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Crumble di Mele con Gelato</span><span class="sub-trans" data-it="" data-fr="(Crumble aux Pommes avec Glace)" data-en="(Apple Crumble with Ice Cream)" data-de="(Apfel-Crumble mit Eis)"></span></div><div class="item-desc" data-it="Crumble caldo servito con gelato alla vaniglia" data-fr="Crumble chaud servi avec glace vanille" data-en="Warm apple crumble served with vanilla ice cream" data-de="Warmer Apfel-Crumble serviert mit Vanilleeis">Crumble caldo servito con gelato alla vaniglia</div></div><div class="item-price">€6,00</div></div>
@@ -455,15 +452,15 @@ cat > /home/claude/index.html << 'HTMLEOF'
       <div class="item-desc" style="margin-top:8px;" data-it="Fatto in Casa ogni Giorno — Il nostro gelato è preparato artigianalmente con ingredienti freschi" data-fr="Fait maison tous les jours — Notre glace est préparée de manière artisanale avec des ingrédients frais" data-en="Freshly Made Every Day — Our ice cream is crafted using only premium fresh ingredients" data-de="Täglich frisch zubereitet — Unser Eis wird handwerklich aus frischen Zutaten hergestellt">Fatto in Casa ogni Giorno — Il nostro gelato è preparato artigianalmente con ingredienti freschi</div>
       <div style="margin-top:15px;font-size:12px;font-weight:bold;color:#d4af37;text-transform:uppercase;letter-spacing:1px;" data-it="Gusti disponibili:" data-fr="Parfums disponibles:" data-en="Available Flavors:" data-de="Verfügbare Sorten:">Gusti disponibili:</div>
       <div class="gelato-grid">
-        <div class="gelato-item"><span class="notranslate">Vaniglia 🍦</span><span class="sub-trans" data-it="" data-fr="(Vanille)" data-en="(Vanilla)" data-de="(Vanille)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;"></span></div>
-        <div class="gelato-item"><span class="notranslate">Fiore di Latte 🥛</span><span class="sub-trans" data-it="" data-fr="(Crème fraîche)" data-en="(Milk cream)" data-de="(Milchcreme)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;"></span></div>
-        <div class="gelato-item"><span class="notranslate">Fragola 🍓</span><span class="sub-trans" data-it="" data-fr="(Fraise)" data-en="(Strawberry)" data-de="(Erdbeere)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;"></span></div>
-        <div class="gelato-item"><span class="notranslate">Nocciola 🌰</span><span class="sub-trans" data-it="" data-fr="(Noisette)" data-en="(Hazelnut)" data-de="(Haselnuss)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;"></span></div>
-        <div class="gelato-item"><span class="notranslate">Limone 🍋</span><span class="sub-trans" data-it="" data-fr="(Citron)" data-en="(Lemon)" data-de="(Zitrone)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;"></span></div>
-        <div class="gelato-item"><span class="notranslate">Mango 🥭</span><span class="sub-trans" data-it="" data-fr="(Mangue)" data-en="(Mango)" data-de="(Mango)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;"></span></div>
-        <div class="gelato-item"><span class="notranslate">Cioccolata 🍫</span><span class="sub-trans" data-it="" data-fr="(Chocolat)" data-en="(Chocolate)" data-de="(Schokolade)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;"></span></div>
-        <div class="gelato-item"><span class="notranslate">Caffè ☕</span><span class="sub-trans" data-it="" data-fr="(Café)" data-en="(Coffee)" data-de="(Kaffee)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;"></span></div>
-        <div class="gelato-item"><span class="notranslate">Sorbetto 🍧</span><span class="sub-trans" data-it="" data-fr="(Sorbet)" data-en="(Sorbet)" data-de="(Sorbet)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;"></span></div>
+        <div class="gelato-item"><span class="notranslate">Vaniglia 🍦</span><span class="sub-trans" data-it="" data-fr="(Vanille)" data-en="(Vanilla)" data-de="(Vanille)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;display:none;"></span></div>
+        <div class="gelato-item"><span class="notranslate">Fiore di Latte 🥛</span><span class="sub-trans" data-it="" data-fr="(Crème fraîche)" data-en="(Milk cream)" data-de="(Milchcreme)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;display:none;"></span></div>
+        <div class="gelato-item"><span class="notranslate">Fragola 🍓</span><span class="sub-trans" data-it="" data-fr="(Fraise)" data-en="(Strawberry)" data-de="(Erdbeere)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;display:none;"></span></div>
+        <div class="gelato-item"><span class="notranslate">Nocciola 🌰</span><span class="sub-trans" data-it="" data-fr="(Noisette)" data-en="(Hazelnut)" data-de="(Haselnuss)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;display:none;"></span></div>
+        <div class="gelato-item"><span class="notranslate">Limone 🍋</span><span class="sub-trans" data-it="" data-fr="(Citron)" data-en="(Lemon)" data-de="(Zitrone)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;display:none;"></span></div>
+        <div class="gelato-item"><span class="notranslate">Mango 🥭</span><span class="sub-trans" data-it="" data-fr="(Mangue)" data-en="(Mango)" data-de="(Mango)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;display:none;"></span></div>
+        <div class="gelato-item"><span class="notranslate">Cioccolata 🍫</span><span class="sub-trans" data-it="" data-fr="(Chocolat)" data-en="(Chocolate)" data-de="(Schokolade)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;display:none;"></span></div>
+        <div class="gelato-item"><span class="notranslate">Caffè ☕</span><span class="sub-trans" data-it="" data-fr="(Café)" data-en="(Coffee)" data-de="(Kaffee)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;display:none;"></span></div>
+        <div class="gelato-item"><span class="notranslate">Sorbetto 🍧</span><span class="sub-trans" data-it="" data-fr="(Sorbet)" data-en="(Sorbet)" data-de="(Sorbet)" style="border-left:none;background:none;padding:2px 0;font-size:12px;margin-top:2px;display:none;"></span></div>
       </div>
     </div>
   </div>
@@ -587,7 +584,8 @@ function googleTranslateElementInit() {
       const text = item.getAttribute('data-' + lang) || '';
       if (text.trim() !== '') {
         item.textContent = text;
-        item.style.display = 'block';
+        // gelato items use inline display; regular items use block
+        item.style.display = item.closest('.gelato-item') ? 'inline-block' : 'block';
         item.classList.add('notranslate');
       } else {
         item.textContent = '';
@@ -596,12 +594,14 @@ function googleTranslateElementInit() {
       }
     });
 
-    // accordion dish translations — inline-block so CSS box styling applies
+    // accordion dish translations
     document.querySelectorAll('.acc-dish-trans').forEach(item => {
       const text = item.getAttribute('data-' + lang) || '';
+      // bambini items are inline (flex row); others use inline-block
+      const isBambini = item.closest('#acc-bambini');
       if (text.trim() !== '') {
         item.textContent = text;
-        item.style.display = 'inline-block';
+        item.style.display = isBambini ? 'inline' : 'inline-block';
         item.classList.add('notranslate');
       } else {
         item.textContent = '';
@@ -625,10 +625,10 @@ function googleTranslateElementInit() {
       if (!spanEl) return;
       const isOpen = acc.style.display === 'block';
       const labels = {
-        it: isOpen ? '📋 Chiudi piatti ▴' : '📋 Vedi piatti ▾',
-        fr: isOpen ? '📋 Fermer ▴' : '📋 Voir les plats ▾',
-        en: isOpen ? '📋 Close ▴' : '📋 View dishes ▾',
-        de: isOpen ? '📋 Schließen ▴' : '📋 Gerichte sehen ▾'
+        it: isOpen ? '🍽️ Chiudi piatti ▴' : '🍽️ Vedi piatti ▾',
+        fr: isOpen ? '🍽️ Fermer ▴' : '🍽️ Voir les plats ▾',
+        en: isOpen ? '🍽️ Close ▴' : '🍽️ View dishes ▾',
+        de: isOpen ? '🍽️ Schließen ▴' : '🍽️ Gerichte sehen ▾'
       };
       spanEl.textContent = labels[lang] || labels.it;
     });
@@ -694,7 +694,7 @@ function googleTranslateElementInit() {
       const itText = item.getAttribute('data-it') || '';
       const enText = item.getAttribute('data-en') || '';
       const sourceText = itText.trim() !== '' ? itText : (enText || '');
-      if (sourceText.trim() !== '') { item.textContent = sourceText; item.style.display = 'block'; }
+      if (sourceText.trim() !== '') { item.textContent = sourceText; item.style.display = item.closest('.gelato-item') ? 'inline-block' : 'block'; }
       else { item.style.display = 'none'; }
     });
 
@@ -703,7 +703,8 @@ function googleTranslateElementInit() {
       const itText = item.getAttribute('data-it') || '';
       const enText = item.getAttribute('data-en') || '';
       const sourceText = itText.trim() !== '' ? itText : enText;
-      if (sourceText.trim() !== '') { item.textContent = sourceText; item.style.display = 'inline-block'; }
+      const isBambini = item.closest('#acc-bambini');
+      if (sourceText.trim() !== '') { item.textContent = sourceText; item.style.display = isBambini ? 'inline' : 'inline-block'; }
     });
 
     document.querySelectorAll('.cocktail-name[data-en]').forEach(item => {
@@ -738,16 +739,16 @@ function googleTranslateElementInit() {
     if (spanEl) {
       const lang = currentLang;
       const labels = {
-        it: isOpen ? '📋 Vedi piatti ▾' : '📋 Chiudi piatti ▴',
-        fr: isOpen ? '📋 Voir les plats ▾' : '📋 Fermer ▴',
-        en: isOpen ? '📋 View dishes ▾' : '📋 Close ▴',
-        de: isOpen ? '📋 Gerichte sehen ▾' : '📋 Schließen ▴'
+        it: isOpen ? '🍽️ Vedi piatti ▾' : '🍽️ Chiudi piatti ▴',
+        fr: isOpen ? '🍽️ Voir les plats ▾' : '🍽️ Fermer ▴',
+        en: isOpen ? '🍽️ View dishes ▾' : '🍽️ Close ▴',
+        de: isOpen ? '🍽️ Gerichte sehen ▾' : '🍽️ Schließen ▴'
       };
       spanEl.textContent = labels[lang] || labels.it;
-      spanEl.setAttribute('data-it', isOpen ? '📋 Vedi piatti ▾' : '📋 Chiudi piatti ▴');
-      spanEl.setAttribute('data-fr', isOpen ? '📋 Voir les plats ▾' : '📋 Fermer ▴');
-      spanEl.setAttribute('data-en', isOpen ? '📋 View dishes ▾' : '📋 Close ▴');
-      spanEl.setAttribute('data-de', isOpen ? '📋 Gerichte sehen ▾' : '📋 Schließen ▴');
+      spanEl.setAttribute('data-it', isOpen ? '🍽️ Vedi piatti ▾' : '🍽️ Chiudi piatti ▴');
+      spanEl.setAttribute('data-fr', isOpen ? '🍽️ Voir les plats ▾' : '🍽️ Fermer ▴');
+      spanEl.setAttribute('data-en', isOpen ? '🍽️ View dishes ▾' : '🍽️ Close ▴');
+      spanEl.setAttribute('data-de', isOpen ? '🍽️ Gerichte sehen ▾' : '🍽️ Schließen ▴');
     }
   }
 
