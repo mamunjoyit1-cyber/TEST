@@ -1,3 +1,6 @@
+bash
+
+cat > /home/claude/index.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -53,8 +56,8 @@
   .item-price { font-size: 18px; font-weight: 800; color: #b31e1e; white-space: nowrap; flex-shrink: 0; background: #fdf5e6; padding: 6px 12px; border-radius: 8px; border: 1px solid #d4af37; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
   .gelato-grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; margin-top: 14px; margin-bottom: 14px; }
   .gelato-item { background: #fdf5e6; border: 1px solid #c5a880; border-radius: 8px; padding: 12px 14px; font-size: 15px; color: #1a0505; font-weight: bold; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-  .note-box { background: rgba(179,30,30,0.12); border: 2px solid #b31e1e; border-radius: 12px; padding: 18px; margin-top: 18px; font-size: 14px; color: #b31e1e; font-weight: bold; line-height: 1.6; }
-  .note-box strong { color: #b31e1e; font-size: 18px; }
+  .note-box { background: linear-gradient(135deg, #2a1d19, #1a110e); border: 2px solid #d4af37; border-radius: 12px; padding: 18px 22px; margin-top: 18px; text-align: center; box-shadow: 0 4px 12px rgba(212,175,55,0.15); }
+  .note-box-text { font-size: 15px; color: #d4af37; font-weight: bold; letter-spacing: 0.5px; line-height: 1.6; }
   .dolce-banner { background: linear-gradient(135deg, #2a1d19, #1a110e); border: 1px solid #d4af37; border-radius: 14px; padding: 24px; margin-bottom: 25px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
   .dolce-banner h3 { color: #d4af37; font-size: 20px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
   .dolce-banner p { color: #bca07d; font-size: 14.5px; font-style: italic; }
@@ -86,7 +89,7 @@
   .acc-dish-row { padding: 7px 0; border-bottom: 1px dotted rgba(212,175,55,0.3); color: #2d1b10; font-size: 13.5px; font-weight: 500; }
   .acc-dish-row:last-child { border-bottom: none; }
   .acc-dish-name { font-weight: 700; color: #110303; display: block; }
-  .acc-dish-trans { display: none; font-size: 12.5px; color: #7a3a1a; font-style: italic; margin-top: 2px; }
+  .acc-dish-trans { display: none; font-size: 14px; color: #2d1b10; font-weight: bold; font-style: italic; margin-top: 5px; background: #f5ede0; padding: 5px 11px; border-radius: 6px; border-left: 4px solid #b31e1e; }
   /* Kitchen selection banner */
   .kitchen-selection-banner { background: linear-gradient(135deg, #1e0d05, #2a1205); border: 2px solid #d4af37; border-radius: 14px; padding: 14px 20px; margin-bottom: 22px; display: flex; align-items: center; gap: 14px; box-shadow: 0 4px 16px rgba(212,175,55,0.15); }
   .kitchen-selection-icon { font-size: 26px; flex-shrink: 0; }
@@ -173,8 +176,8 @@
   <div class="quick-card" onclick="setTab('bar')">
     <div class="card-icon">🍹</div>
     <div class="card-text">
-      <span data-it="Bevande" data-fr="Bevande" data-en="Bevande" data-de="Bevande">Bevande</span>
-      <span class="card-label" data-it="Bibite, Caffè & Cocktails" data-fr="Bibite, Caffè & Cocktails" data-en="Bibite, Caffè & Cocktails" data-de="Bibite, Caffè & Cocktails">Bibite, Caffè & Cocktails</span>
+      <span data-it="Bevande" data-fr="Boissons" data-en="Drinks" data-de="Getränke">Bevande</span>
+      <span class="card-label" data-it="Bibite, Caffè & Cocktails" data-fr="Boissons, Café & Cocktails" data-en="Drinks, Coffee & Cocktails" data-de="Getränke, Kaffee & Cocktails">Bibite, Caffè & Cocktails</span>
     </div>
   </div>
 </div>
@@ -297,12 +300,12 @@
 
     <!-- Bambini -->
     <div class="item" style="display:block;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;width:100%;">
+      <div style="display:flex;justify-content:space-between;align-items:center;width:100%;gap:12px;">
         <div class="item-name">
           <span class="notranslate">Menù Bambini (4/10 Anni)</span>
           <span class="sub-trans" data-it="" data-fr="(Menu Enfant 4/10 Ans)" data-en="(Children's Menu 4–10 years)" data-de="(Kindermenü 4–10 Jahre)"></span>
         </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;">
           <div class="item-price">€15,00</div>
           <button onclick="togglePiatti('bambini')" id="btn-bambini" style="background:rgba(212,175,55,0.12);border:1px solid #d4af37;border-radius:20px;color:#b31e1e;font-size:11px;padding:4px 12px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.2s;">
             <span data-it="📋 Vedi piatti ▾" data-fr="📋 Voir les plats ▾" data-en="📋 View dishes ▾" data-de="📋 Gerichte sehen ▾">📋 Vedi piatti ▾</span>
@@ -313,17 +316,54 @@
     </div>
     <div id="acc-bambini" style="display:none;background:#fffbf4;border:1px solid #d4af37;border-top:none;border-radius:0 0 12px 12px;margin-top:-14px;margin-bottom:16px;padding:16px 18px;">
       <div class="acc-section-head" data-it="Piatti a scelta" data-fr="Plats au choix" data-en="Dishes to choose from" data-de="Gerichte zur Auswahl">Piatti a scelta</div>
-      <div class="acc-dish-row"><span class="acc-dish-name notranslate">Ravioli</span><div class="acc-dish-trans" data-it="" data-fr="Ravioli" data-en="Ravioli" data-de="Ravioli"></div></div>
-      <div class="acc-dish-row"><span class="acc-dish-name notranslate">Tagliatelle</span><div class="acc-dish-trans" data-it="" data-fr="Tagliatelles" data-en="Tagliatelle" data-de="Tagliatelle"></div></div>
-      <div class="acc-dish-row"><span class="acc-dish-name notranslate">Gnocchi</span><div class="acc-dish-trans" data-it="" data-fr="Gnocchi" data-en="Gnocchi" data-de="Gnocchi"></div></div>
-      <div class="acc-dish-row"><span class="acc-dish-name notranslate">Milanese</span><div class="acc-dish-trans" data-it="" data-fr="Escalope Milanaise" data-en="Milanese Cutlet" data-de="Mailänder Schnitzel"></div></div>
-      <div class="acc-dish-row"><span class="acc-dish-name notranslate">Bistecca</span><div class="acc-dish-trans" data-it="" data-fr="Steak" data-en="Steak" data-de="Steak"></div></div>
-      <div class="acc-dish-row"><span class="acc-dish-name notranslate">Rostelle</span><div class="acc-dish-trans" data-it="" data-fr="Brochettes" data-en="Skewers" data-de="Spieße"></div></div>
-      <div class="acc-dish-row"><span class="acc-dish-name notranslate">Salsiccia</span><div class="acc-dish-trans" data-it="" data-fr="Saucisse" data-en="Sausage" data-de="Wurst"></div></div>
+      <div class="acc-dish-row">
+        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;">
+          <span class="acc-dish-name notranslate" style="font-size:15px;">Ravioli</span>
+          <div class="acc-dish-trans" data-it="" data-fr="Ravioli" data-en="Ravioli" data-de="Ravioli"></div>
+        </div>
+      </div>
+      <div class="acc-dish-row" style="border:none;">
+        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;">
+          <span class="acc-dish-name notranslate" style="font-size:15px;">Tagliatelle</span>
+          <div class="acc-dish-trans" data-it="" data-fr="Tagliatelles" data-en="Tagliatelle" data-de="Tagliatelle"></div>
+        </div>
+      </div>
+      <div class="acc-dish-row" style="border:none;">
+        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;">
+          <span class="acc-dish-name notranslate" style="font-size:15px;">Gnocchi</span>
+          <div class="acc-dish-trans" data-it="" data-fr="Gnocchi" data-en="Gnocchi" data-de="Gnocchi"></div>
+        </div>
+      </div>
+      <div class="acc-dish-row" style="border:none;">
+        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;">
+          <span class="acc-dish-name notranslate" style="font-size:15px;">Milanese</span>
+          <div class="acc-dish-trans" data-it="" data-fr="Escalope Milanaise" data-en="Milanese Cutlet" data-de="Mailänder Schnitzel"></div>
+        </div>
+      </div>
+      <div class="acc-dish-row" style="border:none;">
+        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;">
+          <span class="acc-dish-name notranslate" style="font-size:15px;">Bistecca</span>
+          <div class="acc-dish-trans" data-it="" data-fr="Steak" data-en="Steak" data-de="Steak"></div>
+        </div>
+      </div>
+      <div class="acc-dish-row" style="border:none;">
+        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:6px;">
+          <span class="acc-dish-name notranslate" style="font-size:15px;">Rostelle</span>
+          <div class="acc-dish-trans" data-it="" data-fr="Brochettes" data-en="Skewers" data-de="Spieße"></div>
+        </div>
+      </div>
+      <div class="acc-dish-row" style="border:none;">
+        <div style="background:#fdf5e6;border:1px solid #d4af37;border-radius:8px;padding:10px 14px;margin-bottom:0;">
+          <span class="acc-dish-name notranslate" style="font-size:15px;">Salsiccia</span>
+          <div class="acc-dish-trans" data-it="" data-fr="Saucisse" data-en="Sausage" data-de="Wurst"></div>
+        </div>
+      </div>
     </div>
 
     <div class="note-box">
-      <span data-it="I Menù non sono Divisibili per più Persone." data-fr="Les Menus ne peuvent pas être partagés entre plusieurs personnes." data-en="Set menus cannot be shared between guests." data-de="Menüs können nicht auf mehrere Personen aufgeteilt werden.">I Menù non sono Divisibili per più Persone.</span>
+      <div class="note-box-text">
+        <span data-it="I Menù non sono Divisibili per più Persone." data-fr="Les Menus ne peuvent pas être partagés entre plusieurs personnes." data-en="Set menus cannot be shared between guests." data-de="Menüs können nicht auf mehrere Personen aufgeteilt werden.">I Menù non sono Divisibili per più Persone.</span>
+      </div>
     </div>
   </div>
 
@@ -556,12 +596,12 @@ function googleTranslateElementInit() {
       }
     });
 
-    // accordion dish translations
+    // accordion dish translations — inline-block so CSS box styling applies
     document.querySelectorAll('.acc-dish-trans').forEach(item => {
       const text = item.getAttribute('data-' + lang) || '';
       if (text.trim() !== '') {
         item.textContent = text;
-        item.style.display = 'block';
+        item.style.display = 'inline-block';
         item.classList.add('notranslate');
       } else {
         item.textContent = '';
@@ -576,7 +616,7 @@ function googleTranslateElementInit() {
       if (val) item.textContent = val;
     });
 
-    // Re-sync accordion button labels for all accordion IDs
+    // Re-sync accordion button labels
     ['gastro','degu','bambini'].forEach(id => {
       const acc = document.getElementById('acc-' + id);
       const btn = document.getElementById('btn-' + id);
@@ -663,7 +703,7 @@ function googleTranslateElementInit() {
       const itText = item.getAttribute('data-it') || '';
       const enText = item.getAttribute('data-en') || '';
       const sourceText = itText.trim() !== '' ? itText : enText;
-      if (sourceText.trim() !== '') { item.textContent = sourceText; item.style.display = 'block'; }
+      if (sourceText.trim() !== '') { item.textContent = sourceText; item.style.display = 'inline-block'; }
     });
 
     document.querySelectorAll('.cocktail-name[data-en]').forEach(item => {
