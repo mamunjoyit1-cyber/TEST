@@ -41,8 +41,9 @@
   .tabs-wrap { background: #1a110e; border-bottom: 3px solid #d4af37; width: 100%; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
   .tabs { display: flex; flex-wrap: wrap; overflow-x: auto; gap: 12px; padding: 14px 16px; -webkit-overflow-scrolling: touch; justify-content: flex-start; }
   .tabs::-webkit-scrollbar { display: none; }
-  .tab-btn { background: #2a1d19; border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; color: #d4af37; padding: 10px 20px; font-size: 14px; cursor: pointer; font-family: inherit; white-space: nowrap; transition: all 0.2s; font-weight: 600; }
+  .tab-btn { background: #2a1d19; border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; color: #d4af37; padding: 10px 20px; font-size: 14px; cursor: pointer; font-family: inherit; white-space: nowrap; transition: all 0.2s; font-weight: 600; position: relative; }
   .tab-btn.active { background: #d4af37; color: #150e0b; border-color: #d4af37; box-shadow: 0 4px 8px rgba(212,175,55,0.3); }
+  .tab-green-dot { display: inline-block; width: 8px; height: 8px; background: #2a7a2a; border-radius: 50%; margin-left: 6px; vertical-align: middle; box-shadow: 0 0 4px rgba(42,122,42,0.6); }
   .content { padding: 30px 16px 60px; max-width: 750px; margin: 0 auto; }
   .cat-title { text-align: center; color: #d4af37; font-weight: normal; font-size: 26px; letter-spacing: 3px; margin-bottom: 30px; border-bottom: 1px solid #d4af37; padding-bottom: 14px; text-transform: uppercase; }
   .item { background: #fffbf4; border-radius: 14px; padding: 22px 24px; margin-bottom: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 1px solid #d4af37; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; transition: transform 0.2s; color: #1a0505; }
@@ -271,13 +272,21 @@
 <div class="section active" id="sec-menu_packages">
   <h2 class="cat-title">🍽️ <span data-it="I Nostri Menù" data-fr="Nos Menus" data-en="Our Set Menus" data-de="Unsere Menüs">I Nostri Menù</span></h2>
 
+  <!-- MENU DEL LAGO BIN -->
   <div class="item">
     <div class="item-left">
       <div class="item-name"><span class="notranslate">Menù del Lago Bin</span><span class="sub-trans" data-it="" data-fr="(Menu du Lago Bin)" data-en="(Lago Bin Set Menu)" data-de="(Lago Bin Menü)"></span></div>
       <div class="item-desc" data-it='Con i nostri Piatti Tipici e la Formula "Tutto Compreso" (1 bott. di Vino della Casa ogni 4 pers.)' data-fr='Avec nos Plats Typiques et la Formule "Tout Inclus" (1 bott. de Vin de la Maison chaque 4 pers.)' data-en='"All Inclusive" Formula with Typical Dishes (1 bottle of House Wine per 4 persons)' data-de='"Alles Inklusive" Formel mit typischen Gerichten (1 Flasche Hauswein für 4 Personen)'>Con i nostri Piatti Tipici e la Formula "Tutto Compreso" (1 bott. di Vino della Casa ogni 4 pers.)</div>
-      <div style="margin-top:10px;font-size:13px;color:#7a5a2a;font-style:italic;font-weight:600;">🍽️ <span data-it="Piatti selezionati dalla cucina" data-fr="Plats sélectionnés par la cuisine" data-en="Dishes selected by the kitchen" data-de="Von der Küche ausgewählte Gerichte">Piatti selezionati dalla cucina</span></div>
+      <div style="margin-top:10px;font-size:13px;color:#7a5a2a;font-style:italic;font-weight:600;">🍽️ <span data-it="5 Portate Selezionate dalla Cucina" data-fr="5 Plats Sélectionnés par la Cuisine" data-en="5 Courses Selected by the Kitchen" data-de="5 Gänge von der Küche ausgewählt">5 Portate Selezionate dalla Cucina</span></div>
     </div>
-    <div class="item-price">€45,00</div>
+    <div class="order-controls">
+      <div class="item-price">€45,00</div>
+      <div class="qty-box">
+        <button class="qty-btn" onclick="changeQty('menu_lago_bin',-1)">−</button>
+        <span class="qty-num" id="qty-menu_lago_bin">0</span>
+        <button class="qty-btn" onclick="changeQty('menu_lago_bin',1)">+</button>
+      </div>
+    </div>
   </div>
 
   <!-- GASTRONOMICO -->
@@ -303,14 +312,14 @@
     </div>
     <div class="acc-dish-row"><div class="acc-dish-select-row"><span class="acc-dish-name notranslate">Lumache in Umido</span><button class="select-btn" onclick="selectPkg('gastro','Lumache in Umido',this,3,null)">+</button></div><div class="acc-dish-trans" data-it="" data-fr="Escargots braisés" data-en="Braised Snails" data-de="Geschmorte Schnecken"></div></div>
     <div class="acc-section-head" data-it="Primi Piatti" data-fr="Pâtes" data-en="First Courses" data-de="Erster Gang">Primi Piatti</div>
-    <div class="acc-dish-row"><div class="acc-dish-select-row"><span class="acc-dish-name notranslate">Ravioli della Nonna</span><button class="select-btn" onclick="selectPkg('gastro','Ravioli della Nonna',this,3,'ravioli-gastro')">+</button></div><div class="acc-dish-trans" data-it="" data-fr="Ravioli maison tomate ou beurre et sauge" data-en="Grandma's Ravioli with tomato or butter & sage" data-de="Omas Ravioli mit Tomaten- oder Butter-Salbei-Sauce"></div>
-      <div class="pkg-sauce-picker" id="pkgsauce-gastro-Ravioli della Nonna"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="choosePkgSauce('gastro','Ravioli della Nonna','Pomodoro',this)">Pomodoro</button><button class="sauce-btn" onclick="choosePkgSauce('gastro','Ravioli della Nonna','Burro e Salvia',this)">Burro e Salvia</button><button class="sauce-btn" onclick="choosePkgSauce('gastro','Ravioli della Nonna','Funghi',this)">Funghi</button><button class="sauce-btn" onclick="choosePkgSauce('gastro','Ravioli della Nonna','Coniglio',this)">Coniglio</button></div></div>
+    <div class="acc-dish-row"><div class="acc-dish-select-row"><span class="acc-dish-name notranslate">Ravioli della Nonna al Pomodoro o Burro e Salvia</span><button class="select-btn" onclick="selectPkg('gastro','Ravioli della Nonna',this,3,'ravioli-gastro')">+</button></div><div class="acc-dish-trans" data-it="" data-fr="Ravioli maison tomate ou beurre et sauge" data-en="Grandma's Ravioli with tomato or butter & sage" data-de="Omas Ravioli mit Tomaten- oder Butter-Salbei-Sauce"></div>
+      <div class="pkg-sauce-picker" id="pkgsauce-gastro-Ravioli della Nonna"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="choosePkgSauce('gastro','Ravioli della Nonna','Pomodoro',this)">Pomodoro</button><button class="sauce-btn" onclick="choosePkgSauce('gastro','Ravioli della Nonna','Burro e Salvia',this)">Burro e Salvia</button></div></div>
     </div>
-    <div class="acc-dish-row"><div class="acc-dish-select-row"><span class="acc-dish-name notranslate">Tagliatelle di Pasta Fresca</span><button class="select-btn" onclick="selectPkg('gastro','Tagliatelle di Pasta Fresca',this,3,'tagliatelle-gastro')">+</button></div><div class="acc-dish-trans" data-it="" data-fr="Tagliatelles fraîches au gibier ou aux champignons" data-en="Fresh Tagliatelle with game sauce or mushrooms" data-de="Frische Tagliatelle mit Wildsauce oder Pilzen"></div>
-      <div class="pkg-sauce-picker" id="pkgsauce-gastro-Tagliatelle di Pasta Fresca"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="choosePkgSauce('gastro','Tagliatelle di Pasta Fresca','Selvaggina',this)">Selvaggina</button><button class="sauce-btn" onclick="choosePkgSauce('gastro','Tagliatelle di Pasta Fresca','Funghi',this)">Funghi</button><button class="sauce-btn" onclick="choosePkgSauce('gastro','Tagliatelle di Pasta Fresca','Pesto Fresco',this)">Pesto Fresco</button></div></div>
+    <div class="acc-dish-row"><div class="acc-dish-select-row"><span class="acc-dish-name notranslate">Tagliatelle di Pasta Fresca alla Selvaggina o ai Funghi</span><button class="select-btn" onclick="selectPkg('gastro','Tagliatelle di Pasta Fresca',this,3,'tagliatelle-gastro')">+</button></div><div class="acc-dish-trans" data-it="" data-fr="Tagliatelles fraîches au gibier ou aux champignons" data-en="Fresh Tagliatelle with game sauce or mushrooms" data-de="Frische Tagliatelle mit Wildsauce oder Pilzen"></div>
+      <div class="pkg-sauce-picker" id="pkgsauce-gastro-Tagliatelle di Pasta Fresca"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="choosePkgSauce('gastro','Tagliatelle di Pasta Fresca','Selvaggina',this)">Selvaggina</button><button class="sauce-btn" onclick="choosePkgSauce('gastro','Tagliatelle di Pasta Fresca','Funghi',this)">Funghi</button></div></div>
     </div>
-    <div class="acc-dish-row"><div class="acc-dish-select-row"><span class="acc-dish-name notranslate">Gnocchi di Patate</span><button class="select-btn" onclick="selectPkg('gastro','Gnocchi di Patate',this,3,'gnocchi-gastro')">+</button></div><div class="acc-dish-trans" data-it="" data-fr="Gnocchi aux champignons ou fromages et gorgonzola" data-en="Potato Gnocchi with mushrooms or cheeses & gorgonzola" data-de="Kartoffelgnocchi mit Pilzen oder Käse & Gorgonzola"></div>
-      <div class="pkg-sauce-picker" id="pkgsauce-gastro-Gnocchi di Patate"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="choosePkgSauce('gastro','Gnocchi di Patate','Funghi',this)">Funghi</button><button class="sauce-btn" onclick="choosePkgSauce('gastro','Gnocchi di Patate','Formaggi e Gorgonzola',this)">Formaggi e Gorgonzola</button><button class="sauce-btn" onclick="choosePkgSauce('gastro','Gnocchi di Patate','Burro e Salvia',this)">Burro e Salvia</button></div></div>
+    <div class="acc-dish-row"><div class="acc-dish-select-row"><span class="acc-dish-name notranslate">Gnocchi di Patate ai Funghi o ai Formaggi con Gorgonzola</span><button class="select-btn" onclick="selectPkg('gastro','Gnocchi di Patate',this,3,'gnocchi-gastro')">+</button></div><div class="acc-dish-trans" data-it="" data-fr="Gnocchi aux champignons ou fromages et gorgonzola" data-en="Potato Gnocchi with mushrooms or cheeses & gorgonzola" data-de="Kartoffelgnocchi mit Pilzen oder Käse & Gorgonzola"></div>
+      <div class="pkg-sauce-picker" id="pkgsauce-gastro-Gnocchi di Patate"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="choosePkgSauce('gastro','Gnocchi di Patate','Funghi',this)">Funghi</button><button class="sauce-btn" onclick="choosePkgSauce('gastro','Gnocchi di Patate','Formaggi con Gorgonzola',this)">Formaggi con Gorgonzola</button></div></div>
     </div>
     <div class="acc-section-head" data-it="Secondi Piatti" data-fr="Plats principaux" data-en="Main Courses" data-de="Hauptgerichte">Secondi Piatti</div>
     <div class="acc-dish-row"><div class="acc-dish-select-row"><span class="acc-dish-name notranslate">Coniglio alla Rocchettina</span><button class="select-btn" onclick="selectPkg('gastro','Coniglio alla Rocchettina',this,3,null)">+</button></div><div class="acc-dish-trans" data-it="" data-fr="Lapin à la Rocchettina" data-en="Rabbit Rocchettina Style" data-de="Kaninchen nach Rocchettina-Art"></div></div>
@@ -346,14 +355,14 @@
     </div>
     <div class="acc-dish-row"><div class="acc-dish-select-row"><span class="acc-dish-name notranslate">Lumache in Umido</span><button class="select-btn" onclick="selectPkg('degu','Lumache in Umido',this,2,null)">+</button></div><div class="acc-dish-trans" data-it="" data-fr="Escargots braisés" data-en="Braised Snails" data-de="Geschmorte Schnecken"></div></div>
     <div class="acc-section-head" data-it="Primi Piatti" data-fr="Pâtes" data-en="First Courses" data-de="Erster Gang">Primi Piatti</div>
-    <div class="acc-dish-row"><div class="acc-dish-select-row"><span class="acc-dish-name notranslate">Ravioli della Nonna</span><button class="select-btn" onclick="selectPkg('degu','Ravioli della Nonna',this,2,'ravioli-degu')">+</button></div><div class="acc-dish-trans" data-it="" data-fr="Ravioli maison tomate ou beurre et sauge" data-en="Grandma's Ravioli with tomato or butter & sage" data-de="Omas Ravioli mit Tomaten- oder Butter-Salbei-Sauce"></div>
-      <div class="pkg-sauce-picker" id="pkgsauce-degu-Ravioli della Nonna"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="choosePkgSauce('degu','Ravioli della Nonna','Pomodoro',this)">Pomodoro</button><button class="sauce-btn" onclick="choosePkgSauce('degu','Ravioli della Nonna','Burro e Salvia',this)">Burro e Salvia</button><button class="sauce-btn" onclick="choosePkgSauce('degu','Ravioli della Nonna','Funghi',this)">Funghi</button></div></div>
+    <div class="acc-dish-row"><div class="acc-dish-select-row"><span class="acc-dish-name notranslate">Ravioli della Nonna al Pomodoro o Burro e Salvia</span><button class="select-btn" onclick="selectPkg('degu','Ravioli della Nonna',this,2,'ravioli-degu')">+</button></div><div class="acc-dish-trans" data-it="" data-fr="Ravioli maison tomate ou beurre et sauge" data-en="Grandma's Ravioli with tomato or butter & sage" data-de="Omas Ravioli mit Tomaten- oder Butter-Salbei-Sauce"></div>
+      <div class="pkg-sauce-picker" id="pkgsauce-degu-Ravioli della Nonna"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="choosePkgSauce('degu','Ravioli della Nonna','Pomodoro',this)">Pomodoro</button><button class="sauce-btn" onclick="choosePkgSauce('degu','Ravioli della Nonna','Burro e Salvia',this)">Burro e Salvia</button></div></div>
     </div>
-    <div class="acc-dish-row"><div class="acc-dish-select-row"><span class="acc-dish-name notranslate">Tagliatelle di Pasta Fresca</span><button class="select-btn" onclick="selectPkg('degu','Tagliatelle di Pasta Fresca',this,2,'tagliatelle-degu')">+</button></div><div class="acc-dish-trans" data-it="" data-fr="Tagliatelles fraîches au gibier ou aux champignons" data-en="Fresh Tagliatelle with game sauce or mushrooms" data-de="Frische Tagliatelle mit Wildsauce oder Pilzen"></div>
-      <div class="pkg-sauce-picker" id="pkgsauce-degu-Tagliatelle di Pasta Fresca"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="choosePkgSauce('degu','Tagliatelle di Pasta Fresca','Selvaggina',this)">Selvaggina</button><button class="sauce-btn" onclick="choosePkgSauce('degu','Tagliatelle di Pasta Fresca','Funghi',this)">Funghi</button><button class="sauce-btn" onclick="choosePkgSauce('degu','Tagliatelle di Pasta Fresca','Pesto Fresco',this)">Pesto Fresco</button></div></div>
+    <div class="acc-dish-row"><div class="acc-dish-select-row"><span class="acc-dish-name notranslate">Tagliatelle di Pasta Fresca alla Selvaggina o ai Funghi</span><button class="select-btn" onclick="selectPkg('degu','Tagliatelle di Pasta Fresca',this,2,'tagliatelle-degu')">+</button></div><div class="acc-dish-trans" data-it="" data-fr="Tagliatelles fraîches au gibier ou aux champignons" data-en="Fresh Tagliatelle with game sauce or mushrooms" data-de="Frische Tagliatelle mit Wildsauce oder Pilzen"></div>
+      <div class="pkg-sauce-picker" id="pkgsauce-degu-Tagliatelle di Pasta Fresca"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="choosePkgSauce('degu','Tagliatelle di Pasta Fresca','Selvaggina',this)">Selvaggina</button><button class="sauce-btn" onclick="choosePkgSauce('degu','Tagliatelle di Pasta Fresca','Funghi',this)">Funghi</button></div></div>
     </div>
-    <div class="acc-dish-row"><div class="acc-dish-select-row"><span class="acc-dish-name notranslate">Gnocchi di Patate</span><button class="select-btn" onclick="selectPkg('degu','Gnocchi di Patate',this,2,'gnocchi-degu')">+</button></div><div class="acc-dish-trans" data-it="" data-fr="Gnocchi aux champignons ou fromages et gorgonzola" data-en="Potato Gnocchi with mushrooms or cheeses & gorgonzola" data-de="Kartoffelgnocchi mit Pilzen oder Käse & Gorgonzola"></div>
-      <div class="pkg-sauce-picker" id="pkgsauce-degu-Gnocchi di Patate"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="choosePkgSauce('degu','Gnocchi di Patate','Funghi',this)">Funghi</button><button class="sauce-btn" onclick="choosePkgSauce('degu','Gnocchi di Patate','Formaggi e Gorgonzola',this)">Formaggi e Gorgonzola</button><button class="sauce-btn" onclick="choosePkgSauce('degu','Gnocchi di Patate','Burro e Salvia',this)">Burro e Salvia</button></div></div>
+    <div class="acc-dish-row"><div class="acc-dish-select-row"><span class="acc-dish-name notranslate">Gnocchi di Patate ai Funghi o ai Formaggi con Gorgonzola</span><button class="select-btn" onclick="selectPkg('degu','Gnocchi di Patate',this,2,'gnocchi-degu')">+</button></div><div class="acc-dish-trans" data-it="" data-fr="Gnocchi aux champignons ou fromages et gorgonzola" data-en="Potato Gnocchi with mushrooms or cheeses & gorgonzola" data-de="Kartoffelgnocchi mit Pilzen oder Käse & Gorgonzola"></div>
+      <div class="pkg-sauce-picker" id="pkgsauce-degu-Gnocchi di Patate"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="choosePkgSauce('degu','Gnocchi di Patate','Funghi',this)">Funghi</button><button class="sauce-btn" onclick="choosePkgSauce('degu','Gnocchi di Patate','Formaggi con Gorgonzola',this)">Formaggi con Gorgonzola</button></div></div>
     </div>
     <div class="acc-section-head" data-it="Secondi Piatti" data-fr="Plats principaux" data-en="Main Courses" data-de="Hauptgerichte">Secondi Piatti</div>
     <div class="acc-dish-row"><div class="acc-dish-select-row"><span class="acc-dish-name notranslate">Coniglio alla Rocchettina</span><button class="select-btn" onclick="selectPkg('degu','Coniglio alla Rocchettina',this,2,null)">+</button></div><div class="acc-dish-trans" data-it="" data-fr="Lapin à la Rocchettina" data-en="Rabbit Rocchettina Style" data-de="Kaninchen nach Rocchettina-Art"></div></div>
@@ -396,7 +405,6 @@
   <h2 class="cat-title">🥗 <span data-it="Antipasti à la Carte" data-fr="Entrées à la Carte" data-en="Starters à la Carte" data-de="Vorspeisen à la Carte">Antipasti à la Carte</span></h2>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Antipasto Tipico del Lago Bin</span><span class="sub-trans" data-it="" data-fr="(Assortiment Typique du Lago Bin)" data-en="(Typical Lago Bin Starter)" data-de="(Typische Lago Bin Vorspeise)"></span></div></div><div class="order-controls"><div class="item-price">€15,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('antipasto_tipico',-1)">−</button><span class="qty-num" id="qty-antipasto_tipico">0</span><button class="qty-btn" onclick="changeQty('antipasto_tipico',1)">+</button></div></div></div>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Assortimento del Salumiere</span><span class="sub-trans" data-it="" data-fr="(Charcuterie fine sélectionnée)" data-en="(Mixed Premium Charcuterie Platter)" data-de="(Gemischte Aufschnittplatte)"></span></div></div><div class="order-controls"><div class="item-price">€15,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('salumiere',-1)">−</button><span class="qty-num" id="qty-salumiere">0</span><button class="qty-btn" onclick="changeQty('salumiere',1)">+</button></div></div></div>
-  <!-- PROSCIUTTO con Melone/Grana picker -->
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Prosciutto di Parma con Melone o Grana</span><span class="sub-trans" data-it="" data-fr="(Jambon de Parme avec Melon ou Grana)" data-en="(Parma Ham with Melon or Grana Cheese)" data-de="(Parmaschinken mit Melone oder Grana-Käse)"></span></div></div><div class="order-controls"><div class="item-price">€13,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('prosciutto',-1)">−</button><span class="qty-num" id="qty-prosciutto">0</span><button class="qty-btn" onclick="changeQty('prosciutto',1)">+</button></div><div class="sauce-picker" id="sauce-prosciutto"><div class="sauce-label">🍽️ Accompagnamento:</div><div class="sauce-options"><button class="sauce-btn" onclick="chooseSauce('prosciutto','Melone',this)">Melone</button><button class="sauce-btn" onclick="chooseSauce('prosciutto','Grana',this)">Grana</button></div></div></div></div>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Antipasto Misto "Caldo e Freddo" (per 2 pers.)</span><span class="sub-trans" data-it="" data-fr="(Entrée Mixte Chaud et Froid - 2 pers.)" data-en="(Mixed Hot and Cold Starter - for 2 people)" data-de="(Gemischte warme und kalte Vorspeise - für 2 Pers.)"></span></div></div><div class="order-controls"><div class="item-price">€25,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('misto_caldo',-1)">−</button><span class="qty-num" id="qty-misto_caldo">0</span><button class="qty-btn" onclick="changeQty('misto_caldo',1)">+</button></div></div></div>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Lumache in Umido</span><span class="sub-trans" data-it="" data-fr="(Escargots braisés)" data-en="(Braised Snails)" data-de="(Geschmorte Schnecken)"></span></div></div><div class="order-controls"><div class="item-price">€18,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('lumache',-1)">−</button><span class="qty-num" id="qty-lumache">0</span><button class="qty-btn" onclick="changeQty('lumache',1)">+</button></div></div></div>
@@ -410,17 +418,14 @@
 <!-- 3. PRIMI -->
 <div class="section" id="sec-primi">
   <h2 class="cat-title">🍝 <span data-it="Primi Piatti" data-fr="Premiers Plats" data-en="First Courses" data-de="Erster Gang">Primi Piatti</span></h2>
-  <!-- FIX: full Italian name inside notranslate span -->
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Ravioli della Nonna al Pomodoro o Burro e Salvia</span><span class="sub-trans" data-it="" data-fr="(Ravioli maison tomate ou beurre et sauge)" data-en="(Grandma's Ravioli with tomato or butter & sage)" data-de="(Omas Ravioli mit Tomatensauce oder Butter & Salbei)"></span></div><div class="item-desc" data-it="Disponibile anche al Burro e Timo o ai Funghi" data-fr="Aussi disponible beurre/thym ou aux champignons" data-en="Also available with Butter & Thyme, or Mushroom sauce" data-de="Auch erhältlich mit Butter & Thymian oder Pilzsauce">Disponibile anche al Burro e Timo o ai Funghi</div></div><div class="order-controls"><div class="item-price">€18,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('ravioli_nonna',-1)">−</button><span class="qty-num" id="qty-ravioli_nonna">0</span><button class="qty-btn" onclick="changeQty('ravioli_nonna',1)">+</button></div><div class="sauce-picker" id="sauce-ravioli_nonna"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="chooseSauce('ravioli_nonna','Pomodoro',this)">Pomodoro</button><button class="sauce-btn" onclick="chooseSauce('ravioli_nonna','Burro e Salvia',this)">Burro e Salvia</button><button class="sauce-btn" onclick="chooseSauce('ravioli_nonna','Funghi',this)">Funghi</button><button class="sauce-btn" onclick="chooseSauce('ravioli_nonna','Burro e Timo',this)">Burro e Timo</button></div></div></div></div>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Ravioli della Nonna al Coniglio</span><span class="sub-trans" data-it="" data-fr="(Ravioli au Lapin)" data-en="(Grandma's Ravioli with Rabbit)" data-de="(Omas Ravioli mit Kaninchensauce)"></span></div></div><div class="order-controls"><div class="item-price">€20,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('ravioli_coniglio',-1)">−</button><span class="qty-num" id="qty-ravioli_coniglio">0</span><button class="qty-btn" onclick="changeQty('ravioli_coniglio',1)">+</button></div></div></div>
-  <!-- FIX: full Italian name inside notranslate span -->
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Tagliatelle di Pasta Fresca alla Selvaggina o ai Funghi</span><span class="sub-trans" data-it="" data-fr="(Tagliatelles fraîches au gibier ou aux champignons)" data-en="(Fresh Pasta Tagliatelle with game sauce or mushrooms)" data-de="(Frische Tagliatelle mit Wildsauce oder Pilzen)"></span></div><div class="item-desc" data-it="Disponibile anche al Pesto Fresco" data-fr="Aussi disponible au pesto frais" data-en="Also available with fresh Pesto" data-de="Auch mit frischem Pesto erhältlich">Disponibile anche al Pesto Fresco</div></div><div class="order-controls"><div class="item-price">€15,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('tagliatelle_sel',-1)">−</button><span class="qty-num" id="qty-tagliatelle_sel">0</span><button class="qty-btn" onclick="changeQty('tagliatelle_sel',1)">+</button></div><div class="sauce-picker" id="sauce-tagliatelle_sel"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="chooseSauce('tagliatelle_sel','Selvaggina',this)">Selvaggina</button><button class="sauce-btn" onclick="chooseSauce('tagliatelle_sel','Funghi',this)">Funghi</button><button class="sauce-btn" onclick="chooseSauce('tagliatelle_sel','Pesto Fresco',this)">Pesto Fresco</button></div></div></div></div>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Tagliatelle ai Frutti di Mare</span><span class="sub-trans" data-it="" data-fr="(Tagliatelles aux Fruits de Mer)" data-en="(Seafood Tagliatelle)" data-de="(Tagliatelle mit Meeresfrüchten)"></span></div></div><div class="order-controls"><div class="item-price">€18,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('tagliatelle_mare',-1)">−</button><span class="qty-num" id="qty-tagliatelle_mare">0</span><button class="qty-btn" onclick="changeQty('tagliatelle_mare',1)">+</button></div></div></div>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Mezzelune di Magro al Burro e Salvia o alle Noci</span><span class="sub-trans" data-it="" data-fr="(Mezzelune au beurre et sauge ou sauce aux noix)" data-en="(Mezzelune with Butter & Sage or Walnut sauce)" data-de="(Mezzelune mit Butter & Salbei oder Walnusssauce)"></span></div></div><div class="order-controls"><div class="item-price">€15,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('mezzelune',-1)">−</button><span class="qty-num" id="qty-mezzelune">0</span><button class="qty-btn" onclick="changeQty('mezzelune',1)">+</button></div><div class="sauce-picker" id="sauce-mezzelune"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="chooseSauce('mezzelune','Burro e Salvia',this)">Burro e Salvia</button><button class="sauce-btn" onclick="chooseSauce('mezzelune','Noci',this)">Noci</button></div></div></div></div>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Troffie al Pesto Fresco o Primavera</span><span class="sub-trans" data-it="" data-fr="(Troffie au pesto frais ou style Primavera)" data-en="(Troffie with fresh Pesto or Primavera style)" data-de="(Troffie mit frischem Pesto oder nach Primavera-Art)"></span></div><div class="item-desc" data-it="Primavera: Pomodoro, Ricotta, Pesto, Rucola" data-fr="Primavera: Tomate, Ricotta, Pesto, Roquette" data-en="Primavera: Tomato, Ricotta, Pesto, Rocket" data-de="Primavera: Tomate, Ricotta, Pesto, Rucola">Primavera: Pomodoro, Ricotta, Pesto, Rucola</div></div><div class="order-controls"><div class="item-price">€15,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('troffie',-1)">−</button><span class="qty-num" id="qty-troffie">0</span><button class="qty-btn" onclick="changeQty('troffie',1)">+</button></div><div class="sauce-picker" id="sauce-troffie"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="chooseSauce('troffie','Pesto Fresco',this)">Pesto Fresco</button><button class="sauce-btn" onclick="chooseSauce('troffie','Primavera',this)">Primavera</button></div></div></div></div>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Troffie con Gamberetti e Zucchine</span><span class="sub-trans" data-it="" data-fr="(Troffie Crevettes et Courgettes)" data-en="(Troffie with Shrimps & Courgettes)" data-de="(Troffie mit Garnelen und Zucchini)"></span></div></div><div class="order-controls"><div class="item-price">€18,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('troffie_gamberetti',-1)">−</button><span class="qty-num" id="qty-troffie_gamberetti">0</span><button class="qty-btn" onclick="changeQty('troffie_gamberetti',1)">+</button></div></div></div>
-  <!-- FIX: full Italian name inside notranslate span -->
-  <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Gnocchi di Patate ai Funghi o ai Formaggi e Gorgonzola</span><span class="sub-trans" data-it="" data-fr="(Gnocchi aux champignons ou fromages et gorgonzola)" data-en="(Potato Gnocchi with mushrooms or cheeses & gorgonzola)" data-de="(Kartoffelgnocchi mit Pilzen oder Käse & Gorgonzola)"></span></div></div><div class="order-controls"><div class="item-price">€13,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('gnocchi',-1)">−</button><span class="qty-num" id="qty-gnocchi">0</span><button class="qty-btn" onclick="changeQty('gnocchi',1)">+</button></div><div class="sauce-picker" id="sauce-gnocchi"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="chooseSauce('gnocchi','Funghi',this)">Funghi</button><button class="sauce-btn" onclick="chooseSauce('gnocchi','Formaggi e Gorgonzola',this)">Formaggi e Gorgonzola</button><button class="sauce-btn" onclick="chooseSauce('gnocchi','Burro e Salvia',this)">Burro e Salvia</button></div></div></div></div>
+  <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Gnocchi di Patate ai Funghi o ai Formaggi con Gorgonzola</span><span class="sub-trans" data-it="" data-fr="(Gnocchi aux champignons ou fromages et gorgonzola)" data-en="(Potato Gnocchi with mushrooms or cheeses & gorgonzola)" data-de="(Kartoffelgnocchi mit Pilzen oder Käse & Gorgonzola)"></span></div></div><div class="order-controls"><div class="item-price">€13,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('gnocchi',-1)">−</button><span class="qty-num" id="qty-gnocchi">0</span><button class="qty-btn" onclick="changeQty('gnocchi',1)">+</button></div><div class="sauce-picker" id="sauce-gnocchi"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="chooseSauce('gnocchi','Funghi',this)">Funghi</button><button class="sauce-btn" onclick="chooseSauce('gnocchi','Formaggi e Gorgonzola',this)">Formaggi e Gorgonzola</button><button class="sauce-btn" onclick="chooseSauce('gnocchi','Burro e Salvia',this)">Burro e Salvia</button></div></div></div></div>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Risotto ai Frutti di Mare (min. 2 pers.)</span><span class="sub-trans" data-it="" data-fr="(Risotto aux Fruits de Mer)" data-en="(Seafood Risotto)" data-de="(Meeresfrüchte-Risotto)"></span></div></div><div class="order-controls"><div class="item-price">€20,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('risotto',-1)">−</button><span class="qty-num" id="qty-risotto">0</span><button class="qty-btn" onclick="changeQty('risotto',1)">+</button></div></div></div>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Duo di Primi</span><span class="sub-trans" data-it="" data-fr="(Duo de Pâtes au Choix)" data-en="(Platter of Two First Courses)" data-de="(Zweierlei Nudelgerichte)"></span></div></div><div class="order-controls"><div class="item-price">€25,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('duo_primi',-1)">−</button><span class="qty-num" id="qty-duo_primi">0</span><button class="qty-btn" onclick="changeQty('duo_primi',1)">+</button></div></div></div>
 </div>
@@ -601,6 +606,7 @@ function googleTranslateElementInit() {
 let currentLang = 'it';
 
 const carteData = {
+  menu_lago_bin:   { name:'Menù del Lago Bin', price:45 },
   antipasto_tipico:{ name:'Antipasto Tipico del Lago Bin', price:15 },
   salumiere:       { name:'Assortimento del Salumiere', price:15 },
   prosciutto:      { name:'Prosciutto di Parma', price:13, hasSauce:true },
@@ -642,6 +648,16 @@ const carteData = {
   macedonia:       { name:'Macedonia di Frutta', price:6 },
   assort_dolci:    { name:'Assortimento Misto dei Dolci', price:8 },
   gelato:          { name:'Gelato Artigianale', price:6 }
+};
+
+const tabItemMap = {
+  menu_packages: ['menu_lago_bin'],
+  antipasti: ['antipasto_tipico','salumiere','prosciutto','misto_caldo','lumache','brandacujan','tartare_manzo','tomino','tartare_pesce','antipasto_mare'],
+  primi: ['ravioli_nonna','ravioli_coniglio','tagliatelle_sel','tagliatelle_mare','mezzelune','troffie','troffie_gamberetti','gnocchi','risotto','duo_primi'],
+  secondi: ['coniglio','selvaggina','agnello','grigliata','roastbeef','filetto','pescato','grigliata_pesce'],
+  contorni: ['formaggi','verdure','insalata'],
+  dolce: ['tiramisu','pannacotta','cremecaramel','cremacatalana','semifreddo','crumble','bunet','macedonia','assort_dolci'],
+  gelato: ['gelato']
 };
 
 const carteQty   = {};
@@ -729,40 +745,32 @@ function modifyPkg(pkg) {
   updateCart();
 }
 
-// Remove a pkg item from cart (minus button in cart panel)
-function removePkgItem(pkg, item) {
+function removeFullPkg(pkg) {
   const state = pkgState[pkg];
-  if (state.confirmed) return; // se confermato, usa modifica prima
-  delete state.selected[item];
-  delete state.sauces[item];
-  // reset button in accordion
+  state.selected = {};
+  state.sauces = {};
+  state.confirmed = false;
   const acc = document.getElementById('acc-' + pkg);
   if (acc) {
     acc.querySelectorAll('.select-btn').forEach(btn => {
-      const row = btn.closest('.acc-dish-row');
-      if (row) {
-        const nameEl = row.querySelector('.acc-dish-name');
-        if (nameEl && nameEl.textContent.trim() === item) {
-          btn.classList.remove('selected');
-          btn.textContent = '+';
-          const sp = row.querySelector('.pkg-sauce-picker');
-          if (sp) sp.classList.remove('visible');
-        }
-      }
+      btn.classList.remove('selected');
+      btn.textContent = '+';
     });
+    acc.querySelectorAll('.pkg-sauce-picker').forEach(sp => sp.classList.remove('visible'));
   }
-  const count = Object.keys(state.selected).length;
   const counter = document.getElementById('counter-' + pkg);
-  if (counter) { counter.textContent = 'Selezionati: ' + count + ' / ' + state.limit; counter.className = 'pkg-counter-badge' + (count === state.limit ? ' done' : ''); }
-  const confirmBtn = document.getElementById('confirm-' + pkg);
-  if (confirmBtn) confirmBtn.className = 'confirm-pkg-btn ' + (count >= state.limit ? 'active' : 'inactive');
+  if (counter) { counter.textContent = 'Selezionati: 0 / ' + state.limit; counter.className = 'pkg-counter-badge'; }
+  const cb = document.getElementById('confirm-' + pkg);
+  if (cb) { cb.className = 'confirm-pkg-btn inactive'; }
+  const mb = document.getElementById('modify-' + pkg);
+  if (mb) mb.style.display = 'none';
   updateCart();
 }
 
 function updateCart() {
   let totalItems = 0, totalPrice = 0, html = '';
 
-  // À la carte items
+  // À la carte
   const carteItems = Object.entries(carteQty).filter(([,q]) => q > 0);
   if (carteItems.length) {
     html += '<div class="cart-section-lbl">🥗 À la Carte</div>';
@@ -792,18 +800,16 @@ function updateCart() {
     html += `<div class="cart-section-lbl">🍽️ ${state.label}</div>`;
     dishes.forEach(d => {
       const sauce = state.sauces[d] ? ' — ' + state.sauces[d] : '';
-      const canRemove = !state.confirmed;
       html += `<div class="cart-pkg-row">
         <div class="cart-pkg-header">
           <span class="cart-pkg-detail">• ${d}${sauce}</span>
-          ${canRemove ? `<button class="cart-pkg-minus" onclick="removePkgItem('${key}','${d.replace(/'/g,"\\'")}')">−</button>` : ''}
         </div>
       </div>`;
     });
     const status = state.confirmed
       ? `<span style="color:#2a7a2a;font-size:11px;">✅ Confermato</span>`
       : `<span style="color:#b31e1e;font-size:11px;">⚠️ Da confermare</span>`;
-    html += `<div class="cart-pkg-row"><div class="cart-pkg-header"><span class="cart-pkg-name">${state.label} ${status}</span><span class="cart-pkg-price">€${state.price}</span></div></div>`;
+    html += `<div class="cart-pkg-row"><div class="cart-pkg-header"><span class="cart-pkg-name">${state.label} ${status}</span><span style="display:flex;align-items:center;gap:6px;"><span class="cart-pkg-price">€${state.price}</span><button class="cart-pkg-minus" onclick="removeFullPkg('${key}')">−</button></span></div></div>`;
     totalItems++;
     totalPrice += state.price;
   });
@@ -822,6 +828,24 @@ function updateCart() {
     waiterBtn.disabled = true;
   }
   document.getElementById('cart-badge').textContent = totalItems;
+
+  // Green dot update
+  Object.entries(tabItemMap).forEach(([tab, items]) => {
+    const btn = document.querySelector('.tab-btn[onclick*="' + tab + '"]');
+    if (!btn) return;
+    const hasItem = items.some(id => (carteQty[id] || 0) > 0);
+    const hasPkg = tab === 'menu_packages' && Object.values(pkgState).some(s => Object.keys(s.selected).length > 0);
+    let dot = btn.querySelector('.tab-green-dot');
+    if (hasItem || hasPkg) {
+      if (!dot) {
+        dot = document.createElement('span');
+        dot.className = 'tab-green-dot';
+        btn.appendChild(dot);
+      }
+    } else {
+      if (dot) dot.remove();
+    }
+  });
 }
 
 function toggleCart() { document.getElementById('cart-panel').classList.toggle('open'); }
