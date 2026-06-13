@@ -1,4 +1,47 @@
- { display: flex; flex-wrap: wrap; overflow-x: auto; gap: 12px; padding: 14px 16px; -webkit-overflow-scrolling: touch; justify-content: flex-start; }
+bash
+
+cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lago Bin – Menu Premium</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Palatino Linotype', Palatino, serif; background: #150e0b; color: #f9f1e2; -webkit-font-smoothing: antialiased; }
+  .header { background: linear-gradient(135deg, #0f0303 0%, #260707 50%, #0f0303 100%); padding: 40px 20px 30px; text-align: center; border-bottom: 4px solid #d4af37; }
+  .header .subtitle { color: #d4af37; font-size: 12px; letter-spacing: 6px; text-transform: uppercase; margin-bottom: 12px; font-weight: bold; }
+  .header h1 { color: #ffffff; font-size: clamp(34px, 8vw, 48px); font-weight: normal; letter-spacing: 5px; text-shadow: 2px 2px 6px rgba(0,0,0,0.8); }
+  .header .divider { width: 100px; height: 2px; background: #d4af37; margin: 15px auto 0; }
+  .lang-bar { background: #0b0202; padding: 14px 10px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid rgba(212,175,55,0.2); }
+  .lang-btn { background: rgba(255,255,255,0.05); color: #f9f1e2; border: 1px solid #d4af37; border-radius: 25px; padding: 9px 20px; font-size: 14px; cursor: pointer; font-family: inherit; transition: all 0.3s ease; }
+  .lang-btn.active, .lang-btn:hover { background: #d4af37; color: #150e0b; font-weight: bold; box-shadow: 0 4px 12px rgba(212,175,55,0.4); }
+  .translate-wrap { position: relative; display: inline-block; }
+  .translate-btn { background: rgba(255,255,255,0.08); color: #f9f1e2; border: 1px dashed #d4af37; border-radius: 25px; padding: 9px 20px; font-size: 14px; cursor: pointer; font-family: inherit; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .translate-btn:hover { background: rgba(212,175,55,0.2); }
+  .lang-dropdown { display: none; position: absolute; top: 115%; left: 50%; transform: translateX(-50%); background: #221815; border: 2px solid #d4af37; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 999; min-width: 260px; max-height: 400px; overflow-y: auto; }
+  .lang-dropdown.open { display: block; }
+  .lang-dropdown-item { padding: 12px 18px; font-size: 14.5px; cursor: pointer; color: #f9f1e2; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(212,175,55,0.1); transition: background 0.2s; font-family: inherit; }
+  .lang-dropdown-item:last-child { border-bottom: none; }
+  .lang-dropdown-item:hover { background: #3d0b0b; color: #d4af37; font-weight: bold; }
+  .lang-dropdown-section { padding: 10px 18px 6px; font-size: 11px; font-weight: bold; color: #d4af37; text-transform: uppercase; letter-spacing: 2px; background: #1a110e; border-bottom: 1px solid rgba(212,175,55,0.2); position: sticky; top: 0; z-index: 10; }
+  .quick-cards { display: flex; gap: 16px; padding: 18px; background: #1f1512; border-bottom: 1px solid rgba(212,175,55,0.1); justify-content: center; flex-wrap: wrap; }
+  .quick-card { display: flex; align-items: center; gap: 12px; background: #2a1d19; border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 12px 24px; cursor: pointer; text-decoration: none; color: #f9f1e2; font-family: inherit; font-size: 15px; font-weight: bold; transition: all 0.3s ease; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+  .quick-card:hover { background: #d4af37; color: #150e0b; border-color: #d4af37; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(212,175,55,0.4); }
+  .quick-card .card-icon { font-size: 22px; }
+  .quick-card .card-text { display: flex; flex-direction: column; }
+  .quick-card .card-label { font-size: 12px; color: #bca07d; font-weight: normal; font-style: italic; margin-top: 1px; }
+  .quick-card:hover .card-label { color: #4a361c; }
+  .translating-bar { display: none; background: #fff3cd; padding: 12px 20px; text-align: center; font-size: 14px; color: #856404; border-bottom: 1px solid #ffeeba; font-weight: bold; }
+  .translating-bar.show { display: block; }
+  .search-bar-wrap { background: #1a110e; padding: 12px 16px; border-bottom: 1px solid rgba(212,175,55,0.2); }
+  .search-bar-inner { max-width: 500px; margin: 0 auto; position: relative; }
+  .search-bar-inner input { width: 100%; padding: 10px 16px; border-radius: 25px; border: 1px solid #d4af37; background: #2a1d19; color: #f9f1e2; font-size: 14px; font-family: inherit; outline: none; }
+  .search-bar-inner input::placeholder { color: #7a6a5a; }
+  #searchResults { display: none; max-width: 500px; margin: 8px auto 0; background: #221815; border: 1px solid #d4af37; border-radius: 12px; overflow: hidden; max-height: 300px; overflow-y: auto; }
+  .tabs-wrap { background: #1a110e; border-bottom: 3px solid #d4af37; width: 100%; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.4); }
+  .tabs { display: flex; flex-wrap: wrap; overflow-x: auto; gap: 12px; padding: 14px 16px; -webkit-overflow-scrolling: touch; justify-content: flex-start; }
   .tabs::-webkit-scrollbar { display: none; }
   .tab-btn { background: #2a1d19; border: 1px solid rgba(212,175,55,0.3); border-radius: 20px; color: #d4af37; padding: 10px 20px; font-size: 14px; cursor: pointer; font-family: inherit; white-space: nowrap; transition: all 0.2s; font-weight: 600; position: relative; }
   .tab-btn.active { background: #d4af37; color: #150e0b; border-color: #d4af37; box-shadow: 0 4px 8px rgba(212,175,55,0.3); }
@@ -1020,5 +1063,3 @@ function searchMenu(query) {
 </script>
 </body>
 </html>
-HTMLEOF
-echo "Done"
