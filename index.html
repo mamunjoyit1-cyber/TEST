@@ -1,6 +1,4 @@
-bash
 
-cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -434,7 +432,9 @@ cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
 
 <!-- 4. SECONDI -->
 <div class="section" id="sec-secondi">
-  <h2 class="cat-title">🥩 <span data-it="Secondi Piatti" data-fr="Secondes Plats" data-en="Main Courses" data-de="Hauptgerichte">Secondi Piatti</span><br><span style="font-size:16px;font-weight:normal;color:#bca07d;letter-spacing:0;text-transform:none;font-style:italic;">(<span data-it="Contorno incluso" data-fr="Accompagnement inclus" data-en="Side included" data-de="Beilage inbegriffen">Contorno incluso</span>)</span></h2>
+  <h2 class="cat-title">🥩 <span data-it="Secondi Piatti" data-fr="Secondes Plats" data-en="Main Courses" data-de="Hauptgerichte">Secondi Piatti</span><br><<span style="font-size:16px;font-weight:normal;color:#bca07d;letter-spacing:0;text-transform:none;font-style:italic;">
+        (<span data-it="Contorno incluso: Patate fritte, patate al forno (secondo disponibilità) oppure verdure alla griglia" data-fr="Accompagnement inclus : Frites, pommes de terre au four (selon disponibilité) ou légumes grillés" data-en="Side included: French fries, baked potatoes (subject to availability) or grilled vegetables" data-de="Beilage inbegriffen: Pommes frites, Ofenkartoffeln (je nach Verfügbarkeit) oder gegrilltes Gemüse">Contorno incluso: Patate fritte, patate al forno (secondo disponibilità) oppure verdure alla griglia</span>)
+      </span>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Coniglio alla Rocchettina</span><span class="sub-trans" data-it="" data-fr="(Lapin à la Rocchettina)" data-en="(Rabbit Rocchettina Style)" data-de="(Kaninchen nach Rocchettina-Art)"></span></div></div><div class="order-controls"><div class="item-price">€15,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('coniglio',-1)">−</button><span class="qty-num" id="qty-coniglio">0</span><button class="qty-btn" onclick="changeQty('coniglio',1)">+</button></div></div></div>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Selvaggina al Vino Rosso</span><span class="sub-trans" data-it="" data-fr="(Gibier au Vin Rouge)" data-en="(Game in Red Wine)" data-de="(Wildfleisch in Rotwein)"></span></div></div><div class="order-controls"><div class="item-price">€18,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('selvaggina',-1)">−</button><span class="qty-num" id="qty-selvaggina">0</span><button class="qty-btn" onclick="changeQty('selvaggina',1)">+</button></div></div></div>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Costine di Agnello alla Griglia</span><span class="sub-trans" data-it="" data-fr="(Côtes d'Agneau Grillées)" data-en="(Grilled Lamb Ribs)" data-de="(Gegrillte Lammrippchen)"></span></div></div><div class="order-controls"><div class="item-price">€18,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('agnello',-1)">−</button><span class="qty-num" id="qty-agnello">0</span><button class="qty-btn" onclick="changeQty('agnello',1)">+</button></div></div></div>
