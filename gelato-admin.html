@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Gelato Flavors - Lago Bin</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Palatino Linotype', Palatino, serif; background: #150e0b; color: #f9f1e2; min-height: 100vh; padding: 20px; }
+  .container { max-width: 600px; margin: 0 auto; }
+  h1 { color: #d4af37; text-align: center; font-size: 26px; letter-spacing: 2px; margin-bottom: 8px; }
+  .subtitle { text-align: center; color: #bca07d; font-size: 13px; margin-bottom: 30px; font-style: italic; }
+
+  /* Login screen */
+  .login-box { background: #221815; border: 2px solid #d4af37; border-radius: 16px; padding: 30px; margin-top: 60px; }
+  .login-box input { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #d4af37; background: #2a1d19; color: #f9f1e2; font-size: 16px; font-family: inherit; outline: none; margin-bottom: 14px; }
+  .login-box button { width: 100%; padding: 14px; border-radius: 10px; border: none; background: #d4af37; color: #150e0b; font-size: 16px; font-weight: bold; cursor: pointer; font-family: inherit; }
+  .login-error { color: #ff6b6b; text-align: center; font-size: 13px; margin-top: 10px; display: none; }
+
+  /* Admin panel */
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .add-box { background: #221815; border: 2px solid #d4af37; border-radius: 14px; padding: 20px; margin-bottom: 24px; }
+  .add-box h2 { color: #d4af37; font-size: 16px; margin-bottom: 14px; letter-spacing: 1px; }
+  .add-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .add-row input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #d4af37; background: #2a1d19; color: #f9f1e2; font-size: 15px; font-family: inherit; outline: none; }
+  .add-row input.emoji-input { flex: 0 0 70px; text-align: center; font-size: 20px; }
+  .add-btn { padding: 12px 22px; border-radius: 8px; border: none; background: #2a7a2a; color: #fff; font-weight: bold; cursor: pointer; font-family: inherit; font-size: 15px; white-space: nowrap; }
+  .add-btn:hover { background: #339933; }
+
+  .flavor-list { display: flex; flex-direction: column; gap: 10px; }
+  .flavor-row { background: #fffbf4; border: 1px solid #d4af37; border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; color: #1a0505; }
+  .flavor-row .emoji { font-size: 22px; flex-shrink: 0; }
+  .flavor-row input { flex: 1; padding: 8px 10px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.5); font-size: 15px; font-family: inherit; outline: none; }
+  .flavor-row .save-btn { background: #d4af37; color: #150e0b; border: none; border-radius: 6px; padding: 8px 14px; font-weight: bold; cursor: pointer; font-size: 13px; font-family: inherit; }
+  .flavor-row .delete-btn { background: #b31e1e; color: #fff; border: none; border-radius: 6px; padding: 8px 14px; font-weight: bold; cursor: pointer; font-size: 13px; font-family: inherit; }
+  .empty-state { text-align: center; color: #7a6a5a; font-style: italic; padding: 30px; }
+  .status-msg { text-align: center; padding: 10px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; font-weight: bold; display: none; }
+  .status-msg.success { background: rgba(42,122,42,0.2); color: #4ade4a; display: block; }
+  .status-msg.error { background: rgba(179,30,30,0.2); color: #ff6b6b; display: block; }
+  .logout-btn { background: transparent; border: 1px solid #d4af37; color: #d4af37; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 13px; margin-bottom: 20px; }
+  .loading { text-align: center; color: #bca07d; font-style: italic; padding: 20px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>✦ LAGO BIN ✦</h1>
+  <div class="subtitle">Pannello Gestione Gusti Gelato</div>
+
+  <!-- LOGIN SCREEN -->
+  <div class="login-box" id="loginBox">
+    <input type="password" id="passwordInput" placeholder="Password" onkeydown="if(event.key==='Enter')login()">
+    <button onclick="login()">🔓 Accedi</button>
+    <div class="login-error" id="loginError">Password errata</div>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div class="panel" id="adminPanel">
+    <button class="logout-btn" onclick="logout()">← Esci</button>
+    <div class="status-msg" id="statusMsg"></div>
+
+    <div class="add-box">
+      <h2>➕ Aggiungi Nuovo Gusto</h2>
+      <div class="add-row">
+        <input type="text" id="newEmoji" class="emoji-input" placeholder="🍦" maxlength="4">
+        <input type="text" id="newName" placeholder="Nome gusto (es. Pistacchio)">
+        <button class="add-btn" onclick="addFlavor()">Aggiungi</button>
+      </div>
+    </div>
+
+    <div id="flavorListContainer">
+      <div class="loading">Caricamento gusti...</div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, set, remove, onValue, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyC2b8xCtjv5M5xMSv8CYeOjP6ZocWXuwN4",
+    authDomain: "lago-bin-menu.firebaseapp.com",
+    databaseURL: "https://lago-bin-menu-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "lago-bin-menu",
+    storageBucket: "lago-bin-menu.firebasestorage.app",
+    messagingSenderId: "923333186211",
+    appId: "1:923333186211:web:61335bce1af1283b2e6516"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const flavorsRef = ref(db, 'gelatoFlavors');
+
+  const ADMIN_PASSWORD = "Lagobin1";
+
+  window.login = function() {
+    const input = document.getElementById('passwordInput').value;
+    if (input === ADMIN_PASSWORD) {
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('adminPanel').classList.add('active');
+      sessionStorage.setItem('gelatoAdminAuth', 'true');
+      startListening();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  };
+
+  window.logout = function() {
+    sessionStorage.removeItem('gelatoAdminAuth');
+    document.getElementById('adminPanel').classList.remove('active');
+    document.getElementById('loginBox').style.display = 'block';
+    document.getElementById('passwordInput').value = '';
+  };
+
+  // Auto-login if session exists
+  if (sessionStorage.getItem('gelatoAdminAuth') === 'true') {
+    document.getElementById('loginBox').style.display = 'none';
+    document.getElementById('adminPanel').classList.add('active');
+    startListening();
+  }
+
+  function showStatus(msg, type) {
+    const el = document.getElementById('statusMsg');
+    el.textContent = msg;
+    el.className = 'status-msg ' + type;
+    setTimeout(() => { el.style.display = 'none'; }, 2500);
+  }
+
+  window.addFlavor = function() {
+    const emoji = document.getElementById('newEmoji').value.trim() || '🍦';
+    const name = document.getElementById('newName').value.trim();
+    if (!name) { showStatus('Inserisci un nome per il gusto', 'error'); return; }
+    const newRef = push(flavorsRef);
+    set(newRef, { name: name, emoji: emoji })
+      .then(() => {
+        document.getElementById('newEmoji').value = '';
+        document.getElementById('newName').value = '';
+        showStatus('✅ Gusto aggiunto: ' + name, 'success');
+      })
+      .catch(err => showStatus('Errore: ' + err.message, 'error'));
+  };
+
+  window.saveFlavor = function(id) {
+    const nameInput = document.getElementById('name-' + id);
+    const emojiInput = document.getElementById('emoji-' + id);
+    set(ref(db, 'gelatoFlavors/' + id), { name: nameInput.value.trim(), emoji: emojiInput.value.trim() })
+      .then(() => showStatus('✅ Modifiche salvate', 'success'))
+      .catch(err => showStatus('Errore: ' + err.message, 'error'));
+  };
+
+  window.deleteFlavor = function(id, name) {
+    if (!confirm('Rimuovere "' + name + '" dalla lista gusti?')) return;
+    remove(ref(db, 'gelatoFlavors/' + id))
+      .then(() => showStatus('🗑️ Gusto rimosso', 'success'))
+      .catch(err => showStatus('Errore: ' + err.message, 'error'));
+  };
+
+  function startListening() {
+    onValue(flavorsRef, (snapshot) => {
+      const data = snapshot.val();
+      const container = document.getElementById('flavorListContainer');
+      if (!data) {
+        container.innerHTML = '<div class="empty-state">Nessun gusto presente. Aggiungine uno sopra.</div>';
+        return;
+      }
+      let html = '<div class="flavor-list">';
+      Object.entries(data).forEach(([id, flavor]) => {
+        html += `
+          <div class="flavor-row">
+            <input type="text" class="emoji-input-field" id="emoji-${id}" value="${flavor.emoji || ''}" style="flex:0 0 50px;text-align:center;font-size:18px;">
+            <input type="text" id="name-${id}" value="${flavor.name || ''}">
+            <button class="save-btn" onclick="saveFlavor('${id}')">💾 Salva</button>
+            <button class="delete-btn" onclick="deleteFlavor('${id}','${(flavor.name||'').replace(/'/g,"")}')">🗑️</button>
+          </div>`;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    });
+  }
+</script>
+</body>
+</html>
