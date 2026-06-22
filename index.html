@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lago Bin – Menu Premium</title>
+<link rel="icon" type="image/jpeg" href="images.jpeg">
+<link rel="apple-touch-icon" href="images.jpeg">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Palatino Linotype', Palatino, serif; background: #150e0b; color: #f9f1e2; -webkit-font-smoothing: antialiased; }
@@ -60,6 +62,15 @@
   .sauce-picker { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(212,175,55,0.5); width: 100%; }
   .sauce-picker.visible { display: block; }
   .sauce-label { font-size: 11px; color: #7a5a2a; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 7px; }
+  .multi-entries-container { margin-top: 12px; width: 100%; }
+  .multi-entry-row { background: #fdf5e6; border: 1.5px solid #d4af37; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+  .multi-entry-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .multi-entry-name { flex: 1; border: 1px solid rgba(212,175,55,0.5); border-radius: 8px; padding: 6px 10px; font-size: 13px; font-family: inherit; background: #fff; color: #1a0505; }
+  .multi-entry-name:focus { outline: none; border-color: #b31e1e; }
+  .multi-entry-remove { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid #b31e1e; background: #fff; color: #b31e1e; font-size: 13px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: inherit; flex-shrink: 0; }
+  .multi-entry-remove:hover { background: #b31e1e; color: #fff; }
+  .add-entry-btn { width: 100%; margin-top: 10px; padding: 10px; border-radius: 20px; border: 1.5px dashed #d4af37; background: rgba(212,175,55,0.08); color: #b31e1e; font-size: 13px; font-weight: bold; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+  .add-entry-btn:hover { background: #d4af37; color: #150e0b; border-style: solid; }
   .sauce-options { display: flex; flex-wrap: wrap; gap: 6px; }
   .sauce-btn { border: 1.5px solid #d4af37; border-radius: 20px; background: #fff8e6; color: #7a5a2a; font-size: 12px; font-weight: bold; padding: 4px 12px; cursor: pointer; font-family: inherit; transition: all 0.2s; }
   .sauce-btn.selected { background: #d4af37; color: #150e0b; }
@@ -231,7 +242,7 @@
   <div class="quick-card" onclick="setTab('dolce')">
     <div class="card-icon">🍰</div>
     <div class="card-text">
-      <span data-it="Dolce" data-fr="Desserts" data-en="Desserts" data-de="Desserts">Dolce</span>
+      <span data-it="Dolci" data-fr="Desserts" data-en="Desserts" data-de="Desserts">Dolci</span>
       <span class="card-label" data-it="I Nostri Dessert" data-fr="Nos Desserts" data-en="Our Desserts" data-de="Unsere Desserts">I Nostri Dessert</span>
     </div>
   </div>
@@ -260,7 +271,7 @@
     <button class="tab-btn" onclick="setTab('primi', this)">🍝 <span data-it="Primi" data-fr="Plats principaux" data-en="First Courses" data-de="Erster Gang">Primi</span></button>
     <button class="tab-btn" onclick="setTab('secondi', this)">🥩 <span data-it="Secondi" data-fr="Secondes" data-en="Main Courses" data-de="Hauptgerichte">Secondi</span></button>
     <button class="tab-btn" onclick="setTab('contorni', this)">🥦 <span data-it="Contorni" data-fr="Accompagnements" data-en="Sides" data-de="Beilagen">Contorni</span></button>
-    <button class="tab-btn" onclick="setTab('dolce', this)">🍰 <span data-it="Dolce" data-fr="Desserts" data-en="Desserts" data-de="Desserts">Dolce</span></button>
+    <button class="tab-btn" onclick="setTab('dolce', this)">🍰 <span data-it="Dolci" data-fr="Desserts" data-en="Desserts" data-de="Desserts">Dolci</span></button>
     <button class="tab-btn" onclick="setTab('gelato', this)">🍦 <span data-it="Gelato" data-fr="Glace" data-en="Ice Cream" data-de="Eiscreme">Gelato</span></button>
   </div>
 </div>
@@ -417,7 +428,10 @@
 <!-- 3. PRIMI -->
 <div class="section" id="sec-primi">
   <h2 class="cat-title">🍝 <span data-it="Primi Piatti" data-fr="Premiers Plats" data-en="First Courses" data-de="Erster Gang">Primi Piatti</span></h2>
-  <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Ravioli della Nonna al Pomodoro o Burro e Salvia</span><span class="sub-trans" data-it="" data-fr="(Ravioli maison tomate ou beurre et sauge)" data-en="(Grandma's Ravioli with tomato or butter & sage)" data-de="(Omas Ravioli mit Tomatensauce oder Butter & Salbei)"></span></div><div class="item-desc" data-it="Disponibile anche al Burro e Timo o ai Funghi" data-fr="Aussi disponible beurre/thym ou aux champignons" data-en="Also available with Butter & Thyme, or Mushroom sauce" data-de="Auch erhältlich mit Butter & Thymian oder Pilzsauce">Disponibile anche al Burro e Timo o ai Funghi</div></div><div class="order-controls"><div class="item-price">€18,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('ravioli_nonna',-1)">−</button><span class="qty-num" id="qty-ravioli_nonna">0</span><button class="qty-btn" onclick="changeQty('ravioli_nonna',1)">+</button></div><div class="sauce-picker" id="sauce-ravioli_nonna"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="chooseSauce('ravioli_nonna','Pomodoro',this)">Pomodoro</button><button class="sauce-btn" onclick="chooseSauce('ravioli_nonna','Burro e Salvia',this)">Burro e Salvia</button><button class="sauce-btn" onclick="chooseSauce('ravioli_nonna','Funghi',this)">Funghi</button><button class="sauce-btn" onclick="chooseSauce('ravioli_nonna','Burro e Timo',this)">Burro e Timo</button></div></div></div></div>
+  <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Ravioli della Nonna al Pomodoro o Burro e Salvia</span><span class="sub-trans" data-it="" data-fr="(Ravioli maison tomate ou beurre et sauge)" data-en="(Grandma's Ravioli with tomato or butter & sage)" data-de="(Omas Ravioli mit Tomatensauce oder Butter & Salbei)"></span></div><div class="item-desc" data-it="Disponibile anche al Burro e Timo o ai Funghi" data-fr="Aussi disponible beurre/thym ou aux champignons" data-en="Also available with Butter & Thyme, or Mushroom sauce" data-de="Auch erhältlich mit Butter & Thymian oder Pilzsauce">Disponibile anche al Burro e Timo o ai Funghi</div>
+    <div id="multi-entries-ravioli_nonna" class="multi-entries-container"></div>
+    <button class="add-entry-btn" onclick="addMultiEntry('ravioli_nonna')">+ <span data-it="Aggiungi persona" data-fr="Ajouter personne" data-en="Add person" data-de="Person hinzufügen">Aggiungi persona</span></button>
+  </div><div class="order-controls"><div class="item-price">€18,00</div></div></div>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Ravioli della Nonna al Coniglio</span><span class="sub-trans" data-it="" data-fr="(Ravioli au Lapin)" data-en="(Grandma's Ravioli with Rabbit)" data-de="(Omas Ravioli mit Kaninchensauce)"></span></div></div><div class="order-controls"><div class="item-price">€20,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('ravioli_coniglio',-1)">−</button><span class="qty-num" id="qty-ravioli_coniglio">0</span><button class="qty-btn" onclick="changeQty('ravioli_coniglio',1)">+</button></div></div></div>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Tagliatelle di Pasta Fresca alla Selvaggina o ai Funghi</span><span class="sub-trans" data-it="" data-fr="(Tagliatelles fraîches au gibier ou aux champignons)" data-en="(Fresh Pasta Tagliatelle with game sauce or mushrooms)" data-de="(Frische Tagliatelle mit Wildsauce oder Pilzen)"></span></div><div class="item-desc" data-it="Disponibile anche al Pesto Fresco" data-fr="Aussi disponible au pesto frais" data-en="Also available with fresh Pesto" data-de="Auch mit frischem Pesto erhältlich">Disponibile anche al Pesto Fresco</div></div><div class="order-controls"><div class="item-price">€15,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('tagliatelle_sel',-1)">−</button><span class="qty-num" id="qty-tagliatelle_sel">0</span><button class="qty-btn" onclick="changeQty('tagliatelle_sel',1)">+</button></div><div class="sauce-picker" id="sauce-tagliatelle_sel"><div class="sauce-label">🍝 Condimento:</div><div class="sauce-options"><button class="sauce-btn" onclick="chooseSauce('tagliatelle_sel','Selvaggina',this)">Selvaggina</button><button class="sauce-btn" onclick="chooseSauce('tagliatelle_sel','Funghi',this)">Funghi</button><button class="sauce-btn" onclick="chooseSauce('tagliatelle_sel','Pesto Fresco',this)">Pesto Fresco</button></div></div></div></div>
   <div class="item"><div class="item-left"><div class="item-name"><span class="notranslate">Tagliatelle ai Frutti di Mare</span><span class="sub-trans" data-it="" data-fr="(Tagliatelles aux Fruits de Mer)" data-en="(Seafood Tagliatelle)" data-de="(Tagliatelle mit Meeresfrüchten)"></span></div></div><div class="order-controls"><div class="item-price">€18,00</div><div class="qty-box"><button class="qty-btn" onclick="changeQty('tagliatelle_mare',-1)">−</button><span class="qty-num" id="qty-tagliatelle_mare">0</span><button class="qty-btn" onclick="changeQty('tagliatelle_mare',1)">+</button></div></div></div>
@@ -572,7 +586,7 @@
   <span class="cart-badge" id="cart-badge">0</span>
 </div>
 
-<div class="cart-panel" id="cart-panel">
+<div class="cart-panel" id="cart-panel" onclick="event.stopPropagation()">
   <div class="cart-title">📋 <span data-it="Il Tuo Ordine" data-fr="Votre Commande" data-en="Your Order" data-de="Ihre Bestellung">Il Tuo Ordine</span></div>
   <div id="cart-content"><div class="cart-empty">Nessun articolo ancora</div></div>
   <div class="cart-total" id="cart-total" style="display:none;">
@@ -662,6 +676,75 @@ const tabItemMap = {
 const carteQty   = {};
 const carteSauce = {};
 Object.keys(carteData).forEach(k => { carteQty[k] = 0; });
+
+// New: multi-entry system for sauce dishes — allows multiple people with different names/sauces for the SAME dish
+const multiEntryData = {}; // { itemId: [ {entryId, name, sauce}, ... ] }
+let _entryCounter = 0;
+
+function addMultiEntry(id) {
+  if (!multiEntryData[id]) multiEntryData[id] = [];
+  const entryId = 'e' + (++_entryCounter);
+  multiEntryData[id].push({ entryId, name: '', sauce: '' });
+  renderMultiEntries(id);
+  updateCart();
+}
+
+function removeMultiEntry(id, entryId) {
+  if (!multiEntryData[id]) return;
+  multiEntryData[id] = multiEntryData[id].filter(e => e.entryId !== entryId);
+  renderMultiEntries(id);
+  updateCart();
+}
+
+function setMultiEntryName(id, entryId, value) {
+  const entry = (multiEntryData[id] || []).find(e => e.entryId === entryId);
+  if (entry) entry.name = value;
+  updateCart();
+}
+
+function chooseMultiSauce(id, entryId, sauce, btn) {
+  const entry = (multiEntryData[id] || []).find(e => e.entryId === entryId);
+  if (entry) entry.sauce = sauce;
+  btn.closest('.sauce-options').querySelectorAll('.sauce-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  updateCart();
+}
+
+function renderMultiEntries(id) {
+  const container = document.getElementById('multi-entries-' + id);
+  if (!container) return;
+  const entries = multiEntryData[id] || [];
+  const sauceOptionsHtml = (sauceListMap[id] || []).map(s =>
+    `<button class="sauce-btn" onclick="chooseMultiSauce('${id}','__ENTRYID__','${s}',this)">${s}</button>`
+  ).join('');
+  container.innerHTML = entries.map(entry => `
+    <div class="multi-entry-row" data-entry="${entry.entryId}">
+      <div class="multi-entry-top">
+        <input type="text" class="multi-entry-name" placeholder="Nome (opzionale)" value="${entry.name.replace(/"/g,'&quot;')}" oninput="setMultiEntryName('${id}','${entry.entryId}',this.value)">
+        <button class="multi-entry-remove" onclick="removeMultiEntry('${id}','${entry.entryId}')">✕</button>
+      </div>
+      <div class="sauce-options">
+        ${sauceOptionsHtml.replace(/__ENTRYID__/g, entry.entryId)}
+      </div>
+    </div>
+  `).join('');
+  // restore selected sauce highlighting
+  entries.forEach(entry => {
+    if (entry.sauce) {
+      const row = container.querySelector(`[data-entry="${entry.entryId}"]`);
+      if (row) {
+        row.querySelectorAll('.sauce-btn').forEach(b => {
+          if (b.textContent === entry.sauce) b.classList.add('selected');
+        });
+      }
+    }
+  });
+}
+
+// Map of item id -> list of sauce option labels (used to render multi-entry sauce buttons dynamically)
+const sauceListMap = {
+  ravioli_nonna: ['Pomodoro','Burro e Salvia','Funghi','Burro e Timo']
+};
 
 const pkgState = {
   gastro:  { selected:{}, sauces:{}, limit:3, confirmed:false, price:40, label:'Menù Gastronomico' },
@@ -790,6 +873,25 @@ function updateCart() {
       totalPrice += d.price * qty;
     });
   }
+
+  // Multi-entry items (sauce dishes with per-person name+sauce)
+  Object.entries(multiEntryData).forEach(([id, entries]) => {
+    if (!entries.length) return;
+    const d = carteData[id];
+    html += `<div class="cart-section-lbl">🍝 ${d.name}</div>`;
+    entries.forEach(entry => {
+      const namePart = entry.name ? entry.name + ' — ' : '';
+      const saucePart = entry.sauce || '<span style="color:#b31e1e;">scegli condimento</span>';
+      html += `<div class="cart-row">
+        <div class="cart-row-left">
+          <div class="cart-row-name">${namePart}${saucePart}</div>
+        </div>
+        <span class="cart-price">€${d.price}</span>
+      </div>`;
+      totalItems += 1;
+      totalPrice += d.price;
+    });
+  });
 
   Object.entries(pkgState).forEach(([key, state]) => {
     const dishes = Object.keys(state.selected);
