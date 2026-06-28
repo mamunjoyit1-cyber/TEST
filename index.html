@@ -56,9 +56,6 @@ body{
 }
 img{display:block}
 
-/* ═══════════════════════════════════════════
-   HERO HEADER  (bordeaux gradient like screenshot)
-═══════════════════════════════════════════ */
 .hero{
   background: radial-gradient(ellipse at 60% 0%, var(--burg-mid) 0%, var(--burg-dark) 55%, #1a0206 100%);
   padding: 36px 20px 28px;
@@ -124,9 +121,6 @@ img{display:block}
   letter-spacing:0.12em;
 }
 
-/* ═══════════════════════════════════════════
-   CONTROLS BAR
-═══════════════════════════════════════════ */
 .controls{
   background: radial-gradient(ellipse at 60% 0%, var(--burg-mid) 0%, var(--burg-dark) 55%, #1a0206 100%);
   padding:0 12px 16px;
@@ -175,7 +169,6 @@ img{display:block}
 #searchInput::placeholder{color:rgba(201,168,76,0.4)}
 #searchInput:focus{border-color:var(--gold);background:rgba(255,255,255,0.13)}
 
-/* Google Translate */
 #google_translate_element{display:flex;align-items:center}
 #google_translate_element .goog-te-combo{
   padding:11px 12px;
@@ -194,9 +187,6 @@ img{display:block}
 .skiptranslate{display:none!important}
 body{top:0!important}
 
-/* ═══════════════════════════════════════════
-   HINT BAR
-═══════════════════════════════════════════ */
 .hint-bar{
   background:var(--gold);
   color:var(--burg-dark);
@@ -208,18 +198,12 @@ body{top:0!important}
   text-transform:uppercase;
 }
 
-/* ═══════════════════════════════════════════
-   MAIN CONTENT
-═══════════════════════════════════════════ */
 .main{
   max-width:780px;
   margin:0 auto;
   padding:18px 14px 70px;
 }
 
-/* ═══════════════════════════════════════════
-   ACCORDION CATEGORY
-═══════════════════════════════════════════ */
 .cat-section{
   margin-bottom:8px;
   border-radius:5px;
@@ -279,7 +263,6 @@ body{top:0!important}
   to{opacity:1;transform:translateY(0)}
 }
 
-/* ── SUBCAT HEADER ── */
 .subcat-header{
   padding:10px 16px 8px;
   font-size:9px;
@@ -292,9 +275,6 @@ body{top:0!important}
   border-left:3px solid var(--burg);
 }
 
-/* ═══════════════════════════════════════════
-   WINE ROW  — mobile-first
-═══════════════════════════════════════════ */
 .wine-row{
   display:flex;
   align-items:center;
@@ -341,7 +321,6 @@ body{top:0!important}
   color:var(--text-dark);
   line-height:1.3;
   margin-bottom:3px;
-  /* wrap gracefully on mobile */
   word-break:break-word;
   hyphens:auto;
 }
@@ -373,7 +352,6 @@ body{top:0!important}
   line-height:1;
 }
 
-/* ── Search result box ── */
 .search-box{
   background:var(--white);
   border-radius:5px;
@@ -392,7 +370,6 @@ body{top:0!important}
   border-radius:10px;padding:2px 8px;font-size:9px;
 }
 
-/* ── No results ── */
 .no-results{
   text-align:center;padding:60px 20px;color:var(--text-lite);
 }
@@ -401,15 +378,12 @@ body{top:0!important}
   font-size:20px;font-style:italic;
 }
 
-/* ═══════════════════════════════════════════
-   MODAL  — slides up from bottom on mobile
-═══════════════════════════════════════════ */
 .modal-overlay{
   position:fixed;inset:0;
   background:rgba(30,5,8,0.88);
   z-index:1000;
   display:none;
-  align-items:flex-end;      /* bottom-sheet on mobile */
+  align-items:flex-end;
   justify-content:center;
   backdrop-filter:blur(5px);
 }
@@ -431,7 +405,6 @@ body{top:0!important}
   to{opacity:1;transform:translateY(0)}
 }
 
-/* pill drag handle */
 .modal-handle{
   width:36px;height:4px;
   background:rgba(0,0,0,0.12);
@@ -517,7 +490,6 @@ body{top:0!important}
   font-size:12px;color:var(--text-mid);line-height:1.75;
 }
 
-/* ── Lightbox ── */
 .lightbox{
   position:fixed;inset:0;
   background:rgba(0,0,0,0.96);
@@ -531,9 +503,6 @@ body{top:0!important}
   color:var(--gold);font-size:34px;cursor:pointer;line-height:1;
 }
 
-/* ═══════════════════════════════════════════
-   FOOTER
-═══════════════════════════════════════════ */
 .footer{
   background:var(--burg-dark);
   text-align:center;
@@ -552,9 +521,6 @@ body{top:0!important}
   letter-spacing:0.1em;
 }
 
-/* ═══════════════════════════════════════════
-   RESPONSIVE — desktop centres modal
-═══════════════════════════════════════════ */
 @media(min-width:560px){
   .modal-overlay{align-items:center;padding:20px}
   .modal{border-radius:10px;max-height:90vh}
@@ -571,9 +537,6 @@ body{top:0!important}
   .hero-title{font-size:clamp(30px,9vw,48px)}
 }
 
-/* ═══════════════════════════════════════════
-   LANGUAGE DROPDOWN
-═══════════════════════════════════════════ */
 .lang-select-wrap{
   position:relative;
   flex-shrink:0;
@@ -616,7 +579,6 @@ body{top:0!important}
 </head>
 <body>
 
-<!-- HERO -->
 <div class="hero">
   <img class="hero-logo"
        src="images.jpeg" alt="Lago Bin"
@@ -628,7 +590,6 @@ body{top:0!important}
   <div class="hero-subtitle">Carta dei Vini</div>
 </div>
 
-<!-- CONTROLS -->
 <div class="controls">
   <div class="controls-inner">
     <div class="search-wrap">
@@ -662,7 +623,6 @@ body{top:0!important}
   </div>
 </div>
 
-<!-- hidden GT widget still needed -->
 <div id="google_translate_element" style="display:none"></div>
 
 <div class="hint-bar">Tocca la categoria per espandere · Tocca il vino per i dettagli</div>
@@ -674,7 +634,6 @@ body{top:0!important}
   <div class="footer-note">Tutti i prezzi si intendono per bottiglia da 75 Cl</div>
 </div>
 
-<!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -691,7 +650,6 @@ body{top:0!important}
   </div>
 </div>
 
-<!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <span class="lightbox-close">×</span>
   <img id="lightboxImg" src="" alt="">
@@ -755,6 +713,12 @@ const WINES = [
     desc:'Aromi di frutta a polpa bianca, agrumi, crosta di pane e delicate note minerali. Aperitivo e piatti delicati come crudi di pesce, sushi, carpacci di carne, formaggi stagionati e primi piatti leggeri',
     vinif:'Affinamento: 24 mesi sui lieviti'
   },
+  { id:'franciacorta-igor-rapp', cat:'bollicine', subcat:'Selezione Bollicine Italiane',
+    name:'Franciacorta Brut – IGOR Rapp', price:45,
+    img:'images/franciacorta-igor-rapp.png',
+    paese:'Italia', regione:'Lombardia',
+    desc:'Franciacorta Brut della selezione IGOR Rapp'
+  },
   // ─── CHAMPAGNE ────────────────────────────────────────────
   { id:'cuvee-lago-bin', cat:'bollicine', subcat:'Selezione Champagne',
     name:'Cuveè Lago Bin', price:55, img:'images/cuvee-lago-bin.png',
@@ -808,7 +772,7 @@ const WINES = [
 
   // ─── VINI DEL TERRITORIO – BIANCHI ────────────────────────
   { id:'vermentino-poggio-elmo', cat:'territorio', subcat:'Vini Bianchi del Territorio',
-    name:'Vermentino RLP – Poggio dell\' Elmo', price:25, img:'images/vermentino-poggio-elmo.png',
+    name:'Vermentino RLP – Poggio dell\' Elmo', price:28, img:'images/vermentino-poggio-elmo.png',
     sigla:'Vermentino DOC', paese:'Italia', regione:'Liguria', gradazione:'12,5%', uve:'100% Vermentino', colore:'Giallo paglierino con riflessi verdolini',
     desc:'Al naso si apre con un bouquet elegante e delicato: fiori di campo che evocano la natura incontaminata, note erbacee fresche e un accenno vivace di mela verde croccante. Al palato si distingue per una fresca acidità, che dona slancio e vivacità al sorso',
     vinif:'5 ore a contatto con le bucce con controllo della temperatura 5 mesi in acciaio'
@@ -845,8 +809,20 @@ const WINES = [
     desc:'Aromi intensi di frutta matura (nespola, mela), agrumi, camomilla, lavanda e una leggera nota minerale',
     vinif:'8 mesi in acciaio'
   },
+  { id:'tabaka-ka-mancine', cat:'territorio', subcat:'Vini Bianchi del Territorio',
+    name:'Tabaka (Tabaka e Vermentino) – Ka Mancine', price:30,
+    img:'images/tabaka-ka-mancine.png',
+    paese:'Italia', regione:'Liguria', uve:'Tabaka E Vermentino',
+    desc:'Bianco ligure del territorio di Dolceacqua, blend di Tabaka e Vermentino'
+  },
+  { id:'flavia-foresti', cat:'territorio', subcat:'Vini Bianchi del Territorio',
+    name:'Flavia (Vermentino e Pigato) – Foresti', price:34,
+    img:'images/flavia-foresti.png',
+    paese:'Italia', regione:'Liguria', uve:'Vermentino E Pigato',
+    desc:'Blend di Vermentino e Pigato della cantina Foresti'
+  },
   { id:'vermentino-trecoli-lombardi', cat:'territorio', subcat:'Vini Bianchi del Territorio',
-    name:'Vermentino "Treçoli" – Lombardi', price:0, // <<< PRICE: Vermentino Treçoli >>>
+    name:'Vermentino "Treçoli" – Lombardi', price:29,
     img:'images/vermentino-trecoli-lombardi.png',
     paese:'Italia', regione:'Liguria', uve:'Vermentino', colore:'Giallo paglierino con riflessi verdolini',
     gusto:'Secco, fresco e armonico, con piacevole sapidità',
@@ -856,14 +832,14 @@ const WINES = [
 
   // ─── VINI DEL TERRITORIO – ROSSI ──────────────────────────
   { id:'rossese-poggi-elmo-2022', cat:'territorio', subcat:'Vini Rossi del Territorio',
-    name:'Rossese di Dolceacqua – Poggi dell\' Elmo 2022', price:28, img:'images/poggi-dellelmo-rossese-di-dolceacqua-2022.png',
+    name:'Rossese di Dolceacqua – Poggi dell\' Elmo 2022', price:32, img:'images/poggi-dellelmo-rossese-di-dolceacqua-2022.png',
     paese:'Italia', regione:'Liguria', gradazione:'13%', uve:'100% Rossese', colore:'Rosso rubino con riflessi violacei',
     gusto:'Fresco in bocca con sentori di ciliegia sotto spirito',
     desc:'Rosa canina, spezie che ricordano il pepe nero. Accompagna piatti tipici della cucina ligure, va servito ad un temperatura abbastanza fresca intorno ai 16°',
     vinif:'In acciaio con controllo della temperatura'
   },
   { id:'rossese-pini-2022', cat:'territorio', subcat:'Vini Rossi del Territorio',
-    name:'Rossese di Dolceacqua Superiore Pini – Poggi dell\'Elmo 2022', price:36,
+    name:'Rossese di Dolceacqua Superiore Pini – Poggi dell\'Elmo 2022', price:41,
     img:'images/rossese-pini-2022.png',
     paese:'Italia', regione:'Liguria', gradazione:'14,5%', uve:'100% Rossese', colore:'Rosso rubino con riflessi violacei',
     gusto:'Pieno, carnoso, fruttato in bocca',
@@ -920,7 +896,7 @@ const WINES = [
     desc:'Il bouquet è complesso e ricco, con note di frutti rossi, spezie e una leggera sfumatura di erbe mediterranee'
   },
   { id:'rossese-terre-bianche-2022', cat:'territorio', subcat:'Vini Rossi del Territorio',
-    name:'Rossese di Dolceacqua – Terre Bianche 2022', price:32,
+    name:'Rossese di Dolceacqua – Terre Bianche 2022', price:35,
     img:'images/terre-bianche-rossese-di-dolceacqua-2022.png',
     paese:'Italia', regione:'Liguria', gradazione:'13,5%', uve:'100% Rossese', colore:'Rosso rubino con riflessi granati',
     gusto:'Al palato si presenta sapido, elegante, caldo e di buona freschezza, con una nota amarognola',
@@ -1015,14 +991,14 @@ const WINES = [
     vinif:'Uva rossa vinificata in bianco, 12 ore di macerazione a contatto con le bucce'
   },
   { id:'rosato-postu-da-ve-lombardi', cat:'territorio', subcat:'Vini Rosati del Territorio',
-    name:'Rosato "Postu da Vé" – Lombardi', price:0, // <<< PRICE: Rosato Postu da Vé >>>
+    name:'Rosato "Postu da Vé" – Lombardi', price:28,
     img:'images/rosato-postu-da-ve-lombardi.png',
     paese:'Italia', regione:'Liguria', uve:'80% Rossese, 20% Granaccia', colore:'Rosa cipria pallido',
     gusto:'Fresco, asciutto, sapido e mediamente strutturato',
     desc:'Di media intensità olfattiva, con sentori di piccoli frutti di bosco e accenni d\'agrumi',
     vinif:'Vinificazione in bianco con batonnage, affinamento in vasche d\'acciaio per quattro mesi con ripetuti batonnage'
   },
-{ id:'rossese-crespi', cat:'territorio', subcat:'Vini Rossi del Territorio',
+  { id:'rossese-crespi', cat:'territorio', subcat:'Vini Rossi del Territorio',
     name:'Rossese di Dolceacqua – Crespi', price:21,
     img:'images/crespi.png',
     paese:'Italia', regione:'Liguria', gradazione:'13%', colore:'Rosso rubino con riflessi violacei',
@@ -1030,7 +1006,6 @@ const WINES = [
     desc:'Note di frutti rossi maturi, erbe mediterranee e una leggera sfumatura speziata. Un Rossese elegante e tipico del territorio di Dolceacqua.',
     vinif:'Fermentazione in acciaio con macerazione sulle bucce, affinamento in acciaio per alcuni mesi.'
   },
-
 
   // ─── VINI BIANCHI NAZIONALI ───────────────────────────────
   { id:'roero-arneis-2023', cat:'bianchi', subcat:'Selezione vini Bianchi Nazionali',
@@ -1043,6 +1018,12 @@ const WINES = [
     sigla:'Falanghina IGT', gradazione:'12,5%', uve:'Falanghina', colore:'Giallo paglierino intenso',
     gusto:'Buon corpo, rotondo, con un sorso perfettamente equilibrato.',
     desc:'Note fruttate, anche esotici, sentori di banana, ananas, kiwi'
+  },
+  { id:'greco-di-tufo-vinosia', cat:'bianchi', subcat:'Selezione vini Bianchi Nazionali',
+    name:'Greco di Tufo – Vinosia', price:21,
+    img:'images/greco-di-tufo-vinosia.png',
+    paese:'Italia', regione:'Campania', uve:'100% Greco',
+    desc:'Bianco campano fresco e minerale, tipico della zona di Tufo'
   },
   { id:'gewurztraminer-2022', cat:'bianchi', subcat:'Selezione vini Bianchi Nazionali',
     name:'A.A. Gewürztraminer – Muri-Gries 2022', price:27, img:'images/aa-gewurztraminer-muri-gries-2022.png',
@@ -1063,7 +1044,7 @@ const WINES = [
     desc:'Al gusto si presenta aromatico, delicato, asciutto'
   },
   { id:'andaras', cat:'nazionali', subcat:'Vini Bianchi Nazionali',
-    name:'Vermentino di Sardegna "Andaras" 2023', price:29,
+    name:'Vermentino di Sardegna "Andaras" 2023', price:27,
     img:'images/andaras.png',
     paese:'Italia', regione:'Sardegna', gradazione:'13%', uve:'100% Vermentino',
     colore:'Giallo paglierino con riflessi dorati',
@@ -1072,14 +1053,13 @@ const WINES = [
     vinif:'Fermentazione a temperatura controllata in acciaio inox, breve permanenza sui lieviti.'
   },
   { id:'chardonnay-kreuth-terlan', cat:'bianchi', subcat:'Selezione vini Bianchi Nazionali',
-    name:'Chardonnay "Kreuth" – Cantina Terlan 2023', price:0, // <<< PRICE: Chardonnay Kreuth >>>
+    name:'Chardonnay "Kreuth" – Cantina Terlan 2023', price:37,
     img:'images/chardonnay-kreuth-terlan.png',
     paese:'Italia', regione:'Alto Adige', gradazione:'14%', uve:'100% Chardonnay', colore:'Giallo paglierino scintillante e accattivante',
     gusto:'Accattivante, con una struttura flessibile e compatta; sentori speziati, minerali e succosi che conferiscono un forte carattere del terroir',
     desc:'Profumo di frutta esotica come maracuja e carambola, agrumi, con una nota di pietra focaia dai tratti aromatici e minerali',
     vinif:'Vendemmia e selezione manuale delle uve. Fermentazione lenta a temperatura controllata in botti di rovere grandi, affinamento di 10 mesi sui lieviti, metà in acciaio e metà in legno'
   },
-
 
   // ─── VINI ROSATI NAZIONALI ─────────────────────────────────
   { id:'bardolino-chiaretto', cat:'rosati', subcat:'Selezione vini rosati nazionali',
@@ -1093,38 +1073,44 @@ const WINES = [
     name:'Pallido – Capecci', price:27, img:'images/pallido-capecci.png',
     paese:'Italia', regione:'Marche', gradazione:'12%', uve:'Montepulciano'
   },
-{
-  id:'maixei_rose_rosse',
-  cat:'rosati',
-  subcat:'Selezione vini rosati nazionali',
-  name:'Maixei "Rosé Rosse" Vino Rosato',
-  price:24,
-  img:'images/maixei-rose.png',
-  paese:'Italia',
-  regione:'Liguria',
-  gradazione:'12.5%',
-  uve:'Uve locali a bacca rossa',
-  colore:'Rosa cerasuolo brillante',
-  gusto:'Fresco, fruttato, con note di fragolina e melograno',
-  desc:'Rosato ligure dal profilo aromatico elegante, con sentori di frutta rossa e fiori.',
-  vinif:'Vinificazione in acciaio a temperatura controllata per preservare freschezza e aromi.'
-},
-{
-  id:'castel_des_maures',
-  cat:'rosati',
-  subcat:'Selezione vini rosati nazionali',
-  name:'Château Castel des Maures Rosé – Côtes de Provence (Bio)',
-  price:18,
-  img:'images/castel-maures.png',
-  paese:'Francia',
-  regione:'Provence',
-  gradazione:'13%',
-  uve:'Grenache, Cinsault, Syrah',
-  colore:'Rosa pallido provenzale',
-  gusto:'Elegante, secco, con note di pesca bianca, agrumi e fiori',
-  desc:'Rosé biologico della Provenza, fine e aromatico, perfetto per piatti di pesce e aperitivi.',
-  vinif:'Vinificazione biologica con fermentazione a bassa temperatura per esaltare freschezza e profumi.'
-},
+  { id:'roccese-rose-masala', cat:'rosati', subcat:'Selezione vini rosati nazionali',
+    name:'Roccese Rosè – Masala', price:39,
+    img:'images/roccese-rose-masala.png',
+    paese:'Italia', regione:'Liguria', uve:'Rossese E Altri Vitigni Autoctoni',
+    desc:'Rosato ligure della cantina Masala, dal territorio roccioso di Dolceacqua'
+  },
+  {
+    id:'maixei_rose_rosse',
+    cat:'rosati',
+    subcat:'Selezione vini rosati nazionali',
+    name:'Maixei "Rosé Rosse" Vino Rosato',
+    price:24,
+    img:'images/maixei-rose.png',
+    paese:'Italia',
+    regione:'Liguria',
+    gradazione:'12.5%',
+    uve:'Uve locali a bacca rossa',
+    colore:'Rosa cerasuolo brillante',
+    gusto:'Fresco, fruttato, con note di fragolina e melograno',
+    desc:'Rosato ligure dal profilo aromatico elegante, con sentori di frutta rossa e fiori.',
+    vinif:'Vinificazione in acciaio a temperatura controllata per preservare freschezza e aromi.'
+  },
+  {
+    id:'castel_des_maures',
+    cat:'rosati',
+    subcat:'Selezione vini rosati nazionali',
+    name:'Château Castel des Maures Rosé – Côtes de Provence (Bio)',
+    price:18,
+    img:'images/castel-maures.png',
+    paese:'Francia',
+    regione:'Provence',
+    gradazione:'13%',
+    uve:'Grenache, Cinsault, Syrah',
+    colore:'Rosa pallido provenzale',
+    gusto:'Elegante, secco, con note di pesca bianca, agrumi e fiori',
+    desc:'Rosé biologico della Provenza, fine e aromatico, perfetto per piatti di pesce e aperitivi.',
+    vinif:'Vinificazione biologica con fermentazione a bassa temperatura per esaltare freschezza e profumi.'
+  },
 
   // ─── VINI ROSSI NAZIONALI ──────────────────────────────────
   { id:'barbaresco-biologico', cat:'rossi', subcat:'Selezione vini Rossi Nazionali',
@@ -1180,7 +1166,7 @@ const WINES = [
     desc:'Profumi di ciliegia matura, prugna, liquirizia, cioccolato fondente e spezie dolci.'
   },
   { id:'brunello-campogiovanni', cat:'rossi', subcat:'Selezione vini Rossi Nazionali',
-    name:'Brunello di Montalcino Campogiovanni – San Felice 2016', price:70,
+    name:'Brunello di Montalcino Campogiovanni – San Felice 2016', price:80,
     img:'images/brunello-campogiovanni-san-felice-2016.png',
     paese:'Italia', regione:'Toscana', uve:'100% Brunello', colore:'Rosso rubino profondo',
     gusto:'Strutturato e avvolgente, con tannini morbidi e una persistenza dolce e speziata',
@@ -1192,6 +1178,18 @@ const WINES = [
     paese:'Italia', regione:'Toscana', gradazione:'13,5%', uve:'100% Sangiovese', colore:'Rosso rubino profondo',
     gusto:'Corposo e austero, con tannini succosi e una fresca acidità',
     desc:'Aroma intenso e persistente, con note di viola mammola e frutti di bosco.'
+  },
+  { id:'chianti-colli-senesi-panizzi', cat:'rossi', subcat:'Selezione vini Rossi Nazionali',
+    name:'Chianti Colli Senesi – Panizzi', price:20,
+    img:'images/chianti-colli-senesi-panizzi.png',
+    sigla:'DOCG', paese:'Italia', regione:'Toscana', uve:'Sangiovese',
+    desc:'Chianti Colli Senesi della cantina Panizzi'
+  },
+  { id:'chianti-classico-igor-rapp', cat:'rossi', subcat:'Selezione vini Rossi Nazionali',
+    name:'Chianti Classico – IGOR Rapp (Berardenga)', price:33,
+    img:'images/chianti-classico-igor-rapp.png',
+    sigla:'DOCG', paese:'Italia', regione:'Toscana', uve:'Sangiovese',
+    desc:'Chianti Classico della selezione IGOR Rapp, Berardenga'
   },
   { id:'le-volte-ornellaia', cat:'rossi', subcat:'Selezione vini Rossi Nazionali',
     name:'Le Volte dell\'Ornellaia – Tenuta dell\'Ornellaia 2021', price:43,
@@ -1207,6 +1205,24 @@ const WINES = [
     gusto:'Rotondo e generoso, con tannini morbidi e vellutati',
     desc:'Note intriganti di frutta rossa scura, in particolare ciliegie e mirtilli, con sfumature speziate e floreali'
   },
+  { id:'rosso-montalcino-igor-rapp-scopone', cat:'rossi', subcat:'Selezione vini Rossi Nazionali',
+    name:'Rosso di Montalcino – IGOR Rapp (Scopone)', price:33,
+    img:'images/rosso-montalcino-scopone.png',
+    paese:'Italia', regione:'Toscana', uve:'100% Sangiovese',
+    desc:'Rosso di Montalcino della selezione IGOR Rapp, Scopone'
+  },
+  { id:'nobile-montepulciano-igor-rapp-barbicaia', cat:'rossi', subcat:'Selezione vini Rossi Nazionali',
+    name:'Nobile di Montepulciano – IGOR Rapp (Barbicaia)', price:40,
+    img:'images/nobile-montepulciano-barbicaia.png',
+    sigla:'DOCG', paese:'Italia', regione:'Toscana', uve:'Sangiovese (Prugnolo Gentile)',
+    desc:'Vino Nobile di Montepulciano della selezione IGOR Rapp, Barbicaia'
+  },
+  { id:'i-tirreni-bolgheri-igor-rapp-hydra', cat:'rossi', subcat:'Selezione vini Rossi Nazionali',
+    name:'I Tirreni Bolgheri – IGOR Rapp (Hydra)', price:43,
+    img:'images/i-tirreni-bolgheri-hydra.png',
+    sigla:'DOC Bolgheri', paese:'Italia', regione:'Toscana',
+    desc:'Bolgheri della selezione IGOR Rapp, I Tirreni "Hydra"'
+  },
   { id:'rosso-montepulciano-sabazio', cat:'rossi', subcat:'Selezione vini Rossi Nazionali',
     name:'Rosso di Montepulciano Sabazio – La Braccesca 2021', price:21,
     img:'images/rosso-montepulciano-sabazio-2021.png',
@@ -1221,7 +1237,7 @@ const WINES = [
     desc:'Note di ciliegie mature, petali di rosa e un accenno di spezie.'
   },
   { id:'promis-ca-marcanda-gaja-2023', cat:'rossi', subcat:'Selezione vini Rossi Nazionali',
-    name:'Promis – Ca\' Marcanda Gaja 2023', price:0, // <<< PRICE: Promis >>>
+    name:'Promis – Ca\' Marcanda Gaja 2023', price:45,
     img:'images/promis-ca-marcanda-gaja-2023.png',
     sigla:'Toscana IGT', paese:'Italia', regione:'Toscana', uve:'55% Merlot, 35% Syrah, 10% Sangiovese', colore:'Rosso rubino brillante e intenso',
     gusto:'Caldo e corposo, avvolgente, con freschezza e tannino ben presenti; finale lungo e persistente',
@@ -1229,7 +1245,7 @@ const WINES = [
     vinif:'Affinamento in barrique per circa 12 mesi'
   },
   { id:'grottaia-caccia-al-piano-2023', cat:'rossi', subcat:'Selezione vini Rossi Nazionali',
-    name:'Grottaia – Caccia al Piano 1868 2023', price:0, // <<< PRICE: Grottaia >>>
+    name:'Grottaia – Caccia al Piano 1868 2023', price:34,
     img:'images/grottaia-caccia-al-piano-2023.png',
     sigla:'Toscana IGT', paese:'Italia', regione:'Toscana', gradazione:'13,5%', uve:'50% Cabernet Sauvignon, 50% Merlot', colore:'Rosso rubino brillante',
     gusto:'Fresco e accattivante, di pronta beva, con un leggero tannino giovane',
@@ -1257,7 +1273,7 @@ const WINES = [
     desc:'Un vino elegante ma ancora profondamente territoriale.'
   },
   { id:'mora-aglianico-campania', cat:'rossi', subcat:'Selezione vini Rossi Nazionali',
-    name:'"Mora" – Aglianico Campania IGP', price:0, // <<< PRICE: Mora Aglianico >>>
+    name:'"Mora" – Aglianico Campania IGP', price:21,
     img:'images/mora-aglianico-campania.png',
     paese:'Italia', regione:'Campania', uve:'100% Aglianico', colore:'Rosso rubino intenso',
     gusto:'Asciutto, caldo, armonico e ben tannico, di buon corpo',
@@ -1299,7 +1315,7 @@ const WINES = [
     desc:"Un Lambrusco frizzante vivace con note di ciliegia, mora e piccoli frutti rossi. La leggera dolcezza lo rende ideale come aperitivo o abbinato a salumi, formaggi emiliani, pizza e dessert leggeri"
   },
   { id:'barbera-asti-la-villa', cat:'nazionali', subcat:'Vini Rossi Nazionali',
-    name:'Barbera d\'Asti "La Villa" - Tenuta Olim Bauda 2024', price:24,
+    name:'Barbera d\'Asti "La Villa" - Tenuta Olim Bauda 2024', price:27,
     img:'images/barbera-asti-la-villa.png',
     paese:'Italia', regione:'Piemonte', gradazione:'14,5%', uve:'100% Barbera',
     colore:'Rosso rubino intenso con riflessi violacei',
@@ -1307,7 +1323,7 @@ const WINES = [
     desc:'Note di frutta rossa matura, una leggera speziatura e un finale persistente, tipico della Barbera d\'Asti.',
     vinif:'Fermentazione in acciaio inox, seguita da un affinamento in acciaio per alcuni mesi.'
   },
-{ id:'dogliani-terra', cat:'nazionali', subcat:'Vini Rossi Nazionali',
+  { id:'dogliani-terra', cat:'nazionali', subcat:'Vini Rossi Nazionali',
     name:'Dogliani "Terra" - Produttori in Clavesana', price:24,
     img:'images/dogliani-terra.png',
     paese:'Italia', regione:'Piemonte', gradazione:'13,5%', uve:'100% Dolcetto',
@@ -1315,6 +1331,30 @@ const WINES = [
     gusto:'Asciutto, armonico, con tannini morbidi e una buona freschezza',
     desc:'Aromi di frutti rossi maturi e una leggera nota floreale, tipici del Dolcetto di Dogliani.',
     vinif:'Fermentazione e affinamento in acciaio inox, senza passaggi in legno.'
+  },
+  { id:'ziggurat-montefalco-rosso', cat:'rossi', subcat:'Selezione vini Rossi Nazionali',
+    name:'Ziggurat Montefalco Rosso – Tenuta Castelbuono', price:24,
+    img:'images/ziggurat-montefalco-rosso.png',
+    sigla:'DOC Montefalco Rosso', paese:'Italia', regione:'Umbria',
+    desc:'Montefalco Rosso della Tenuta Castelbuono (Lunelli)'
+  },
+  { id:'ciro-rosso-riserva-duca-sanfelice', cat:'rossi', subcat:'Selezione vini Rossi Nazionali',
+    name:'Cirò Rosso Riserva Duca Sanfelice – Librandi', price:21,
+    img:'images/ciro-rosso-riserva-duca-sanfelice.png',
+    sigla:'DOC Cirò Riserva', paese:'Italia', regione:'Calabria', uve:'Gaglioppo 100%',
+    desc:'Cirò Rosso Riserva "Duca Sanfelice" della cantina Librandi'
+  },
+  { id:'ciro-bianco-librandi', cat:'bianchi', subcat:'Selezione vini Bianchi Nazionali',
+    name:'Cirò Bianco (Greco 100%) – Librandi', price:17,
+    img:'images/ciro-bianco-librandi.png',
+    sigla:'DOC Cirò Bianco', paese:'Italia', regione:'Calabria', uve:'Greco 100%',
+    desc:'Cirò Bianco della cantina Librandi'
+  },
+  { id:'vermentino-masala', cat:'bianchi', subcat:'Selezione vini Bianchi Nazionali',
+    name:'Vermentino – Masala', price:48,
+    img:'images/vermentino-masala.png',
+    paese:'Italia', regione:'Liguria', uve:'Vermentino',
+    desc:'Vermentino della cantina Masala'
   },
 
 ];
@@ -1339,7 +1379,6 @@ function renderAll() {
   const isSearch = searchQ.trim().length > 0;
 
   if (isSearch) {
-    // Search mode: flat list
     const results = getFilteredWines();
     if (results.length === 0) {
       main.innerHTML = `<div class="no-results"><p>Nessun vino trovato</p></div>`;
@@ -1356,14 +1395,12 @@ function renderAll() {
     return;
   }
 
-  // Normal accordion mode
   let html = '';
   CATS.forEach(cat => {
     const wines = WINES.filter(w => w.cat === cat.id);
     if (wines.length === 0) return;
     const isOpen = openCats.has(cat.id);
 
-    // Group by subcat
     const groups = {};
     wines.forEach(w => {
       const g = w.subcat || '—';
@@ -1522,7 +1559,6 @@ function setLang(langCode) {
   }
 }
 
-// Sync dropdown with current translation on page load
 (function syncDropdown() {
   const m = document.cookie.match(/googtrans=\/it\/([^;]+)/);
   const sel = document.getElementById('langSelect');
