@@ -570,6 +570,12 @@ function setSubTab(name,el){document.querySelectorAll('.sub-tab-btn').forEach(b=
 function searchMenu(q){const box=document.getElementById('searchResults');if(!q||q.trim().length<2){box.style.display='none';return;}const results=[];document.querySelectorAll('.item-name').forEach(el=>{const txt=el.textContent.trim();if(txt.toLowerCase().includes(q.toLowerCase())){const pe=el.closest('.item')?.querySelector('.item-price');results.push({name:txt,price:pe?pe.textContent:''});}});if(!results.length)box.innerHTML='<div style="padding:12px 16px;color:#bca07d;font-size:13px;font-style:italic;">Nessun risultato trovato</div>';else box.innerHTML=results.map(r=>`<div style="padding:10px 16px;border-bottom:1px solid rgba(212,175,55,0.1);color:#f9f1e2;font-size:14px;display:flex;justify-content:space-between;"><span style="font-weight:600;">${r.name}</span><span style="color:#d4af37;">${r.price}</span></div>`).join('');box.style.display='block';}
 document.addEventListener('DOMContentLoaded',()=>{applyLang('it');updateCart();renderInlineGelato();});
 document.addEventListener('click',e=>{if(!e.target.closest('.translate-wrap'))closeDropdown();const panel=document.getElementById('cart-panel'),fab=document.querySelector('.cart-fab');if(panel&&fab&&!panel.contains(e.target)&&!fab.contains(e.target))panel.classList.remove('open');});
+  (function(){
+  var domain = location.hostname;
+  document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + domain;
+  document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
+  document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + domain;
+})();
 </script>
 </body>
 </html>
