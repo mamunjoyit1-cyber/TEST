@@ -1456,6 +1456,10 @@ function openModal(id) {
   }
 
   document.getElementById('modalName').textContent = w.name;
+
+  const lang = window._currentLang || 'it';
+  const d = (typeof TRANSLATIONS !== 'undefined' && TRANSLATIONS[lang]) ? TRANSLATIONS[lang] : {};
+
   document.getElementById('modalPrice').innerHTML = `€&nbsp;${w.price} <span class="modal-price-cl">${d.modal_price_cl || '· 75 cl'}</span>`;
 
   const details = [
@@ -1473,8 +1477,6 @@ function openModal(id) {
       <div class="detail-value">${v}</div>
     </div>`).join('');
 
-  const lang = window._currentLang || 'it';
-  const d = (typeof TRANSLATIONS !== 'undefined' && TRANSLATIONS[lang]) ? TRANSLATIONS[lang] : {};
   const gusto_text = (typeof getWineText !== 'undefined') ? getWineText(w, 'gusto') : w.gusto;
   const desc_text  = (typeof getWineText !== 'undefined') ? getWineText(w, 'desc')  : w.desc;
 
