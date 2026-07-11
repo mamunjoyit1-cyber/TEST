@@ -7,44 +7,24 @@
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="favicon-180.png">
-<script src="translations.js"></script>
-<script src="wine_translations.js"></script>
+<script>
+// Translation files are optional — site works in Italian without them
+window._currentLang = 'it';
+</script>
+<script src="translations.js" defer onerror="console.warn('translations.js not found')"></script>
+<script src="wine_translations.js" defer onerror="console.warn('wine_translations.js not found')"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <!-- Reset language to Italian on manual refresh only -->
 <script>
 (function(){
   if (!sessionStorage.getItem('langSwitch')) {
-    // manual refresh — clear GT cookie → Italian
-    var d = location.hostname;
-    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + d;
-    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
-    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + d;
+    window._currentLang = 'it';
   } else {
-    // language-switch reload — keep cookie, clear flag
     sessionStorage.removeItem('langSwitch');
   }
 })();
 </script>
-
-<!-- Google Translate -->
-<script type="text/javascript">
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({
-    pageLanguage: 'it',
-    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-    autoDisplay: false,
-    multilanguagePage: true
-  }, 'google_translate_element');
-}
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<style>
-/* Hide default Google bar */
-.goog-te-banner-frame,.skiptranslate{display:none!important}
-body{top:0!important}
-iframe.skiptranslate{display:none!important}
-</style>
 
 <style>
 :root{
@@ -206,23 +186,7 @@ img{display:block}
 .sort-btn:hover,.sort-btn:active{border-color:var(--gold);background:rgba(255,255,255,0.13)}
 .sort-btn.active{color:var(--gold);border-color:var(--gold);background:rgba(201,168,76,0.15)}
 
-#google_translate_element{display:flex;align-items:center}
-#google_translate_element .goog-te-combo{
-  padding:11px 12px;
-  background:rgba(255,255,255,0.08) !important;
-  border:1px solid rgba(201,168,76,0.3) !important;
-  border-radius:4px;
-  color:var(--cream) !important;
-  font-family:'Montserrat',sans-serif;
-  font-size:12px;
-  outline:none;
-  cursor:pointer;
-  min-width:130px;
-  letter-spacing:0.03em;
-}
-.goog-te-banner-frame{display:none!important}
-.skiptranslate{display:none!important}
-body{top:0!important}
+
 
 .hint-bar{
   background:var(--gold);
@@ -964,8 +928,6 @@ body{top:0!important}
   </div>
 </div>
 
-<div id="google_translate_element" style="display:none"></div>
-
 <div class="hint-bar">Tocca la categoria per espandere · Tocca il vino per i dettagli</div>
 
 <div class="main" id="mainContent"></div>
@@ -1555,43 +1517,21 @@ document.addEventListener('keydown', e => {
 // ── LANGUAGE SWITCHER ─────────────────────────────────────────
 function setLang(langCode) {
   window._currentLang = langCode;
+  // sync dropdown
+  const sel = document.getElementById('langSelect');
+  if (sel) sel.value = langCode;
+  // apply translations
   applyChipLabels(langCode);
   applyUITranslations(langCode);
-
-  if (langCode === 'it') {
-    const domain = location.hostname;
-    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + domain;
-    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
-    document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + domain;
-    sessionStorage.setItem('langSwitch', 'it');
-    location.reload();
-    return;
-  }
-
-  const val = '/it/' + langCode;
-  const domain = location.hostname;
-  document.cookie = 'googtrans=' + val + '; path=/; domain=' + domain;
-  document.cookie = 'googtrans=' + val + '; path=/';
-  document.cookie = 'googtrans=' + val + '; path=/; domain=.' + domain;
-
-  const sel = document.querySelector('.goog-te-combo');
-  if (sel) {
-    sel.value = langCode;
-    sel.dispatchEvent(new Event('change'));
-  } else {
-    sessionStorage.setItem('langSwitch', langCode);
-    location.reload();
-  }
+  // save preference
+  try { sessionStorage.setItem('userLang', langCode); } catch(e) {}
 }
 
 (function syncDropdown() {
-  const m = document.cookie.match(/googtrans=\/it\/([^;]+)/);
+  const saved = sessionStorage.getItem('userLang') || 'it';
+  window._currentLang = saved;
   const sel = document.getElementById('langSelect');
-  if (m && sel) {
-    sel.value = decodeURIComponent(m[1]);
-  } else if (sel) {
-    sel.value = 'it';
-  }
+  if (sel) sel.value = saved;
 }());
 
 // ── CHIP LABELS ───────────────────────────────────────────────
@@ -1659,8 +1599,7 @@ function applyUITranslations(langCode) {
 // ── INIT ──────────────────────────────────────────────────────
 renderAll();
 (function() {
-  const m = document.cookie.match(/googtrans=\/it\/([^;]+)/);
-  const lang = m ? decodeURIComponent(m[1]) : 'it';
+  const lang = sessionStorage.getItem('userLang') || 'it';
   window._currentLang = lang;
   applyChipLabels(lang);
   if (lang !== 'it') applyUITranslations(lang);
