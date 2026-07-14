@@ -3982,6 +3982,10 @@ const WINE_TRANSLATIONS = {
 function getWineText(wine, field) {
   const lang = window._currentLang || 'it';
   const wtr = WINE_TRANSLATIONS[wine.id];
-  if (!wtr || !wtr[field]) return wine[field] || '';
-  return wtr[field][lang] || wtr[field]['en'] || wine[field] || '';
+  if (wtr && wtr[field]) return wtr[field][lang] || wtr[field]['en'] || wine[field] || '';
+  if (typeof WINE_COLORE_VINIF !== 'undefined') {
+    const cv = WINE_COLORE_VINIF[wine.id];
+    if (cv && cv[field]) return cv[field][lang] || cv[field]['en'] || wine[field] || '';
+  }
+  return wine[field] || '';
 }
