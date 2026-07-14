@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lago Bin – Admin Dashboard</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Palatino Linotype', Palatino, serif; background: #150e0b; color: #f9f1e2; min-height: 100vh; }
+.header { background: linear-gradient(135deg, #0f0303 0%, #260707 50%, #0f0303 100%); padding: 24px 20px; text-align: center; border-bottom: 4px solid #d4af37; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.header h1 { color: #fff; font-size: 26px; letter-spacing: 3px; }
+.header .sub { color: #d4af37; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; }
+.logout-btn { background: transparent; border: 1px solid #d4af37; color: #d4af37; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 13px; }
+.logout-btn:hover { background: rgba(212,175,55,0.15); }
+
+/* LOGIN */
+#login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+.login-box { background: #221815; border: 2px solid #d4af37; border-radius: 16px; padding: 40px 32px; max-width: 360px; width: 100%; text-align: center; }
+.login-box h2 { color: #d4af37; letter-spacing: 3px; margin-bottom: 6px; font-size: 22px; }
+.login-box .sub { color: #bca07d; font-size: 13px; margin-bottom: 24px; font-style: italic; }
+.login-box input { width: 100%; padding: 12px 16px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #d4af37; background: #2a1d19; color: #f9f1e2; font-size: 14px; font-family: inherit; outline: none; }
+.login-box button { width: 100%; padding: 13px; border-radius: 24px; border: none; background: #d4af37; color: #150e0b; font-weight: bold; font-size: 14px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+.login-box button:hover { background: #f0c93a; }
+.login-error { color: #ff6b6b; font-size: 13px; margin-top: 10px; min-height: 16px; }
+
+/* DASHBOARD */
+#dashboard { display: none; padding: 20px; max-width: 900px; margin: 0 auto; }
+.tab-nav { display: flex; gap: 8px; margin-top: 16px; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 0; }
+.main-tab-btn { flex: 1; padding: 12px 8px; border: none; background: transparent; color: #bca07d; font-family: inherit; font-size: 14px; font-weight: bold; cursor: pointer; border-bottom: 3px solid transparent; }
+.main-tab-btn.active { color: #d4af37; border-bottom-color: #d4af37; }
+.empty-state { text-align: center; color: #7a6a5a; padding: 60px 20px; font-style: italic; }
+.order-card { background: #221815; border: 1px solid rgba(212,175,55,0.4); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+.order-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
+.table-label { font-size: 20px; font-weight: bold; color: #d4af37; display: flex; align-items: center; gap: 8px; }
+.table-label input { width: 60px; padding: 6px 10px; border-radius: 8px; border: 1px solid #d4af37; background: #2a1d19; color: #f9f1e2; font-size: 16px; font-family: inherit; text-align: center; }
+.table-room-row { display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; overflow-x: auto; margin-bottom: 10px; }
+.table-badge { background: #d4af37; color: #2a1d19; font-weight: 900; font-size: 20px; padding: 6px 14px; border-radius: 10px; display: flex; align-items: center; gap: 6px; white-space: nowrap; flex-shrink: 0; }
+.table-badge input { width: 50px; padding: 4px 6px; border-radius: 6px; border: none; background: #2a1d19; color: #f9f1e2; font-size: 18px; font-weight: 900; font-family: inherit; text-align: center; }
+.order-count { font-size: 12px; color: #bca07d; }
+.complete-badge { font-size: 12px; font-weight: bold; padding: 4px 10px; border-radius: 12px; display: inline-block; margin-top: 4px; }
+.complete-badge.done { background: rgba(46,125,50,0.25); color: #6fcf73; }
+.complete-badge.waiting { background: rgba(255,193,7,0.2); color: #ffc107; }
+
+.area-toggle { display: flex; gap: 8px; }
+.area-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid #d4af37; background: transparent; color: #d4af37; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: bold; }
+.area-btn.active { background: #d4af37; color: #150e0b; }
+
+.item-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(212,175,55,0.15); gap: 10px; }
+.item-row .item-info { flex: 1; }
+.item-row .item-name { font-size: 14px; font-weight: 600; }
+.item-row .item-name.drink { color: #7ec8e3; }
+.item-row .item-detail { font-size: 12px; color: #bca07d; font-style: italic; }
+.item-row .item-price { font-weight: bold; color: #d4af37; font-size: 14px; }
+.item-remove { background: none; border: none; color: #ff6b6b; font-size: 16px; cursor: pointer; padding: 4px 8px; }
+
+.add-item-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.add-item-row input { flex: 1; min-width: 100px; padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(212,175,55,0.4); background: #2a1d19; color: #f9f1e2; font-size: 13px; font-family: inherit; }
+.add-item-row select { padding: 8px; border-radius: 8px; border: 1px solid rgba(212,175,55,0.4); background: #2a1d19; color: #f9f1e2; font-size: 13px; font-family: inherit; }
+.add-item-btn { padding: 8px 14px; border-radius: 8px; border: none; background: rgba(212,175,55,0.25); color: #d4af37; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: bold; }
+
+.card-total { text-align: right; margin: 14px 0; font-size: 16px; font-weight: bold; color: #d4af37; }
+.card-actions { display: flex; gap: 10px; }
+.approve-btn { flex: 1; padding: 13px; border-radius: 22px; border: none; background: #2e7d32; color: #fff; font-weight: bold; font-size: 14px; cursor: pointer; font-family: inherit; }
+.approve-btn:hover { background: #357a38; }
+.approve-btn:disabled { background: rgba(255,255,255,0.1); color: #7a6a5a; cursor: not-allowed; }
+.cancel-btn { padding: 13px 18px; border-radius: 22px; border: 1px solid #ff6b6b; background: transparent; color: #ff6b6b; font-weight: bold; font-size: 14px; cursor: pointer; font-family: inherit; }
+.decline-btn { padding: 8px 14px; border-radius: 18px; border: 1px solid #ff6b6b; background: transparent; color: #ff6b6b; font-weight: bold; font-size: 12px; cursor: pointer; font-family: inherit; white-space: nowrap; }
+.decline-btn:hover { background: rgba(255,107,107,0.15); }
+
+.pending-time { font-size: 11px; color: #7a6a5a; margin-top: 4px; }
+
+/* MENU AVAILABILITY SECTION */
+.menu-mgmt { background: #221815; border: 1px solid rgba(212,175,55,0.4); border-radius: 16px; padding: 20px; margin-bottom: 24px; }
+.menu-mgmt h3 { color: #d4af37; font-size: 16px; margin-bottom: 4px; }
+.menu-mgmt .mgmt-sub { color: #bca07d; font-size: 12px; font-style: italic; margin-bottom: 14px; }
+.mgmt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 10px; margin-bottom: 18px; }
+.mgmt-section-title { color: #d4af37; font-size: 13px; font-weight: bold; margin: 14px 0 8px; text-transform: uppercase; letter-spacing: 1px; }
+.mgmt-row { display: flex; justify-content: space-between; align-items: center; background: #2a1d19; border-radius: 10px; padding: 10px 14px; }
+.mgmt-row .mgmt-name { font-size: 13px; }
+.mgmt-switch { width: 42px; height: 24px; border-radius: 12px; border: 1px solid #d4af37; background: rgba(255,255,255,0.05); position: relative; cursor: pointer; flex-shrink: 0; }
+.mgmt-switch.on { background: #2e7d32; border-color: #2e7d32; }
+.mgmt-switch .knob { position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #f9f1e2; transition: left 0.15s; }
+.mgmt-switch.on .knob { left: 20px; }
+
+/* PRINT AREA - hidden on screen, shown only when printing */
+#print-area { display: none; }
+@media print {
+  @page { size: 72mm auto; margin: 0; }
+  body * { visibility: hidden; }
+  #print-area, #print-area * { visibility: visible; }
+  #print-area { display: block !important; position: absolute; top: 0; left: 0; width: 72mm; padding: 4mm; font-family: 'Courier New', monospace; color: #000; }
+  .receipt-table-big { text-align: center; font-size: 22px; font-weight: bold; margin-bottom: 4px; letter-spacing: 1px; }
+  .receipt-meta-row { font-size: 13px; display: flex; justify-content: space-between; margin-bottom: 2px; }
+  .receipt-tavolo-box { border: 2px solid #000; font-size: 18px; font-weight: bold; padding: 3px 6px; margin: 6px 0; display: flex; justify-content: space-between; }
+  .receipt-divider-line { border-top: 1px solid #000; margin: 6px 0; }
+  .receipt-footer-row { font-size: 11px; border-top: 1px dashed #000; padding-top: 4px; margin-top: 10px; display: flex; justify-content: space-between; }
+  .rqty { font-weight: bold; }
+  .receipt-online-tag { text-align: center; font-size: 13px; font-weight: bold; border: 1.5px dashed #000; padding: 3px; margin-bottom: 8px; }
+  .receipt-meta { font-size: 12px; margin-bottom: 8px; }
+  .receipt-item { font-size: 13px; margin-bottom: 6px; }
+  .receipt-item .rname { font-weight: bold; }
+  .receipt-item .rdetail { font-size: 11px; }
+  .receipt-turno { font-weight: bold; font-size: 13px; margin: 8px 0 4px; border-top: 1px dashed #000; padding-top: 4px; }
+  .menu-fisso-tag { font-size: 9px; font-weight: bold; border: 1px solid #000; border-radius: 3px; padding: 1px 5px; margin-left: 4px; letter-spacing: 0.5px; white-space: nowrap; }
+  .receipt-total { border-top: 2px solid #000; margin-top: 10px; padding-top: 6px; font-size: 15px; font-weight: bold; text-align: right; }
+  .receipt-divider { border-top: 2px dashed #000; margin: 12px 0 8px; }
+  .person-summary-title { font-weight: bold; font-size: 12px; text-align: center; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .person-summary-block { font-size: 11px; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px dotted #999; }
+  .person-summary-name { font-weight: bold; font-size: 12px; margin-bottom: 2px; }
+  .person-summary-item { margin-left: 8px; }
+  .person-summary-subtotal { text-align: right; font-weight: bold; font-size: 11px; margin-top: 2px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-box">
+    <h2>✦ LAGO BIN ✦</h2>
+    <div class="sub">Admin Dashboard</div>
+    <input type="email" id="loginEmail" placeholder="Email" autocomplete="username">
+    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+    <button onclick="doLogin()">Accedi</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="header">
+    <div>
+      <h1>LAGO BIN</h1>
+      <div class="sub">Admin — Ordini in Attesa</div>
+    </div>
+    <button class="logout-btn" id="notif-btn" onclick="enableNotifications()" style="margin-right:8px;">🔔 Notifiche</button>
+    <button class="logout-btn" onclick="doLogout()">Esci</button>
+  </div>
+  <div class="tab-nav">
+    <button class="main-tab-btn active" id="maintab-orders-btn" onclick="switchMainTab('orders')">📋 Ordini</button>
+    <button class="main-tab-btn" id="maintab-menu-btn" onclick="switchMainTab('menu')">🍽️ Menu</button>
+  </div>
+  <div style="padding:20px 0;">
+    <div id="maintab-orders">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
+        <button class="add-item-btn" onclick="toggleHistorySection()" id="history-toggle-btn">📜 Storico Ordini</button>
+      </div>
+      <div id="orders-container"></div>
+
+      <div id="history-section" style="display:none;margin-top:20px;">
+        <div class="menu-mgmt">
+          <h3>📜 Storico Ordini</h3>
+          <div class="mgmt-sub">Ordini approvati, per data (oggi selezionato di default).</div>
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
+            <input type="date" id="historyDate" onchange="loadHistory()" style="padding:8px 12px;border-radius:8px;border:1px solid #d4af37;background:#2a1d19;color:#f9f1e2;font-family:inherit;">
+            <button class="add-item-btn" onclick="loadHistory()">🔄 Aggiorna</button>
+          </div>
+          <div id="history-container"><div class="empty-state">Caricamento...</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="maintab-menu" style="display:none;">
+      <div class="menu-mgmt">
+        <h3>🍽️ Gestione Disponibilità Menu</h3>
+        <div class="mgmt-sub">Disattiva un articolo per nasconderlo dal menu dei clienti (es. finito in cucina).</div>
+        <div id="menu-mgmt-container"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HIDDEN PRINT AREA -->
+<div id="print-area"></div>
+
+<!-- FIREBASE SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+// ── FIREBASE CONFIG (same project as the customer site) ──
+const firebaseConfig = {
+  apiKey: "AIzaSyAAVvNWOTCUp9PT44pRvIWVnNBOzjxYdeI",
+  authDomain: "lagobin-orders.firebaseapp.com",
+  projectId: "lagobin-orders",
+  storageBucket: "lagobin-orders.firebasestorage.app",
+  messagingSenderId: "202005520791",
+  appId: "1:202005520791:web:8211a8b59b4fcea1eee4d2"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// ── PRINTER ROUTING CONFIG ──
+// These must match the EXACT printer names installed in Windows.
+const PRINTER_ROUTES = {
+  esterno: {
+    label: 'Rist. Esterno',
+    full: { printer: 'POS-80C (Ristorante3)', title: 'Rist. Esterno' },
+    kitchen: { printer: 'POS-80C Cucina', title: 'CUCINA' },
+    bar: null // no separate bar printer for esterno currently
+  },
+  interno: {
+    label: 'Rist. Interno',
+    full: { printer: 'POS-80 RISTORANTE2', title: 'Rist. Interno' },
+    kitchen: { printer: 'POS-80C Cucina', title: 'CUCINA' },
+    bar: { printer: 'POS-80 BARINTERNO', title: 'BAR' }
+  }
+};
+
+// ── TURNO OPTIONS (must match the Italian values stored by the customer site) ──
+const TURNO_OPTIONS=['1° turno','2° turno','3° turno','4° turno'];
+
+// ── FULL MENU AVAILABILITY MANAGEMENT (all categories) ──
+const COURSE_LABELS = {antipasti:'🥗 Antipasti', primi:'🍝 Primi', secondi:'🥩 Secondi', contorni:'🥦 Contorni', dolci:'🍰 Dolci', gelato:'🍨 Gelato'};
+const ALL_MENU_ITEMS = [
+  {id:'antipasto_tipico',name:'Antipasto Tipico del Lago Bin',course:'antipasti',price:15},
+  {id:'salumiere',name:'Assortimento del Salumiere',course:'antipasti',price:15},
+  {id:'prosciutto',name:'Prosciutto di Parma',course:'antipasti',price:13,sauces:['Melone','Grana']},
+  {id:'misto_caldo',name:'Antipasto Misto Caldo e Freddo',course:'antipasti',price:25},
+  {id:'lumache',name:'Lumache in Umido',course:'antipasti',price:18},
+  {id:'brandacujan',name:'Brandacujan',course:'antipasti',price:15},
+  {id:'tartare_manzo',name:'Tartare di Manzo al Coltello',course:'antipasti',price:20},
+  {id:'tomino',name:"Tomino d'Alpeggio Caldo",course:'antipasti',price:12},
+  {id:'tartare_pesce',name:'Tartare di Pesce',course:'antipasti',price:18},
+  {id:'antipasto_mare',name:'Antipasto Misto di Mare',course:'antipasti',price:25},
+  {id:'ravioli_nonna',name:'Ravioli della Nonna',course:'primi',price:18,sauces:['Pomodoro','Burro e Salvia','Funghi','Burro e Timo']},
+  {id:'ravioli_coniglio',name:'Ravioli al Coniglio',course:'primi',price:20},
+  {id:'tagliatelle_sel',name:'Tagliatelle di Pasta Fresca',course:'primi',price:15,sauces:['Selvaggina','Funghi','Pesto Fresco']},
+  {id:'tagliatelle_mare',name:'Tagliatelle ai Frutti di Mare',course:'primi',price:18},
+  {id:'mezzelune',name:'Mezzelune di Magro',course:'primi',price:15,sauces:['Burro e Salvia','Noci']},
+  {id:'troffie',name:'Troffie',course:'primi',price:15,sauces:['Pesto Fresco','Primavera']},
+  {id:'troffie_gamberetti',name:'Troffie con Gamberetti e Zucchine',course:'primi',price:18},
+  {id:'gnocchi',name:'Gnocchi di Patate',course:'primi',price:13,sauces:['Funghi','Formaggi e Gorgonzola','Burro e Salvia']},
+  {id:'risotto',name:'Risotto ai Frutti di Mare',course:'primi',price:20},
+  {id:'duo_primi',name:'Duo di Primi',course:'primi',price:25,multiSelect:2,sauces:['Ravioli della Nonna','Ravioli al Coniglio','Tagliatelle Selvaggina','Tagliatelle Funghi','Tagliatelle Pesto','Tagliatelle Frutti di Mare','Mezzelune Burro e Salvia','Mezzelune Noci','Troffie Pesto','Troffie Primavera','Troffie Gamberetti','Gnocchi Funghi','Gnocchi Formaggi','Gnocchi Burro e Salvia','Risotto Frutti di Mare']},
+  {id:'coniglio',name:'Coniglio alla Rocchettina',course:'secondi',price:15},
+  {id:'selvaggina',name:'Selvaggina al Vino Rosso',course:'secondi',price:18},
+  {id:'agnello',name:'Costine di Agnello alla Griglia',course:'secondi',price:18},
+  {id:'grigliata',name:'Grigliata Mista di Carne',course:'secondi',price:20},
+  {id:'roastbeef',name:'Roast Beef',course:'secondi',price:18},
+  {id:'filetto',name:'Filetto di Manzo',course:'secondi',price:25,sauces:['Pepe Verde','Gorgonzola','Griglia'],cottura:true},
+  {id:'pescato',name:'Pescato o Gamberoni',course:'secondi',price:18,sauces:['Al Forno','Alla Griglia']},
+  {id:'grigliata_pesce',name:'Grigliata Mista di Pesce',course:'secondi',price:25},
+  {id:'formaggi',name:'Assortimento di Formaggi',course:'contorni',price:10},
+  {id:'verdure',name:'Grigliata di Verdure',course:'contorni',price:10},
+  {id:'insalata',name:'Insalata Mista',course:'contorni',price:10},
+  {id:'tiramisu',name:'Tiramisù',course:'dolci',price:6},
+  {id:'pannacotta',name:'Panna Cotta',course:'dolci',price:6},
+  {id:'cremecaramel',name:'Crème Caramel',course:'dolci',price:6},
+  {id:'cremacatalana',name:'Crema Catalana',course:'dolci',price:6},
+  {id:'semifreddo',name:'Semifreddo',course:'dolci',price:6},
+  {id:'crumble',name:'Crumble di Mele',course:'dolci',price:6},
+  {id:'bunet',name:'Bunet',course:'dolci',price:6},
+  {id:'macedonia',name:'Macedonia di Frutta',course:'dolci',price:6},
+  {id:'assort_dolci',name:'Assortimento Dolci',course:'dolci',price:8},
+  {id:'gelato',name:'Gelato Artigianale',course:'gelato',price:6,isGelato:true},
+  {id:'sorbetto',name:'Sorbetto',course:'gelato',price:3,isSorbetto:true}
+];
+const COTTURA_OPTIONS=['🔴 Al Sangue','🟠 Blue','🟡 Media Cottura','✅ Ben Cotto'];
+
+// ── WINE LIST (Carta dei Vini) — for availability toggling only ──
+// These ids must match the wine 'id' field in the WINES array on the wine menu page.
+const WINE_ITEMS = [
+  {id:'bollicine-lago',name:'Le Bollicine del Lago'},
+  {id:'lago-bianco',name:'Lago Bianco'},
+  {id:'lago-rose',name:'Lago Rosè'},
+  {id:'lago-rosso',name:'Lago Rosso'},
+  {id:'bolle-lago',name:'Le Bolle del Lago'},
+  {id:'prosecco-valdobbiadene',name:'Prosecco di Valdobbiadene Superiore Extra Brut'},
+  {id:'prosecco-rose',name:'Prosecco Rosé Extra Dry'},
+  {id:'franciacorta-berlucchi',name:"Franciacorta Brut '61 – Berlucchi"},
+  {id:'franciacorta-manti',name:'Franciacorta Brut – Manti'},
+  {id:'cuvee-lago-bin',name:'Cuveè Lago Bin'},
+  {id:'gardet',name:'Gardet "Tradition"'},
+  {id:'veuve-clicquot',name:'Veuve Cliquot'},
+  {id:'michel-tixier',name:'Michel Tixier'},
+  {id:'deutz',name:'Deutz'},
+  {id:'gh-mumm',name:'G H Mumm'},
+  {id:'ruinart-magnum',name:'Ruinart "Magnum"'},
+  {id:'laurent-perrier',name:'Laurent Perrier'},
+  {id:'don-perignon',name:'Don Perignon'},
+  {id:'vermentino-poggio-elmo',name:"Vermentino RLP – Poggio dell' Elmo"},
+  {id:'vermentino-terre-bianche',name:'Vermentino RLP – Terre Bianche'},
+  {id:'vermentino-foresti',name:'Vermentino RLP – Foresti'},
+  {id:'pigato-soli-foresti',name:'Pigato RLP – I Soli – Foresti'},
+  {id:'pigato-nemu',name:'Pigato RLP – Nemu'},
+  {id:'pigato-cygnus',name:'Pigato RLP Cygnus – Poggio dei Gorleri'},
+  {id:'tabaka-ka-mancine',name:'Tabaka (Tabaka e Vermentino) – Ka Mancine'},
+  {id:'flavia-foresti',name:'Flavia (Vermentino e Pigato) – Foresti'},
+  {id:'vermentino-trecoli-lombardi',name:'Vermentino "Treçoli" – Lombardi'},
+  {id:'rossese-poggi-elmo-2022',name:"Rossese di Dolceacqua – Poggi dell' Elmo"},
+  {id:'rossese-pini-2022',name:"Rossese di Dolceacqua Superiore Pini"},
+  {id:'rossese-cima-tramontina',name:'Rossese di Dolceacqua Cima Tramontina – Du Nemu'},
+  {id:'rossese-superiore-nemu-2021',name:'Rossese di Dolceacqua Superiore – Du Nemu'},
+  {id:'rossese-foresti-2022',name:'Rossese di Dolceacqua – Foresti'},
+  {id:'rossese-luvaira-foresti',name:'Rossese di Dolceacqua Luvaira – Foresti'},
+  {id:'rossese-beragna-ka-mancine',name:'Rossese di Dolceacqua Beragna – Ka Mancine'},
+  {id:'rossese-galeae-2022',name:'Rossese di Dolceacqua Galeae – Ka Mancine'},
+  {id:'rossese-ange-2024',name:'Rossese di Dolceacqua Ange – Ka Mancine'},
+  {id:'rossese-terre-bianche-2022',name:'Rossese di Dolceacqua – Terre Bianche'},
+  {id:'rossese-bricco-arcagna',name:'Rossese di Dolceacqua Bricco Arcagna – Terre Bianche'},
+  {id:'rossese-testalonga',name:'Rossese di Dolceacqua Testalonga'},
+  {id:'roccese-masala',name:'Roccese – Masala'},
+  {id:'roccese-barricato-masala',name:'Roccese Barricato – Masala'},
+  {id:'rossese-dolceacqua-generic',name:'Rossese di Dolceacqua Doc Posaù'},
+  {id:'rossese-peverelli',name:'Rossese di Dolceacqua Superiore Peverelli'},
+  {id:'roccese-du-nemu',name:'Roccese dolceacqua et rossa du nemu'},
+  {id:'roccese-bucciardino',name:'Roccese dolceacqua bucciardino ka mancine'},
+  {id:'rossese-maccario-ringenberg',name:'Rossese di dolceacqua Maccario Dringenberg'},
+  {id:'rossese-fratelli-maccario',name:'Rossese di Dolceacqua Fratelli Macario'},
+  {id:'rossese-curli',name:'Rossese Curli'},
+  {id:'rossese-rosato-du-nemu',name:'Rossese di Dolceacqua Rosato – Du Nemu'},
+  {id:'rossese-rosato-ka-mancine',name:'Rossese di Dolceacqua Rosato – Ka Mancine'},
+  {id:'rossese-rosato-poggi-elmo',name:"Rossese di Dolceacqua Rosato – Poggi dell' Elmo"},
+  {id:'rosato-postu-da-ve-lombardi',name:'Rosato "Postu da Vé" – Lombardi'},
+  {id:'rossese-crespi',name:'Rossese di Dolceacqua – Crespi'},
+  {id:'crespi-rosato',name:'Rosato – Crespi'},
+  {id:'roero-arneis-2023',name:'Roero Arneis Ero – Clavesana'},
+  {id:'falanghina-2022',name:'Falanghina Beneventano – Vinosia'},
+  {id:'greco-di-tufo-vinosia',name:'Greco di Tufo – Vinosia'},
+  {id:'gewurztraminer-2022',name:'A.A. Gewürztraminer – Muri-Gries'},
+  {id:'soave-latium-2021',name:'Soave (Garganega 100%) – Latium'},
+  {id:'sauvignon',name:'Sauvignon'},
+  {id:'andaras',name:'Vermentino di Sardegna "Andaras"'},
+  {id:'chardonnay-kreuth-terlan',name:'Chardonnay "Kreuth" – Cantina Terlan'},
+  {id:'bardolino-chiaretto',name:'Bardolino Chiaretto Classico – Negrar Domìni Veneti'},
+  {id:'pallido-capecci',name:'Pallido – Capecci'},
+  {id:'roccese-rose-masala',name:'Roccese Rosè – Masala'},
+  {id:'maixei_rose_rosse',name:'Maixei "Rosé Rosse" Vino Rosato'},
+  {id:'castel_des_maures',name:'Château Castel des Maures Rosé'},
+  {id:'barbaresco-biologico',name:'Barbaresco Biologico – Nada'},
+  {id:'barbera-pio-cesare',name:"Barbera d'Alba – Pio Cesare"},
+  {id:'barbera-clavesana',name:"Barbera d'Alba – Clavesana"},
+  {id:'barolo-palladino',name:'Barolo Serralunga – Palladino'},
+  {id:'dolcetto-palladino',name:"Dolcetto d'Alba – Palladino"},
+  {id:'nebbiolo-clavesana',name:"Nebbiolo d'Alba Nhe – Clavesana"},
+  {id:'amarone-latium',name:'Amarone della Valpolicella Campo Leòn – Latium'},
+  {id:'bellaja-bolgheri',name:"Bell'Aja Bolgheri – San Felice"},
+  {id:'brunello-campogiovanni',name:'Brunello di Montalcino Campogiovanni – San Felice'},
+  {id:'chianti-classico-grigio',name:'Chianti Classico Riserva il Grigio – San Felice'},
+  {id:'chianti-classico-berardenga',name:'Chianti Classico – Berardenga'},
+  {id:'le-volte-ornellaia',name:"Le Volte dell'Ornellaia"},
+  {id:'rosso-montalcino-casanova',name:'Rosso di Montalcino – Casanova di Neri'},
+  {id:'rosso-montalcino-scopone',name:'Rosso di Montalcino – Scopone'},
+  {id:'nobile-montepulciano-barbicaia',name:'Nobile di Montepulciano – Barbicaia'},
+  {id:'i-tirreni-bolgheri-hydra',name:'I Tirreni Bolgheri – Hydra'},
+  {id:'rosso-montepulciano-sabazio',name:'Rosso di Montepulciano Sabazio – La Braccesca'},
+  {id:'ruit-hora-bolgheri',name:'Ruit Hora Bolgheri – Caccia al Piano'},
+  {id:'promis-ca-marcanda-gaja-2023',name:"Promis – Ca' Marcanda Gaja"},
+  {id:'grottaia-caccia-al-piano-2023',name:'Grottaia – Caccia al Piano 1868'},
+  {id:'tignanello-antinori',name:'Tignanello – Marchesi Antinori'},
+  {id:'montepulciano-abruzzo',name:"Montepulciano d'Abruzzo – Masciarelli"},
+  {id:'aglianico-neromora',name:'Aglianico Neromora – Vinosia'},
+  {id:'mora-aglianico-campania',name:'"Mora" – Aglianico Campania IGP'},
+  {id:'primitivo-salento',name:'Primitivo Salento Orus – Vinosia'},
+  {id:'nero-davola',name:"Nero d'Avola – Musita"},
+  {id:'brunello-poggio-oro',name:'Brunello di Montalcino "Poggio all\' Oro"'},
+  {id:'5050-avignonesi',name:'50 & 50 – Capannelle Avignonesi'},
+  {id:'lambrusco-ambasciatori',name:'Ambasciatori Lambrusco Emilia'},
+  {id:'barbera-asti-la-villa',name:'Barbera d\'Asti "La Villa"'},
+  {id:'dogliani-terra',name:'Dogliani "Terra"'},
+  {id:'vermentino-masala',name:'Vermentino – Masala'}
+];
+
+// ── GELATO FLAVOR LIST (for availability toggling only — separate from dish list) ──
+const GELATO_FLAVOR_ITEMS = [
+  {id:'gusto_vaniglia',name:'Vaniglia 🍦'},
+  {id:'gusto_fiordilatte',name:'Fiore di Latte 🥛'},
+  {id:'gusto_fragola',name:'Fragola 🍓'},
+  {id:'gusto_nocciola',name:'Nocciola 🌰'},
+  {id:'gusto_limone',name:'Limone 🍋'},
+  {id:'gusto_mango',name:'Mango 🥭'},
+  {id:'gusto_cioccolata',name:'Cioccolata 🍫'},
+  {id:'gusto_caffe',name:'Caffè ☕'}
+];
+let menuAvailabilityUnsub=null;
+let availabilityState={};
+function startMenuAvailabilityListener(){
+  if(menuAvailabilityUnsub)menuAvailabilityUnsub();
+  menuAvailabilityUnsub=db.collection('menuAvailability').onSnapshot(snap=>{
+    const state={};
+    snap.forEach(doc=>{state[doc.id]=doc.data().available!==false;});
+    availabilityState=state;
+    renderMenuMgmt(state);
+  }, err=>console.error('Menu availability listener error:',err));
+}
+function renderMenuMgmt(state){
+  const container=document.getElementById('menu-mgmt-container');
+  if(!container)return;
+  const byCourse={};
+  ALL_MENU_ITEMS.forEach(it=>{ if(!byCourse[it.course])byCourse[it.course]=[]; byCourse[it.course].push(it); });
+  let html='';
+  Object.keys(COURSE_LABELS).forEach(course=>{
+    if(!byCourse[course])return;
+    html+='<div class="mgmt-section-title">'+COURSE_LABELS[course]+'</div>';
+    html+='<div class="mgmt-grid">';
+    byCourse[course].forEach(it=>{
+      const isOn = state[it.id]!==false;
+      html+='<div class="mgmt-row"><span class="mgmt-name">'+it.name+'</span>'
+        + '<div class="mgmt-switch '+(isOn?'on':'')+'" onclick="toggleAvailability(\''+it.id+'\','+(!isOn)+')"><div class="knob"></div></div></div>';
+    });
+    html+='</div>';
+  });
+  // Gelato flavors — separate section so a single flavor can be marked "finito" without hiding the whole Gelato Artigianale item
+  html+='<div class="mgmt-section-title">🍦 Gusti Gelato</div>';
+  html+='<div class="mgmt-grid">';
+  GELATO_FLAVOR_ITEMS.forEach(it=>{
+    const isOn = state[it.id]!==false;
+    html+='<div class="mgmt-row"><span class="mgmt-name">'+it.name+'</span>'
+      + '<div class="mgmt-switch '+(isOn?'on':'')+'" onclick="toggleAvailability(\''+it.id+'\','+(!isOn)+')"><div class="knob"></div></div></div>';
+  });
+  html+='</div>';
+  // Wines (Carta dei Vini) — separate section, ids match the wine menu page's WINES array
+  html+='<div class="mgmt-section-title">🍷 Vini (Carta dei Vini)</div>';
+  html+='<div class="mgmt-grid">';
+  WINE_ITEMS.forEach(it=>{
+    const isOn = state[it.id]!==false;
+    html+='<div class="mgmt-row"><span class="mgmt-name">'+it.name+'</span>'
+      + '<div class="mgmt-switch '+(isOn?'on':'')+'" onclick="toggleAvailability(\''+it.id+'\','+(!isOn)+')"><div class="knob"></div></div></div>';
+  });
+  html+='</div>';
+  container.innerHTML=html;
+}
+function toggleAvailability(itemId,newValue){
+  db.collection('menuAvailability').doc(itemId).set({available:newValue},{merge:true}).catch(err=>console.error(err));
+}
+
+// ── MAIN TAB SWITCHING (Ordini is the default/home tab) ──
+function switchMainTab(tab){
+  ['orders','menu'].forEach(t=>{
+    document.getElementById('maintab-'+t).style.display = (t===tab)?'block':'none';
+    document.getElementById('maintab-'+t+'-btn').classList.toggle('active', t===tab);
+  });
+}
+function toggleHistorySection(){
+  const sec=document.getElementById('history-section');
+  const isOpen=sec.style.display!=='none';
+  sec.style.display=isOpen?'none':'block';
+  if(!isOpen)loadHistory();
+}
+
+// ── USER DISPLAY NAMES & ADMIN ROLE ──
+// Add/edit entries here if you create more staff logins later.
+const STAFF_NAMES = {
+  'admin@lagobin.it': 'Admin',
+  'cameriere1@lagobin.it': 'Cameriere 1',
+  'cameriere2@lagobin.it': 'Cameriere 2'
+};
+const ADMIN_EMAILS = ['admin@lagobin.it'];
+let currentUserEmail='';
+let isAdminUser=false;
+function staffName(email){ return STAFF_NAMES[email] || (email?email.split('@')[0]:''); }
+
+// ── AUTH ──
+function doLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const pass=document.getElementById('loginPassword').value;
+  const errEl=document.getElementById('loginError');
+  errEl.textContent='';
+  if(!email||!pass){errEl.textContent='Inserisci email e password.';return;}
+  auth.signInWithEmailAndPassword(email,pass).catch(err=>{
+    errEl.textContent='❌ Accesso fallito: email o password errata.';
+    console.error(err);
+  });
+}
+function doLogout(){ auth.signOut(); }
+
+auth.onAuthStateChanged(user=>{
+  if(user){
+    currentUserEmail=user.email||'';
+    isAdminUser=ADMIN_EMAILS.includes(currentUserEmail);
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+    startListening();
+    loadHistory();
+    if('Notification' in window && Notification.permission==='default'){
+      Notification.requestPermission().then(updateNotifBtn);
+    }
+  }else{
+    currentUserEmail='';
+    isAdminUser=false;
+    document.getElementById('login-screen').style.display='flex';
+    document.getElementById('dashboard').style.display='none';
+  }
+});
+
+// ── NOTIFICATIONS (foreground browser/PWA notification + sound on new order) ──
+let notifPermissionAsked=false;
+function updateNotifBtn(){
+  const btn=document.getElementById('notif-btn');
+  if(!btn||!('Notification' in window))return;
+  if(Notification.permission==='granted')btn.textContent='🔔 Notifiche Attive';
+  else if(Notification.permission==='denied')btn.textContent='🔕 Notifiche Bloccate';
+  else btn.textContent='🔔 Attiva Notifiche';
+}
+function enableNotifications(){
+  if(!('Notification' in window)){alert('Il browser non supporta le notifiche.');return;}
+  if(Notification.permission==='denied'){
+    alert('Le notifiche sono bloccate. Riattivale dalle impostazioni del browser/sito.');
+    return;
+  }
+  Notification.requestPermission().then(()=>{updateNotifBtn();});
+}
+function playBeep(){
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.type='sine'; o.frequency.value=880; g.gain.value=0.2;
+    o.connect(g); g.connect(ctx.destination);
+    o.start();
+    setTimeout(()=>{o.frequency.value=660;},150);
+    setTimeout(()=>{o.stop(); ctx.close();},400);
+  }catch(e){console.error('Beep error:',e);}
+}
+function notifyNewOrder(tbl){
+  playBeep();
+  if('Notification' in window && Notification.permission==='granted'){
+    try{
+      const n=new Notification('🔔 Nuovo Ordine — Tavolo '+tbl,{body:'Nuovo ordine ricevuto. Apri il pannello per approvarlo.'});
+      n.onclick=()=>{window.focus();n.close();};
+    }catch(e){console.error('Notification error:',e);}
+  }
+}
+
+// ── LIVE ORDERS LISTENER ──
+let ordersUnsub=null;
+let selectedArea={}; // { tableNumber: 'esterno'|'interno' }
+let tableAnyDocId={}; // { tableNumber: any pending doc id for that table, used by the product picker }
+let manualEntryOpen={}; // { tableNumber: true/false }
+let ordersFirstLoad=true;
+
+function startListening(){
+  if(ordersUnsub)ordersUnsub();
+  ordersFirstLoad=true;
+  updateNotifBtn();
+  ordersUnsub=db.collection('orders').where('status','==','pending')
+    .onSnapshot(snap=>{
+      if(!ordersFirstLoad){
+        snap.docChanges().forEach(change=>{
+          if(change.type==='added'){
+            notifyNewOrder(change.doc.data().table||'?');
+          }
+        });
+      }
+      ordersFirstLoad=false;
+      renderOrders(snap);
+    }, err=>console.error('Listener error:',err));
+  startMenuAvailabilityListener();
+}
+
+function renderOrders(snapshot){
+  const container=document.getElementById('orders-container');
+  if(snapshot.empty){
+    container.innerHTML='<div class="empty-state">Nessun ordine in attesa al momento.</div>';
+    return;
+  }
+  // Group documents by table number
+  const groups={};
+  snapshot.forEach(doc=>{
+    const data=doc.data();
+    const tbl=data.table||'—';
+    if(!groups[tbl])groups[tbl]=[];
+    groups[tbl].push({id:doc.id,...data});
+  });
+
+  let html='';
+  Object.keys(groups).sort((a,b)=>Number(a)-Number(b)).forEach(tbl=>{
+    const docs=groups[tbl];
+    const allItems=[];
+    docs.forEach(d=>(d.items||[]).forEach((it,idx)=>allItems.push({...it,__docId:d.id,__idx:idx})));
+    const total=allItems.reduce((s,it)=>s+(Number(it.price)||0),0);
+    const area=selectedArea[tbl]||'';
+    const earliestTime=docs.map(d=>d.createdAt?.toDate?.()||new Date()).sort((a,b)=>a-b)[0];
+    const timeStr=earliestTime?earliestTime.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}):'';
+    const roomVal=docs.find(d=>d.room)?.room||'';
+    const peopleVal=docs.find(d=>d.people)?.people||1;
+    tableAnyDocId[tbl]=docs[0].id;
+
+    html+='<div class="order-card" data-table="'+tbl+'">';
+    html+='  <div class="order-card-header" style="flex-direction:column;align-items:stretch;">';
+    html+='    <div class="table-room-row">';
+    html+='      <div class="table-badge">🪑 <input type="text" value="'+tbl+'" onchange="changeTableNumber(\''+tbl+'\',this.value)"></div>';
+    html+='      <div class="table-label" style="font-size:14px;">🔑 Camera <input type="text" value="'+roomVal+'" placeholder="n." style="width:70px;" onchange="changeRoomNumber(\''+tbl+'\',this.value)"></div>';
+    html+='      <div class="table-label" style="font-size:14px;">👥 Persone <input type="number" min="1" value="'+peopleVal+'" style="width:60px;" onchange="changePeopleCount(\''+tbl+'\',this.value)"></div>';
+    html+='    </div>';
+    html+='    <div class="area-toggle">';
+    html+='      <button class="area-btn '+(area==='esterno'?'active':'')+'" onclick="setArea(\''+tbl+'\',\'esterno\')">🌤️ Esterno</button>';
+    html+='      <button class="area-btn '+(area==='interno'?'active':'')+'" onclick="setArea(\''+tbl+'\',\'interno\')">🏠 Interno</button>';
+    html+='    </div>';
+    html+='  </div>';
+    html+='  <div class="order-count">'+docs.length+' ordine/i · ricevuto alle '+timeStr+'</div>';
+    const isComplete=docs.some(d=>d.lastOrder===true);
+    html+='  <div class="complete-badge '+(isComplete?'done':'waiting')+'">'+(isComplete?'✅ Tutti hanno ordinato':'⏳ Altri potrebbero ordinare ancora')+'</div>';
+    html+='  <div class="pending-time"></div>';
+    html+='  <div style="margin-top:12px;">';
+    allItems.forEach(it=>{
+      html+='<div class="item-row">';
+      html+='  <div class="item-info">';
+      html+='    <div class="item-name '+(it.category==='drink'?'drink':'')+'">'+(it.category==='drink'?'🍷':'🍽️')+' '+(it.person?'<span style="color:#d4af37;">👤 '+it.person+'</span> — ':'')+it.name+(it.turno?' <span style="font-weight:normal;color:#bca07d;">('+it.turno+')</span>':'')+'</div>';
+      if(it.detail)html+='    <div class="item-detail">'+it.detail+'</div>';
+      html+='  </div>';
+      html+='  <div class="item-price">€'+it.price+'</div>';
+      html+='  <button class="item-remove" onclick="removeItem(\''+it.__docId+'\','+it.__idx+')">✕</button>';
+      html+='</div>';
+    });
+    html+='  </div>';
+    html+='  <div class="add-item-row" style="flex-direction:column;align-items:stretch;">';
+    html+='    <div style="display:flex;gap:8px;flex-wrap:wrap;">';
+    html+='      <select id="newcat-'+tbl+'" onchange="renderProductPicker(\''+tbl+'\')"><option value="">📂 Categoria...</option><option value="antipasti">🥗 Antipasti</option><option value="primi">🍝 Primi</option><option value="secondi">🥩 Secondi</option><option value="contorni">🥦 Contorni</option><option value="dolci">🍰 Dolci</option><option value="gelato">🍨 Gelato</option></select>';
+    html+='      <input type="text" id="newsearch-'+tbl+'" placeholder="🔎 Cerca piatto..." oninput="renderProductPicker(\''+tbl+'\')" style="flex:1;">';
+    html+='      <select id="newturno-'+tbl+'" title="Turno per il piatto selezionato"><option value="">📋 Turno...</option>'+TURNO_OPTIONS.map(t=>'<option value="'+t+'">'+t+'</option>').join('')+'</select>';
+    html+='      <select id="newperson-'+tbl+'" title="Persona a cui assegnare il piatto"><option value="">👤 Persona...</option>'+Array.from({length:peopleVal},(_,i)=>'Persona '+(i+1)).map(p=>'<option value="'+p+'">'+p+'</option>').join('')+'</select>';
+    html+='    </div>';
+    html+='    <div id="productlist-'+tbl+'" style="display:flex;flex-direction:column;gap:4px;max-height:160px;overflow-y:auto;margin-top:6px;"></div>';
+    html+='    <div id="customize-'+tbl+'"></div>';
+    html+='    <div style="margin-top:8px;">';
+    html+='      <a href="javascript:void(0)" onclick="toggleManualEntry(\''+tbl+'\')" style="color:#bca07d;font-size:12px;text-decoration:underline;">+ Voce manuale (es. vino specifico)</a>';
+    html+='      <div id="manualentry-'+tbl+'" style="display:none;gap:8px;flex-wrap:wrap;margin-top:8px;flex-direction:row;">';
+    html+='        <input type="text" id="newname-'+tbl+'" placeholder="Nome piatto/bevanda" style="flex:1;min-width:100px;">';
+    html+='        <input type="number" id="newprice-'+tbl+'" placeholder="€" style="width:70px;">';
+    html+='        <select id="newmancat-'+tbl+'"><option value="food">🍽️ Cibo</option><option value="drink">🍷 Bevanda</option></select>';
+    html+='        <select id="newmanturno-'+tbl+'"><option value="">📋 Turno...</option>'+TURNO_OPTIONS.map(t=>'<option value="'+t+'">'+t+'</option>').join('')+'</select>';
+    html+='        <select id="newmanperson-'+tbl+'"><option value="">👤 Persona...</option>'+Array.from({length:peopleVal},(_,i)=>'Persona '+(i+1)).map(p=>'<option value="'+p+'">'+p+'</option>').join('')+'</select>';
+    html+='        <button class="add-item-btn" onclick="addManualItem(\''+tbl+'\',tableAnyDocId[\''+tbl+'\'])">+ Aggiungi</button>';
+    html+='      </div>';
+    html+='    </div>';
+    html+='  </div>';
+    html+='  <div class="card-total">Totale: €'+total+'</div>';
+    html+='  <div class="card-actions">';
+    html+='    <button class="approve-btn" '+(area?'':'disabled')+' onclick="approveTable(\''+tbl+'\')">✅ Approva e Stampa</button>';
+    html+='    <button class="decline-btn" onclick="cancelTable(\''+tbl+'\')">❌ Rifiuta</button>';
+    html+='  </div>';
+    html+='</div>';
+  });
+  container.innerHTML=html;
+  // Restore any in-progress customize panel that existed before this re-render
+  Object.keys(pendingCustomize).forEach(t=>renderCustomizePanel(t));
+}
+
+function setArea(tbl,area){
+  selectedArea[tbl]=area;
+  db.collection('orders').where('status','==','pending').get().then(renderOrders);
+}
+
+// ── EDIT: change table number for a specific order doc ──
+function changeTableNumber(oldTbl,newTbl){
+  if(!newTbl||newTbl===oldTbl)return;
+  db.collection('orders').where('table','==',oldTbl).where('status','==','pending').get().then(snap=>{
+    const batch=db.batch();
+    snap.forEach(doc=>batch.update(doc.ref,{table:newTbl}));
+    return batch.commit();
+  }).catch(err=>console.error(err));
+}
+
+// ── EDIT: set/change the room number for a table's pending orders ──
+function changeRoomNumber(tbl,newRoom){
+  db.collection('orders').where('table','==',tbl).where('status','==','pending').get().then(snap=>{
+    const batch=db.batch();
+    snap.forEach(doc=>batch.update(doc.ref,{room:newRoom}));
+    return batch.commit();
+  }).catch(err=>console.error(err));
+}
+
+// ── EDIT: set/change the number of people at a table's pending orders ──
+function changePeopleCount(tbl,newCount){
+  const n=Math.max(1,parseInt(newCount,10)||1);
+  db.collection('orders').where('table','==',tbl).where('status','==','pending').get().then(snap=>{
+    const batch=db.batch();
+    snap.forEach(doc=>batch.update(doc.ref,{people:n}));
+    return batch.commit();
+  }).catch(err=>console.error(err));
+}
+
+// ── EDIT: remove an item from an order doc ──
+function removeItem(docId,itemIdx){
+  const ref=db.collection('orders').doc(docId);
+  ref.get().then(doc=>{
+    const data=doc.data();
+    const items=(data.items||[]).slice();
+    items.splice(itemIdx,1);
+    const total=items.reduce((s,it)=>s+(Number(it.price)||0),0);
+    return ref.update({items,total});
+  }).catch(err=>console.error(err));
+}
+
+// ── SMART ADD: category/search product picker (auto price from master menu list) ──
+function toggleManualEntry(tbl){
+  manualEntryOpen[tbl]=!manualEntryOpen[tbl];
+  const el=document.getElementById('manualentry-'+tbl);
+  if(el)el.style.display=manualEntryOpen[tbl]?'flex':'none';
+}
+function renderProductPicker(tbl){
+  const listEl=document.getElementById('productlist-'+tbl);
+  if(!listEl)return;
+  const cat=document.getElementById('newcat-'+tbl)?.value||'';
+  const q=(document.getElementById('newsearch-'+tbl)?.value||'').trim().toLowerCase();
+  let results=ALL_MENU_ITEMS;
+  if(cat)results=results.filter(it=>it.course===cat);
+  if(q)results=results.filter(it=>it.name.toLowerCase().includes(q));
+  if(!cat&&!q){listEl.innerHTML='';return;}
+  if(!results.length){listEl.innerHTML='<div style="color:#7a6a5a;font-size:12px;font-style:italic;padding:6px;">Nessun risultato</div>';return;}
+  listEl.innerHTML=results.slice(0,30).map(it=>
+    '<div style="display:flex;justify-content:space-between;align-items:center;background:#2a1d19;border-radius:8px;padding:8px 12px;cursor:pointer;" onclick="selectMasterItem(\''+tbl+'\',\''+it.id+'\')">'
+    +'<span style="font-size:13px;">'+it.name+'</span><span style="color:#d4af37;font-weight:bold;font-size:13px;">€'+it.price+'</span></div>'
+  ).join('');
+}
+
+// ── CUSTOMIZE STEP (sauce / cottura / duo di primi / gelato-sorbetto flavors) ──
+let pendingCustomize={}; // { [tbl]: {itemId, sauce, multiSauces:[], cottura, flavors:[], sorbettoType} }
+
+function availableGelatoChipsForAdmin(){
+  return GELATO_FLAVOR_ITEMS.filter(f=>availabilityState[f.id]!==false);
+}
+
+function selectMasterItem(tbl,itemId){
+  const item=ALL_MENU_ITEMS.find(it=>it.id===itemId);
+  if(!item)return;
+  const needsCustomize = (item.sauces&&item.sauces.length) || item.cottura || item.isGelato || item.isSorbetto;
+  if(!needsCustomize){
+    finalizeMasterItemAdd(tbl,item,'');
+    return;
+  }
+  pendingCustomize[tbl]={itemId,sauce:'',multiSauces:[],cottura:'',flavors:[],sorbettoType:''};
+  renderCustomizePanel(tbl);
+}
+function renderCustomizePanel(tbl){
+  const c=pendingCustomize[tbl];
+  const el=document.getElementById('customize-'+tbl);
+  if(!el)return;
+  if(!c){el.innerHTML='';return;}
+  const item=ALL_MENU_ITEMS.find(it=>it.id===c.itemId);
+  if(!item){el.innerHTML='';return;}
+  let html='<div style="background:#1a110e;border:1px solid rgba(212,175,55,0.5);border-radius:10px;padding:10px 12px;margin-top:8px;">';
+  html+='<div style="font-size:13px;font-weight:bold;color:#d4af37;margin-bottom:8px;">'+item.name+'</div>';
+
+  if(item.isGelato){
+    html+='<div style="font-size:11px;color:#bca07d;margin-bottom:6px;">🍦 Scegli fino a 3 gusti ('+c.flavors.length+'/3):</div><div style="display:flex;gap:6px;flex-wrap:wrap;">';
+    availableGelatoChipsForAdmin().forEach(f=>{
+      const sel=c.flavors.includes(f.name);
+      const maxed=!sel&&c.flavors.length>=3;
+      html+='<button type="button" '+(maxed?'disabled':'')+' onclick="toggleCustomizeFlavor(\''+tbl+'\',\''+f.name.replace(/'/g,"\\'")+'\')" style="border:1.5px solid rgba(212,175,55,0.4);border-radius:20px;background:'+(sel?'#b31e1e':'#2a1d19')+';color:'+(sel?'#fff':'#bca07d')+';font-size:12px;font-weight:bold;padding:5px 12px;cursor:pointer;">'+f.name+'</button>';
+    });
+    html+='</div>';
+  }else if(item.isSorbetto){
+    html+='<div style="font-size:11px;color:#bca07d;margin-bottom:6px;">🍹 Con o senza alcol?</div><div style="display:flex;gap:6px;flex-wrap:wrap;">';
+    [['Alcolico','🍷 Con Alcol'],['Senza Alcol','🧃 Senza Alcol']].forEach(([val,label])=>{
+      const sel=c.sorbettoType===val;
+      html+='<button type="button" onclick="setCustomizeSorbetto(\''+tbl+'\',\''+val+'\')" style="border:1.5px solid rgba(212,175,55,0.4);border-radius:20px;background:'+(sel?'#b31e1e':'#2a1d19')+';color:'+(sel?'#fff':'#bca07d')+';font-size:12px;font-weight:bold;padding:5px 12px;cursor:pointer;">'+label+'</button>';
+    });
+    html+='</div>';
+  }else if(item.multiSelect){
+    html+='<div style="font-size:11px;color:#bca07d;margin-bottom:6px;">🍽️ Scegli '+item.multiSelect+' piatti ('+c.multiSauces.length+'/'+item.multiSelect+'):</div><div style="display:flex;gap:6px;flex-wrap:wrap;">';
+    item.sauces.forEach(s=>{
+      const sel=c.multiSauces.includes(s);
+      const maxed=!sel&&c.multiSauces.length>=item.multiSelect;
+      html+='<button type="button" '+(maxed?'disabled':'')+' onclick="toggleCustomizeMultiSauce(\''+tbl+'\',\''+s.replace(/'/g,"\\'")+'\')" style="border:1.5px solid rgba(212,175,55,0.4);border-radius:20px;background:'+(sel?'#b31e1e':'#2a1d19')+';color:'+(sel?'#fff':'#bca07d')+';font-size:12px;font-weight:bold;padding:5px 12px;cursor:pointer;">'+s+'</button>';
+    });
+    html+='</div>';
+  }else if(item.sauces&&item.sauces.length){
+    html+='<div style="font-size:11px;color:#bca07d;margin-bottom:6px;">🍽️ Condimento:</div><div style="display:flex;gap:6px;flex-wrap:wrap;">';
+    item.sauces.forEach(s=>{
+      const sel=c.sauce===s;
+      html+='<button type="button" onclick="setCustomizeSauce(\''+tbl+'\',\''+s.replace(/'/g,"\\'")+'\')" style="border:1.5px solid rgba(212,175,55,0.4);border-radius:20px;background:'+(sel?'#b31e1e':'#2a1d19')+';color:'+(sel?'#fff':'#bca07d')+';font-size:12px;font-weight:bold;padding:5px 12px;cursor:pointer;">'+s+'</button>';
+    });
+    html+='</div>';
+  }
+
+  if(item.cottura){
+    html+='<div style="font-size:11px;color:#bca07d;margin:8px 0 6px;">🔥 Cottura:</div><div style="display:flex;gap:6px;flex-wrap:wrap;">';
+    COTTURA_OPTIONS.forEach(co=>{
+      const sel=c.cottura===co;
+      html+='<button type="button" onclick="setCustomizeCottura(\''+tbl+'\',\''+co+'\')" style="border:1.5px solid rgba(212,175,55,0.4);border-radius:20px;background:'+(sel?'#b31e1e':'#2a1d19')+';color:'+(sel?'#fff':'#bca07d')+';font-size:12px;font-weight:bold;padding:5px 12px;cursor:pointer;">'+co+'</button>';
+    });
+    html+='</div>';
+  }
+
+  const ok=isCustomizeComplete(item,c);
+  html+='<div style="margin-top:10px;display:flex;gap:8px;">';
+  html+='<button class="add-item-btn" '+(ok?'':'disabled')+' onclick="finalizeMasterItemAdd(\''+tbl+'\')">✓ Aggiungi</button>';
+  html+='<a href="javascript:void(0)" onclick="cancelCustomize(\''+tbl+'\')" style="color:#bca07d;font-size:12px;text-decoration:underline;align-self:center;">Annulla</a>';
+  html+='</div></div>';
+  el.innerHTML=html;
+}
+function isCustomizeComplete(item,c){
+  if(item.isGelato)return c.flavors.length>0;
+  if(item.isSorbetto)return !!c.sorbettoType;
+  if(item.multiSelect)return c.multiSauces.length>=item.multiSelect;
+  if(item.sauces&&item.sauces.length&&!c.sauce)return false;
+  if(item.cottura&&!c.cottura)return false;
+  return true;
+}
+function toggleCustomizeFlavor(tbl,f){
+  const c=pendingCustomize[tbl]; if(!c)return;
+  if(c.flavors.includes(f))c.flavors=c.flavors.filter(x=>x!==f);
+  else if(c.flavors.length<3)c.flavors.push(f);
+  renderCustomizePanel(tbl);
+}
+function setCustomizeSorbetto(tbl,v){ const c=pendingCustomize[tbl]; if(c){c.sorbettoType=v; renderCustomizePanel(tbl);} }
+function toggleCustomizeMultiSauce(tbl,s){
+  const c=pendingCustomize[tbl]; if(!c)return;
+  const item=ALL_MENU_ITEMS.find(it=>it.id===c.itemId);
+  if(c.multiSauces.includes(s))c.multiSauces=c.multiSauces.filter(x=>x!==s);
+  else if(c.multiSauces.length<item.multiSelect)c.multiSauces.push(s);
+  renderCustomizePanel(tbl);
+}
+function setCustomizeSauce(tbl,s){ const c=pendingCustomize[tbl]; if(c){c.sauce=s; renderCustomizePanel(tbl);} }
+function setCustomizeCottura(tbl,co){ const c=pendingCustomize[tbl]; if(c){c.cottura=co; renderCustomizePanel(tbl);} }
+function cancelCustomize(tbl){ delete pendingCustomize[tbl]; renderCustomizePanel(tbl); }
+
+function finalizeMasterItemAdd(tbl,directItem,directDetail){
+  let item,detail;
+  if(directItem){
+    item=directItem; detail=directDetail||'';
+  }else{
+    const c=pendingCustomize[tbl];
+    if(!c)return;
+    item=ALL_MENU_ITEMS.find(it=>it.id===c.itemId);
+    if(!item||!isCustomizeComplete(item,c))return;
+    const d=[];
+    if(item.isGelato)d.push(c.flavors.join(', '));
+    else if(item.isSorbetto)d.push(c.sorbettoType==='Alcolico'?'🍷 Con Alcol':'🧃 Senza Alcol');
+    else if(item.multiSelect&&c.multiSauces.length)d.push(c.multiSauces.join(' + '));
+    else if(c.sauce)d.push(c.sauce);
+    if(item.cottura&&c.cottura)d.push('Cottura: '+c.cottura);
+    detail=d.join(' · ');
+  }
+  const anyDocId=tableAnyDocId[tbl];
+  if(!anyDocId)return;
+  const turnoEl=document.getElementById('newturno-'+tbl);
+  const turno=turnoEl?turnoEl.value:'';
+  const personEl=document.getElementById('newperson-'+tbl);
+  const person=personEl?personEl.value:'';
+  const ref=db.collection('orders').doc(anyDocId);
+  ref.get().then(doc=>{
+    const data=doc.data();
+    const items=(data.items||[]).slice();
+    items.push({name:item.name,price:item.price,category:'food',course:item.course,detail,person,turno});
+    const total=items.reduce((s,it)=>s+(Number(it.price)||0),0);
+    return ref.update({items,total});
+  }).then(()=>{
+    const searchEl=document.getElementById('newsearch-'+tbl);
+    if(searchEl)searchEl.value='';
+    delete pendingCustomize[tbl];
+    renderProductPicker(tbl);
+    renderCustomizePanel(tbl);
+  }).catch(err=>console.error(err));
+}
+
+// ── EDIT: manually add an item (e.g. something ordered verbally) ──
+function addManualItem(tbl,anyDocId){
+  const nameEl=document.getElementById('newname-'+tbl);
+  const priceEl=document.getElementById('newprice-'+tbl);
+  const catEl=document.getElementById('newmancat-'+tbl);
+  const turnoEl=document.getElementById('newmanturno-'+tbl);
+  const personEl=document.getElementById('newmanperson-'+tbl);
+  const name=nameEl.value.trim();
+  const price=Number(priceEl.value)||0;
+  const category=catEl.value;
+  const turno=turnoEl?turnoEl.value:'';
+  const person=personEl?personEl.value:'';
+  if(!name)return;
+  const ref=db.collection('orders').doc(anyDocId);
+  ref.get().then(doc=>{
+    const data=doc.data();
+    const items=(data.items||[]).slice();
+    items.push({name,price,category,course:category==='drink'?'bevande':'manuale',detail:'',person,turno});
+    const total=items.reduce((s,it)=>s+(Number(it.price)||0),0);
+    return ref.update({items,total});
+  }).then(()=>{nameEl.value='';priceEl.value='';}).catch(err=>console.error(err));
+}
+
+// ── CANCEL an entire table's pending orders ──
+function cancelTable(tbl){
+  if(!confirm('Annullare tutti gli ordini del Tavolo '+tbl+'?'))return;
+  db.collection('orders').where('table','==',tbl).where('status','==','pending').get().then(snap=>{
+    const batch=db.batch();
+    snap.forEach(doc=>batch.update(doc.ref,{status:'cancelled'}));
+    return batch.commit();
+  }).catch(err=>console.error(err));
+}
+
+// ── PRINT RECEIPT BUILDING ──
+// NOTA: il riepilogo per persona è stato rimosso su richiesta — la ricevuta ora
+// mostra solo la parte superiore (tavolo, articoli per turno, totale).
+function buildReceiptHTML(job,tbl,items,showPrice,room,operatorName,billingItems){
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('it-IT')+' '+now.toLocaleTimeString('it-IT');
+  let html='<div class="receipt-table-big">TAVOLO '+tbl+'</div>';
+  html+='<div class="receipt-title">'+job.title+'</div>';
+  html+='<div class="receipt-meta">'+(room?'Camera: <b>'+room+'</b><br>':'')+dateStr+(operatorName?'<br>Cameriere: '+operatorName:'')+'</div>';
+  // group by turno for readability — applies to EVERY job (full/kitchen/bar), so packages
+  // show their component dishes under the correct turno just like à la carte items.
+  const byTurno={};
+  items.forEach(it=>{
+    const key=it.turno||'—';
+    if(!byTurno[key])byTurno[key]=[];
+    byTurno[key].push(it);
+  });
+  // Sort turno groups in the correct serving order (1°, 2°, 3°, 4°...), not the order
+  // items happened to arrive in — items without a turno are shown last.
+  const sortedTurni=Object.keys(byTurno).sort((a,b)=>{
+    if(a==='—')return 1;
+    if(b==='—')return -1;
+    return parseInt(a,10)-parseInt(b,10);
+  });
+  sortedTurni.forEach(turno=>{
+    if(turno!=='—')html+='<div class="receipt-turno">'+turno+'</div>';
+    byTurno[turno].forEach(it=>{
+      const isMenuFisso = it.name==='Menù del Lago Bin';
+      const isMenuComponent = it.course==='menu_component';
+      const tag = isMenuFisso ? ' <span class="menu-fisso-tag">MENU FISSO</span>' : (isMenuComponent ? ' <span class="menu-fisso-tag">MENU</span>' : '');
+      html+='<div class="receipt-item"><span class="rname">'+(it.person?it.person+' — ':'')+it.name+tag+'</span>';
+      html+='<br>';
+      if(it.detail && it.name!=='Menù del Lago Bin')html+='<span class="rdetail">'+it.detail+'</span>';
+      html+='</div>';
+    });
+  });
+  if(showPrice){
+    const billing=billingItems||items;
+    const total=billing.reduce((s,it)=>s+(Number(it.price)||0),0);
+    html+='<div class="receipt-total">TOTALE: €'+total+'</div>';
+    html+='<div class="receipt-online-tag">🌐 ORDINE ONLINE — Da inserire nel gestionale</div>';
+  }
+  return html;
+}
+
+function doPrint(){
+  return new Promise(resolve=>{
+    function handler(){window.removeEventListener('afterprint',handler);resolve();}
+    window.addEventListener('afterprint',handler);
+    window.print();
+  });
+}
+
+async function printJobs(jobs,tbl,room,operatorName){
+  for(const job of jobs){
+    if(!job.items.length)continue;
+    document.getElementById('print-area').innerHTML=buildReceiptHTML(job,tbl,job.items,job.showPrice,room,operatorName,job.billingItems);
+    alert('🖨️ Nella finestra di stampa, seleziona la stampante:\n\n"'+job.printer+'"\n\nPremi OK per continuare, poi clicca Stampa.');
+    await doPrint();
+  }
+}
+
+// ── APPROVE: build print jobs per routing rules and mark orders approved ──
+// Expands any package with a dishBreakdown into its individual dishes (tagged "MENU"),
+// so every job's turno-grouped display shows real dishes, not just the package label.
+function expandForDisplay(rawItems){
+  const out=[];
+  rawItems.forEach(it=>{
+    if(it.course==='menu' && it.dishBreakdown && it.dishBreakdown.length){
+      it.dishBreakdown.forEach(d=>{
+        out.push({name:d.name,turno:d.turno,detail:'',category:it.category,course:'menu_component',person:it.person});
+      });
+    }else{
+      out.push(it);
+    }
+  });
+  return out;
+}
+
+// ── Build the printer job list for a set of items, given an area ──
+// NOTA: Cucina e Bar sono temporaneamente DISATTIVATI su richiesta — viene stampata
+// solo la copia completa (Rist. Esterno / Rist. Interno). Per riattivarli, decommenta
+// le righe indicate qui sotto.
+function buildJobsForArea(area,allItems){
+  const route=PRINTER_ROUTES[area]||PRINTER_ROUTES.esterno;
+  const expandedAll=expandForDisplay(allItems);
+  const jobs=[
+    {printer:route.full.printer, title:route.full.title, items:expandedAll, billingItems:allItems, showPrice:true}
+  ];
+  // ── Per riattivare la stampa in Cucina/Bar, decommenta questo blocco: ──
+  // const expandedFood=expandedAll.filter(it=>it.category!=='drink');
+  // const expandedDrink=expandedAll.filter(it=>it.category==='drink');
+  // jobs.push({printer:route.kitchen.printer, title:route.kitchen.title, items:expandedFood, showPrice:false});
+  // if(route.bar){
+  //   jobs.push({printer:route.bar.printer, title:route.bar.title, items:expandedDrink, showPrice:false});
+  // }
+  return jobs;
+}
+
+async function approveTable(tbl){
+  const area=selectedArea[tbl];
+  if(!area){alert('Seleziona prima Esterno o Interno.');return;}
+
+  const snap=await db.collection('orders').where('table','==',tbl).where('status','==','pending').get();
+  const allItems=[];
+  const docIds=[];
+  let room='';
+  snap.forEach(doc=>{
+    docIds.push(doc.id);
+    if(!room&&doc.data().room)room=doc.data().room;
+    (doc.data().items||[]).forEach(it=>allItems.push(it));
+  });
+  if(!allItems.length)return;
+
+  const jobs=buildJobsForArea(area,allItems);
+
+  const operatorName=staffName(currentUserEmail);
+  await printJobs(jobs,tbl,room,operatorName);
+
+  // Mark all this table's orders as approved (with who approved them + area, for history + reprint + receipt)
+  const batch=db.batch();
+  docIds.forEach(id=>batch.update(db.collection('orders').doc(id),{
+    status:'approved',
+    approvedAt:firebase.firestore.FieldValue.serverTimestamp(),
+    approvedByEmail:currentUserEmail,
+    approvedByName:operatorName,
+    area:area
+  }));
+  await batch.commit();
+  delete selectedArea[tbl];
+  loadHistory();
+}
+
+// ── ORDER HISTORY (by date, auto-defaults to today) ──
+function todayStr(){
+  const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function dateStrOf(jsDate){
+  return jsDate.getFullYear()+'-'+String(jsDate.getMonth()+1).padStart(2,'0')+'-'+String(jsDate.getDate()).padStart(2,'0');
+}
+// Set the date input to today the first time the dashboard loads
+if(document.getElementById('historyDate') && !document.getElementById('historyDate').value){
+  document.getElementById('historyDate').value=todayStr();
+}
+async function loadHistory(){
+  const dateInput=document.getElementById('historyDate');
+  if(dateInput && !dateInput.value)dateInput.value=todayStr();
+  const wantedDate=dateInput?dateInput.value:todayStr();
+  const container=document.getElementById('history-container');
+  if(!container)return;
+  container.innerHTML='<div class="empty-state">Caricamento...</div>';
+  try{
+    // Only an equality filter here (no orderBy) so this never needs a Firestore composite index.
+    const snap=await db.collection('orders').where('status','==','approved').get();
+    const matches=[];
+    snap.forEach(doc=>{
+      const data=doc.data();
+      const approvedAt=data.approvedAt?.toDate?.();
+      if(approvedAt && dateStrOf(approvedAt)===wantedDate)matches.push({id:doc.id,...data,__time:approvedAt});
+    });
+    matches.sort((a,b)=>b.__time-a.__time);
+    renderHistory(matches);
+  }catch(err){
+    console.error('History load error:',err);
+    container.innerHTML='<div class="empty-state">Errore nel caricamento dello storico.</div>';
+  }
+}
+function renderHistory(orders){
+  const container=document.getElementById('history-container');
+  if(!container)return;
+  if(!orders.length){
+    container.innerHTML='<div class="empty-state">Nessun ordine approvato in questa data.</div>';
+    return;
+  }
+  let html='';
+  orders.forEach(o=>{
+    const total=(o.items||[]).reduce((s,it)=>s+(Number(it.price)||0),0);
+    const timeStr=o.__time.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+    html+='<div class="order-card">';
+    html+='  <div class="order-card-header">';
+    html+='    <div class="table-room-row" style="margin-bottom:0;"><div class="table-badge" style="font-size:16px;padding:5px 12px;">🪑 '+(o.table||'—')+'</div>'+(o.room?'<div class="table-label" style="font-size:13px;">🔑 Camera '+o.room+'</div>':'')+'</div>';
+    html+='    <div class="order-count">'+timeStr+(o.approvedByName?' · '+o.approvedByName:'')+'</div>';
+    html+='  </div>';
+    (o.items||[]).forEach(it=>{
+      html+='<div class="item-row"><div class="item-info"><div class="item-name">'+it.name+'</div></div><div class="item-price">€'+it.price+'</div></div>';
+    });
+    html+='  <div class="card-total">Totale: €'+total+'</div>';
+    html+='  <div class="card-actions"><button class="decline-btn" style="border-color:#d4af37;color:#d4af37;" onclick="reprintOrder(\''+o.id+'\')">🖨️ Ristampa</button>'
+      +'<button class="cancel-btn" onclick="deleteHistoryOrder(\''+o.id+'\')">🗑️ Elimina</button>'
+      +'</div>';
+    html+='</div>';
+  });
+  container.innerHTML=html;
+}
+async function reprintOrder(docId){
+  try{
+    const doc=await db.collection('orders').doc(docId).get();
+    if(!doc.exists){alert('Ordine non trovato.');return;}
+    const data=doc.data();
+    const items=data.items||[];
+    if(!items.length){alert('Nessun articolo da ristampare.');return;}
+    const area=data.area||'esterno';
+    const jobs=buildJobsForArea(area,items);
+    const operatorName=data.approvedByName||staffName(currentUserEmail);
+    await printJobs(jobs,data.table||'—',data.room||'',operatorName);
+  }catch(err){
+    console.error('Reprint error:',err);
+    alert('Errore durante la ristampa.');
+  }
+}
+function deleteHistoryOrder(docId){
+  if(!confirm('Eliminare definitivamente questo ordine dallo storico?'))return;
+  db.collection('orders').doc(docId).delete().then(loadHistory).catch(err=>console.error(err));
+}
+</script>
+</body>
+</html>
