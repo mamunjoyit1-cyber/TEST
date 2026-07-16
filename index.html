@@ -1339,7 +1339,9 @@ function updateDishBar() {
     clearBtn.classList.add('visible');
   } else {
     btn.classList.remove('active');
-    label.textContent = 'Abbina al tuo piatto';
+    const lang = window._currentLang || 'it';
+    const d = (typeof TRANSLATIONS !== 'undefined' && TRANSLATIONS[lang]) ? TRANSLATIONS[lang] : {};
+    label.textContent = d.dish_btn || 'Abbina al tuo piatto';
     clearBtn.classList.remove('visible');
   }
 }
