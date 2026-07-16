@@ -81,6 +81,11 @@ body { font-family: 'Palatino Linotype', Palatino, serif; background: #150e0b; c
 .mgmt-switch.on { background: #2e7d32; border-color: #2e7d32; }
 .mgmt-switch .knob { position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #f9f1e2; transition: left 0.15s; }
 .mgmt-switch.on .knob { left: 20px; }
+.mgmt-subtab-btn { padding: 9px 18px; border-radius: 20px; border: 1px solid #d4af37; background: transparent; color: #d4af37; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: bold; }
+.mgmt-subtab-btn.active { background: #d4af37; color: #150e0b; }
+.mgmt-search-input { width: 100%; padding: 10px 14px; margin-bottom: 16px; border-radius: 10px; border: 1px solid rgba(212,175,55,0.5); background: #2a1d19; color: #f9f1e2; font-size: 13px; font-family: inherit; outline: none; }
+.mgmt-search-input::placeholder { color: #7a6a5a; }
+.mgmt-no-results { text-align: center; color: #7a6a5a; padding: 30px 10px; font-style: italic; font-size: 13px; }
 
 /* PRINT AREA - hidden on screen, shown only when printing */
 #print-area { display: none; }
@@ -164,6 +169,12 @@ body { font-family: 'Palatino Linotype', Palatino, serif; background: #150e0b; c
       <div class="menu-mgmt">
         <h3>🍽️ Gestione Disponibilità Menu</h3>
         <div class="mgmt-sub">Disattiva un articolo per nasconderlo dal menu dei clienti (es. finito in cucina).</div>
+        <div class="mgmt-subtab-row" style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+          <button class="mgmt-subtab-btn active" id="mgmtsubtab-piatti-btn" onclick="switchMgmtSubTab('piatti')">🍽️ Piatti</button>
+          <button class="mgmt-subtab-btn" id="mgmtsubtab-gelato-btn" onclick="switchMgmtSubTab('gelato')">🍨 Gelato</button>
+          <button class="mgmt-subtab-btn" id="mgmtsubtab-vino-btn" onclick="switchMgmtSubTab('vino')">🍷 Vino</button>
+        </div>
+        <input type="text" id="mgmtSearchInput" class="mgmt-search-input" placeholder="🔎 Cerca articolo per nome..." oninput="filterMgmtSearch(this.value)">
         <div id="menu-mgmt-container"></div>
       </div>
     </div>
@@ -385,42 +396,80 @@ function startMenuAvailabilityListener(){
     renderMenuMgmt(state);
   }, err=>console.error('Menu availability listener error:',err));
 }
+let activeMgmtSubTab='piatti';
+let mgmtSearchQuery='';
+
+function switchMgmtSubTab(tab){
+  activeMgmtSubTab=tab;
+  ['piatti','gelato','vino'].forEach(t=>{
+    const btn=document.getElementById('mgmtsubtab-'+t+'-btn');
+    if(btn)btn.classList.toggle('active', t===tab);
+  });
+  renderMenuMgmt(availabilityState);
+}
+function filterMgmtSearch(v){
+  mgmtSearchQuery=(v||'').trim().toLowerCase();
+  renderMenuMgmt(availabilityState);
+}
+
+function mgmtRow(it,state){
+  const isOn = state[it.id]!==false;
+  return '<div class="mgmt-row"><span class="mgmt-name">'+it.name+'</span>'
+    + '<div class="mgmt-switch '+(isOn?'on':'')+'" onclick="toggleAvailability(\''+it.id+'\','+(!isOn)+')"><div class="knob"></div></div></div>';
+}
+
 function renderMenuMgmt(state){
   const container=document.getElementById('menu-mgmt-container');
   if(!container)return;
-  const byCourse={};
-  ALL_MENU_ITEMS.forEach(it=>{ if(!byCourse[it.course])byCourse[it.course]=[]; byCourse[it.course].push(it); });
+  const q=mgmtSearchQuery;
   let html='';
-  Object.keys(COURSE_LABELS).forEach(course=>{
-    if(!byCourse[course])return;
-    html+='<div class="mgmt-section-title">'+COURSE_LABELS[course]+'</div>';
-    html+='<div class="mgmt-grid">';
-    byCourse[course].forEach(it=>{
-      const isOn = state[it.id]!==false;
-      html+='<div class="mgmt-row"><span class="mgmt-name">'+it.name+'</span>'
-        + '<div class="mgmt-switch '+(isOn?'on':'')+'" onclick="toggleAvailability(\''+it.id+'\','+(!isOn)+')"><div class="knob"></div></div></div>';
+  let anyResults=false;
+
+  if(activeMgmtSubTab==='piatti'){
+    // Antipasti, Primi, Secondi, Contorni, Dolci
+    const byCourse={};
+    ALL_MENU_ITEMS.filter(it=>it.course!=='gelato').forEach(it=>{
+      if(q && !it.name.toLowerCase().includes(q))return;
+      if(!byCourse[it.course])byCourse[it.course]=[];
+      byCourse[it.course].push(it);
     });
-    html+='</div>';
-  });
-  // Gelato flavors — separate section so a single flavor can be marked "finito" without hiding the whole Gelato Artigianale item
-  html+='<div class="mgmt-section-title">🍦 Gusti Gelato</div>';
-  html+='<div class="mgmt-grid">';
-  GELATO_FLAVOR_ITEMS.forEach(it=>{
-    const isOn = state[it.id]!==false;
-    html+='<div class="mgmt-row"><span class="mgmt-name">'+it.name+'</span>'
-      + '<div class="mgmt-switch '+(isOn?'on':'')+'" onclick="toggleAvailability(\''+it.id+'\','+(!isOn)+')"><div class="knob"></div></div></div>';
-  });
-  html+='</div>';
-  // Wines (Carta dei Vini) — separate section, ids match the wine menu page's WINES array
-  html+='<div class="mgmt-section-title">🍷 Vini (Carta dei Vini)</div>';
-  html+='<div class="mgmt-grid">';
-  WINE_ITEMS.forEach(it=>{
-    const isOn = state[it.id]!==false;
-    html+='<div class="mgmt-row"><span class="mgmt-name">'+it.name+'</span>'
-      + '<div class="mgmt-switch '+(isOn?'on':'')+'" onclick="toggleAvailability(\''+it.id+'\','+(!isOn)+')"><div class="knob"></div></div></div>';
-  });
-  html+='</div>';
-  container.innerHTML=html;
+    Object.keys(COURSE_LABELS).forEach(course=>{
+      if(!byCourse[course]||!byCourse[course].length)return;
+      anyResults=true;
+      html+='<div class="mgmt-section-title">'+COURSE_LABELS[course]+'</div>';
+      html+='<div class="mgmt-grid">';
+      byCourse[course].forEach(it=>{ html+=mgmtRow(it,state); });
+      html+='</div>';
+    });
+  }else if(activeMgmtSubTab==='gelato'){
+    // Gelato Artigianale / Sorbetto dishes
+    const gelatoDishes=ALL_MENU_ITEMS.filter(it=>it.course==='gelato' && (!q||it.name.toLowerCase().includes(q)));
+    if(gelatoDishes.length){
+      anyResults=true;
+      html+='<div class="mgmt-section-title">🍨 Gelato</div><div class="mgmt-grid">';
+      gelatoDishes.forEach(it=>{ html+=mgmtRow(it,state); });
+      html+='</div>';
+    }
+    // Gelato flavors — separate section so a single flavor can be marked "finito" without hiding the whole Gelato Artigianale item
+    const flavors=GELATO_FLAVOR_ITEMS.filter(it=>!q||it.name.toLowerCase().includes(q));
+    if(flavors.length){
+      anyResults=true;
+      html+='<div class="mgmt-section-title">🍦 Gusti Gelato</div><div class="mgmt-grid">';
+      flavors.forEach(it=>{ html+=mgmtRow(it,state); });
+      html+='</div>';
+    }
+  }else if(activeMgmtSubTab==='vino'){
+    // Wines (Carta dei Vini) — ids match the wine menu page's WINES array
+    const wines=WINE_ITEMS.filter(it=>!q||it.name.toLowerCase().includes(q));
+    if(wines.length){
+      anyResults=true;
+      html+='<div class="mgmt-section-title">🍷 Vini (Carta dei Vini)</div><div class="mgmt-grid">';
+      wines.forEach(it=>{ html+=mgmtRow(it,state); });
+      html+='</div>';
+    }
+  }
+
+  container.innerHTML = anyResults ? html : '<div class="mgmt-no-results">Nessun articolo trovato.</div>';
 }
 function toggleAvailability(itemId,newValue){
   db.collection('menuAvailability').doc(itemId).set({available:newValue},{merge:true}).catch(err=>console.error(err));
