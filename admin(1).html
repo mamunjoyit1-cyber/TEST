@@ -86,6 +86,8 @@ body { font-family: 'Palatino Linotype', Palatino, serif; background: #150e0b; c
 .mgmt-search-input { width: 100%; padding: 10px 14px; margin-bottom: 16px; border-radius: 10px; border: 1px solid rgba(212,175,55,0.5); background: #2a1d19; color: #f9f1e2; font-size: 13px; font-family: inherit; outline: none; }
 .mgmt-search-input::placeholder { color: #7a6a5a; }
 .mgmt-no-results { text-align: center; color: #7a6a5a; padding: 30px 10px; font-style: italic; font-size: 13px; }
+.mgmt-disabled-toggle { flex-shrink: 0; padding: 10px 16px; border-radius: 10px; border: 1px solid #ff6b6b; background: transparent; color: #ff6b6b; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: bold; white-space: nowrap; }
+.mgmt-disabled-toggle.active { background: #ff6b6b; color: #150e0b; }
 
 /* PRINT AREA - hidden on screen, shown only when printing */
 #print-area { display: none; }
@@ -174,7 +176,10 @@ body { font-family: 'Palatino Linotype', Palatino, serif; background: #150e0b; c
           <button class="mgmt-subtab-btn" id="mgmtsubtab-gelato-btn" onclick="switchMgmtSubTab('gelato')">🍨 Gelato</button>
           <button class="mgmt-subtab-btn" id="mgmtsubtab-vino-btn" onclick="switchMgmtSubTab('vino')">🍷 Vino</button>
         </div>
-        <input type="text" id="mgmtSearchInput" class="mgmt-search-input" placeholder="🔎 Cerca articolo per nome..." oninput="filterMgmtSearch(this.value)">
+        <div class="mgmt-search-row" style="display:flex;gap:8px;margin-bottom:16px;align-items:center;">
+          <input type="text" id="mgmtSearchInput" class="mgmt-search-input" style="margin-bottom:0;flex:1;" placeholder="🔎 Cerca articolo per nome..." oninput="filterMgmtSearch(this.value)">
+          <button class="mgmt-disabled-toggle" id="mgmtDisabledToggleBtn" onclick="toggleShowOnlyDisabled()">🔴 Solo Disattivi</button>
+        </div>
         <div id="menu-mgmt-container"></div>
       </div>
     </div>
@@ -398,6 +403,7 @@ function startMenuAvailabilityListener(){
 }
 let activeMgmtSubTab='piatti';
 let mgmtSearchQuery='';
+let showOnlyDisabled=false;
 
 function switchMgmtSubTab(tab){
   activeMgmtSubTab=tab;
@@ -411,11 +417,22 @@ function filterMgmtSearch(v){
   mgmtSearchQuery=(v||'').trim().toLowerCase();
   renderMenuMgmt(availabilityState);
 }
+function toggleShowOnlyDisabled(){
+  showOnlyDisabled=!showOnlyDisabled;
+  const btn=document.getElementById('mgmtDisabledToggleBtn');
+  if(btn)btn.classList.toggle('active', showOnlyDisabled);
+  renderMenuMgmt(availabilityState);
+}
 
 function mgmtRow(it,state){
   const isOn = state[it.id]!==false;
   return '<div class="mgmt-row"><span class="mgmt-name">'+it.name+'</span>'
     + '<div class="mgmt-switch '+(isOn?'on':'')+'" onclick="toggleAvailability(\''+it.id+'\','+(!isOn)+')"><div class="knob"></div></div></div>';
+}
+function passesMgmtFilters(it,state,q){
+  if(q && !it.name.toLowerCase().includes(q))return false;
+  if(showOnlyDisabled && state[it.id]!==false)return false;
+  return true;
 }
 
 function renderMenuMgmt(state){
@@ -429,7 +446,7 @@ function renderMenuMgmt(state){
     // Antipasti, Primi, Secondi, Contorni, Dolci
     const byCourse={};
     ALL_MENU_ITEMS.filter(it=>it.course!=='gelato').forEach(it=>{
-      if(q && !it.name.toLowerCase().includes(q))return;
+      if(!passesMgmtFilters(it,state,q))return;
       if(!byCourse[it.course])byCourse[it.course]=[];
       byCourse[it.course].push(it);
     });
@@ -443,7 +460,7 @@ function renderMenuMgmt(state){
     });
   }else if(activeMgmtSubTab==='gelato'){
     // Gelato Artigianale / Sorbetto dishes
-    const gelatoDishes=ALL_MENU_ITEMS.filter(it=>it.course==='gelato' && (!q||it.name.toLowerCase().includes(q)));
+    const gelatoDishes=ALL_MENU_ITEMS.filter(it=>it.course==='gelato' && passesMgmtFilters(it,state,q));
     if(gelatoDishes.length){
       anyResults=true;
       html+='<div class="mgmt-section-title">🍨 Gelato</div><div class="mgmt-grid">';
@@ -451,7 +468,7 @@ function renderMenuMgmt(state){
       html+='</div>';
     }
     // Gelato flavors — separate section so a single flavor can be marked "finito" without hiding the whole Gelato Artigianale item
-    const flavors=GELATO_FLAVOR_ITEMS.filter(it=>!q||it.name.toLowerCase().includes(q));
+    const flavors=GELATO_FLAVOR_ITEMS.filter(it=>passesMgmtFilters(it,state,q));
     if(flavors.length){
       anyResults=true;
       html+='<div class="mgmt-section-title">🍦 Gusti Gelato</div><div class="mgmt-grid">';
@@ -460,7 +477,7 @@ function renderMenuMgmt(state){
     }
   }else if(activeMgmtSubTab==='vino'){
     // Wines (Carta dei Vini) — ids match the wine menu page's WINES array
-    const wines=WINE_ITEMS.filter(it=>!q||it.name.toLowerCase().includes(q));
+    const wines=WINE_ITEMS.filter(it=>passesMgmtFilters(it,state,q));
     if(wines.length){
       anyResults=true;
       html+='<div class="mgmt-section-title">🍷 Vini (Carta dei Vini)</div><div class="mgmt-grid">';
