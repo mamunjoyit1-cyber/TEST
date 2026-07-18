@@ -13,7 +13,12 @@ window._currentLang = 'it';
 </script>
 <script src="translations.js" defer onerror="console.warn('translations.js not found')"></script>
 <script src="wine_translations.js" defer onerror="console.warn('wine_translations.js not found')"></script>
+<script src="wine_translations_colore_vinif.js" defer onerror="console.warn('wine_translations_colore_vinif.js not found')"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- FIREBASE SDK (same project as index.html / admin.html) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <!-- Reset language to Italian on manual refresh only -->
 <script>
@@ -373,15 +378,15 @@ img{display:block}
   display:flex;flex-direction:column;gap:6px;
 }
 .dish-btn{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:4px;
-  width:100%;
-  background:var(--cream3);
-  border:1px solid var(--line-cream);
+  display:flex;align-items:center;
+  gap:10px;
+  padding:11px 14px;
   border-radius:8px;
-  padding:9px 12px;
+  border:1px solid var(--line-cream);
+  background:var(--cream3);
+  color:var(--text-dark);
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px;font-weight:600;
   cursor:pointer;
   text-align:left;
   transition:all 0.15s;
@@ -395,41 +400,6 @@ img{display:block}
   background:var(--burg);
   color:var(--gold2);
   border-color:var(--burg);
-}
-.dish-btn-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  width:100%;
-  gap:8px;
-}
-.dish-btn-name{
-  font-family:'Cormorant Garamond',serif;
-  font-size:15px;font-weight:600;
-  color:var(--text-dark);
-  line-height:1.3;
-  flex:1;
-}
-.dish-btn.active .dish-btn-name{ color:var(--gold2); }
-.dish-btn-sub{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  background:var(--cream2);
-  border-left:3px solid var(--burg);
-  border-radius:0 4px 4px 0;
-  padding:3px 8px;
-  font-family:'Cormorant Garamond',serif;
-  font-size:12px;
-  font-style:italic;
-  color:var(--burg);
-  width:100%;
-  box-sizing:border-box;
-}
-.dish-btn.active .dish-btn-sub{
-  background:rgba(0,0,0,0.15);
-  border-left-color:var(--gold);
-  color:var(--gold3);
 }
 .dish-btn-wines{
   font-family:'Montserrat',sans-serif;
@@ -608,6 +578,98 @@ img{display:block}
   display:flex;align-items:center;
   gap:6px;flex-shrink:0;
 }
+
+/* ── WINE CART: qty controls + FAB + panel ── */
+.wine-qty-row{
+  display:flex;align-items:center;gap:6px;
+  flex-shrink:0;
+}
+.wine-qty-btn{
+  width:24px;height:24px;
+  border-radius:50%;
+  border:1.5px solid var(--gold);
+  background:var(--cream3);
+  color:var(--burg);
+  font-size:15px;font-weight:bold;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-family:inherit;line-height:1;
+  -webkit-tap-highlight-color:transparent;
+}
+.wine-qty-btn:hover{background:var(--gold);color:var(--white)}
+.wine-qty-display{
+  font-size:13px;font-weight:700;color:var(--burg);
+  min-width:16px;text-align:center;
+}
+.wine-cart-fab{
+  position:fixed;bottom:20px;right:16px;
+  background:var(--burg);
+  border:2px solid var(--gold);
+  color:var(--gold2);
+  padding:12px 18px;
+  border-radius:30px;
+  cursor:pointer;
+  font-size:14px;font-weight:700;
+  font-family:'Montserrat',sans-serif;
+  box-shadow:0 4px 16px rgba(0,0,0,0.4);
+  z-index:600;
+  display:flex;align-items:center;gap:8px;
+}
+.wine-cart-badge{
+  background:var(--gold);color:var(--burg);
+  border-radius:50%;width:22px;height:22px;
+  font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+}
+.wine-cart-panel{
+  display:none;
+  position:fixed;bottom:80px;right:16px;
+  width:min(320px,88vw);
+  background:var(--white);
+  border:2px solid var(--gold);
+  border-radius:14px;
+  padding:16px;
+  z-index:600;
+  box-shadow:0 8px 30px rgba(0,0,0,0.4);
+  max-height:70vh;overflow-y:auto;
+}
+.wine-cart-panel.open{display:block}
+.wine-cart-title{
+  color:var(--burg);font-size:13px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:10px;padding-bottom:8px;
+  border-bottom:1px solid var(--line-cream);
+}
+.wine-cart-row{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:13px;padding:6px 0;
+  border-bottom:1px dotted var(--line-cream);
+  gap:8px;
+}
+.wine-cart-row:last-child{border-bottom:none}
+.wine-cart-row-name{font-weight:600;color:var(--text-dark);flex:1;min-width:0}
+.wine-cart-remove{
+  background:none;border:1px solid #b31e1e;color:#b31e1e;
+  border-radius:50%;width:20px;height:20px;font-size:12px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-family:inherit;flex-shrink:0;
+}
+.wine-cart-empty{color:var(--text-lite);font-size:12px;font-style:italic;text-align:center;padding:8px 0}
+.wine-cart-total{
+  margin-top:10px;border-top:1px solid var(--line-cream);padding-top:8px;
+  display:flex;justify-content:space-between;font-weight:700;color:var(--burg);font-size:15px;
+}
+.wine-table-select{
+  width:100%;padding:9px 12px;border-radius:10px;
+  border:1px solid var(--gold);background:var(--cream3);color:var(--text-dark);
+  font-size:13px;font-family:inherit;outline:none;margin-bottom:10px;
+}
+.wine-send-btn{
+  width:100%;padding:11px;border-radius:22px;border:none;
+  background:var(--gold);color:var(--white);
+  font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:8px;
+}
+.wine-send-btn:disabled{background:#d8cbb0;color:#a3927a;cursor:not-allowed}
 .wine-row-price{
   font-family:'Cormorant Garamond',serif;
   font-size:16px;
@@ -1014,6 +1076,20 @@ img{display:block}
   <img id="lightboxImg" src="" alt="">
 </div>
 
+<!-- WINE CART FAB + PANEL -->
+<div class="wine-cart-fab" onclick="toggleWineCart()">
+  🛒 Ordine <span class="wine-cart-badge" id="wineCartBadge">0</span>
+</div>
+<div class="wine-cart-panel" id="wineCartPanel" onclick="event.stopPropagation()">
+  <div class="wine-cart-title">📋 Il Tuo Ordine di Vini</div>
+  <select class="wine-table-select" id="wineTableSelect">
+    <option value="">-- Seleziona Tavolo --</option>
+  </select>
+  <div id="wineCartContent"><div class="wine-cart-empty">Nessun vino ancora selezionato</div></div>
+  <div class="wine-cart-total" id="wineCartTotal" style="display:none;"><span>Totale stimato</span><span id="wineCartTotalAmount">€0</span></div>
+  <button class="wine-send-btn" id="wineSendBtn" disabled onclick="sendWineOrder()">📤 Invia Ordine</button>
+</div>
+
 <script>
 // ── WINE DATA ──────────────────────────────────────────────────
 const WINES = [
@@ -1081,7 +1157,7 @@ const WINES = [
   { id:"chardonnay-kreuth-terlan", cat:"bianchi", subcat:"Selezione vini Bianchi Nazionali", name:"Chardonnay \"Kreuth\" – Cantina Terlan", price:37, img:"images/chardonnay-kreuth-terlan.png", paese:"Italia", regione:"Alto Adige", gradazione:"14%", uve:"100% Chardonnay", colore:"Giallo paglierino scintillante e accattivante", gusto:"Accattivante, con una struttura flessibile e compatta; sentori speziati, minerali e succosi che conferiscono un forte carattere del terroir", desc:"Profumo di frutta esotica come maracuja e carambola, agrumi, con una nota di pietra focaia dai tratti aromatici e minerali", vinif:"Vendemmia e selezione manuale delle uve. Fermentazione lenta a temperatura controllata in botti di rovere grandi, affinamento di 10 mesi sui lieviti, metà in acciaio e metà in legno", pairing:["pesce","formaggi","pasta"] },
   { id:"bardolino-chiaretto", cat:"rosati", subcat:"Selezione vini rosati nazionali", name:"Bardolino Chiaretto Classico – Negrar Domìni Veneti", price:16, img:"images/bardolino-chiaretto-classico-domini-veneti-2021.png", sigla:"DOC Bardolino", paese:"Italia", regione:"Veneto", gradazione:"12,5%", uve:"Corvina, Rondinella E Molinara", colore:"Rosato splendente", gusto:"Pieno ed equilibrato, fresco, ricorda fragoline di bosco e lamponi", desc:"Al naso il profumo è delicato di frutti rossi, rosa tea e violetta. Un vino che si abbina molto bene a pesce alla griglia, carni bianche, salumi freschi e formaggi molli", pairing:["pesce","aperitivo","carne","antipasto"] },
   { id:"pallido-capecci", cat:"rosati", subcat:"Selezione vini rosati nazionali", name:"Pallido – Capecci", price:27, img:"images/pallido-capecci.png", paese:"Italia", regione:"Marche", gradazione:"12%", uve:"Montepulciano", pairing:["pesce","aperitivo","carne","antipasto"] },
-  { id:"roccese-rose-masala", cat:"rosati", subcat:"Selezione vini rosati nazionali", name:"Roccese Rosè – Masala", price:39, img:"images/roccese-rose-masala.png", paese:"Italia", regione:"Liguria", uve:"Rossese E Altri Vitigni Autoctoni", desc:"Rosato ligure della cantina Masala, dal territorio roccioso di Dolceacqua", available:false, pairing:["pesce","aperitivo","carne"] },
+  { id:"roccese-rose-masala", cat:"rosati", subcat:"Selezione vini rosati nazionali", name:"Roccese Rosè – Masala", price:39, img:"images/roccese-rose-masala.png", paese:"Italia", regione:"Liguria", uve:"Rossese E Altri Vitigni Autoctoni", desc:"Rosato ligure della cantina Masala, dal territorio roccioso di Dolceacqua", pairing:["pesce","aperitivo","carne"] },
   { id:"maixei_rose_rosse", cat:"rosati", subcat:"Selezione vini rosati nazionali", name:"Maixei \"Rosé Rosse\" Vino Rosato", price:24, img:"images/maixei-rose.png", paese:"Italia", regione:"Liguria", gradazione:"12.5%", uve:"Uve locali a bacca rossa", colore:"Rosa cerasuolo brillante", gusto:"Fresco, fruttato, con note di fragolina e melograno", desc:"Rosato ligure dal profilo aromatico elegante, con sentori di frutta rossa e fiori.", vinif:"Vinificazione in acciaio a temperatura controllata per preservare freschezza e aromi.", pairing:["pesce","aperitivo","carne","antipasto"] },
   { id:"castel_des_maures", cat:"rosati", subcat:"Selezione vini rosati nazionali", name:"Château Castel des Maures Rosé – Côtes de Provence (Bio)", price:18, img:"images/castel-maures.png", paese:"Francia", regione:"Provence", gradazione:"13%", uve:"Grenache, Cinsault, Syrah", colore:"Rosa pallido provenzale", gusto:"Elegante, secco, con note di pesca bianca, agrumi e fiori", desc:"Rosé biologico della Provenza, fine e aromatico, perfetto per piatti di pesce e aperitivi.", vinif:"Vinificazione biologica con fermentazione a bassa temperatura per esaltare freschezza e profumi.", pairing:["pesce","aperitivo","carne","antipasto"] },
   { id:"barbaresco-biologico", cat:"rossi", subcat:"Selezione vini Rossi Nazionali", name:"Barbaresco Biologico – Nada", price:59, img:"images/barbaresco-biologico-nada-2019.png", paese:"Italia", regione:"Piemonte", gradazione:"14%", uve:"100% Nebbiolo", colore:"Rosso granato brillante", gusto:"Elegante, sapido, con tannini levigati e una lunga persistenza", desc:"Intensi sentori floreali, con note di frutti rossi e spezie.", vinif:"Affinamento: 24 mesi in botti di rovere, seguito da 6 mesi in bottiglia", pairing:["carne","pasta"] },
@@ -1115,7 +1191,7 @@ const WINES = [
   { id:"lambrusco-ambasciatori", cat:"rossi", subcat:"Vini Frizzanti", name:"Ambasciatori Lambrusco Emilia IGT Amabile", price:18, img:"images/lambrusco-sierra.png", sigla:"IGT Emilia", paese:"Italia", regione:"Emilia-Romagna", gradazione:"8%", uve:"Lambrusco", colore:"Rosso rubino brillante con spuma rosata", gusto:"Amabile, morbido, fruttato con piacevole freschezza", desc:"Un Lambrusco frizzante vivace con note di ciliegia, mora e piccoli frutti rossi. La leggera dolcezza lo rende ideale come aperitivo o abbinato a salumi, formaggi emiliani, pizza e dessert leggeri", pairing:["aperitivo","formaggi","dolci"] },
   { id:"barbera-asti-la-villa", cat:"rossi", subcat:"Selezione vini Rossi Nazionali", name:"Barbera d'Asti \"La Villa\" - Tenuta Olim Bauda", price:27, img:"images/barbera-asti-la-villa.png", paese:"Italia", regione:"Piemonte", gradazione:"14,5%", uve:"100% Barbera", colore:"Rosso rubino intenso con riflessi violacei", gusto:"Pieno e corposo, con tannini morbidi e una piacevole freschezza", desc:"Note di frutta rossa matura, una leggera speziatura e un finale persistente, tipico della Barbera d'Asti.", vinif:"Fermentazione in acciaio inox, seguita da un affinamento in acciaio per alcuni mesi.", pairing:["carne","formaggi","pasta"] },
   { id:"dogliani-terra", cat:"rossi", subcat:"Selezione vini Rossi Nazionali", name:"Dogliani \"Terra\" - Produttori in Clavesana", price:24, img:"images/dogliani-terra.png", paese:"Italia", regione:"Piemonte", gradazione:"13,5%", uve:"100% Dolcetto", colore:"Rosso rubino intenso con riflessi violacei", gusto:"Asciutto, armonico, con tannini morbidi e una buona freschezza", desc:"Aromi di frutti rossi maturi e una leggera nota floreale, tipici del Dolcetto di Dogliani.", vinif:"Fermentazione e affinamento in acciaio inox, senza passaggi in legno.", pairing:["carne","formaggi","pasta"] },
-  { id:"vermentino-masala", cat:"bianchi", subcat:"Selezione vini Bianchi Nazionali", name:"Vermentino – Masala", price:48, img:"images/vermentino-masala.png", paese:"Italia", regione:"Liguria", uve:"Vermentino", desc:"Vermentino della cantina Masala", available:false, pairing:["pesce","aperitivo"] },
+  { id:"vermentino-masala", cat:"bianchi", subcat:"Selezione vini Bianchi Nazionali", name:"Vermentino – Masala", price:48, img:"images/vermentino-masala.png", paese:"Italia", regione:"Liguria", uve:"Vermentino", desc:"Vermentino della cantina Masala", pairing:["pesce","aperitivo"] },
 ];
 
 // ── CATEGORIES CONFIG ─────────────────────────────────────────
@@ -1222,26 +1298,17 @@ function closeDishModalOutside(e) {
 function setDishCat(cat, el) {
   activeDishCat = cat;
   document.querySelectorAll('.dish-cat-tab').forEach(t => t.classList.remove('active'));
+  // find and activate clicked tab
   document.querySelectorAll('.dish-cat-tab').forEach(t => {
     if (t.getAttribute('onclick').includes("'" + cat + "'")) t.classList.add('active');
   });
-  const lang = window._currentLang || 'it';
   const list = document.getElementById('dishList');
   const dishes = Object.entries(DISH_PAIRINGS).filter(([,d]) => d.cat === cat);
-  const winesLabel = ((typeof TRANSLATIONS !== 'undefined' && TRANSLATIONS[lang]) || {}).wines_count || 'vini';
-  list.innerHTML = dishes.map(([id, d]) => {
-    const subTr = (typeof DISH_LABELS !== 'undefined' && DISH_LABELS[id] && lang !== 'it')
-      ? DISH_LABELS[id][lang] || DISH_LABELS[id]['en'] || ''
-      : '';
-    const subHtml = subTr ? `<div class="dish-btn-sub">${subTr}</div>` : '';
-    return `<button class="dish-btn${activeDish===id?' active':''}" onclick="selectDish('${id}')">
-      <div class="dish-btn-row">
-        <span class="dish-btn-name">${d.label}</span>
-        <span class="dish-btn-wines">${d.wines.length} ${winesLabel}</span>
-      </div>
-      ${subHtml}
-    </button>`;
-  }).join('');
+  list.innerHTML = dishes.map(([id, d]) => `
+    <button class="dish-btn${activeDish===id?' active':''}" onclick="selectDish('${id}')">
+      <span>${d.label}</span>
+      <span class="dish-btn-wines">${d.wines.length} ${((typeof TRANSLATIONS !== 'undefined' && TRANSLATIONS[window._currentLang || 'it']) || {}).wines_count || 'vini'}</span>
+    </button>`).join('');
 }
 
 function selectDish(id) {
@@ -1272,7 +1339,9 @@ function updateDishBar() {
     clearBtn.classList.add('visible');
   } else {
     btn.classList.remove('active');
-    label.textContent = 'Abbina al tuo piatto';
+    const lang = window._currentLang || 'it';
+    const d = (typeof TRANSLATIONS !== 'undefined' && TRANSLATIONS[lang]) ? TRANSLATIONS[lang] : {};
+    label.textContent = d.dish_btn || 'Abbina al tuo piatto';
     clearBtn.classList.remove('visible');
   }
 }
@@ -1358,7 +1427,7 @@ function renderAll() {
 
   let html = '';
   CATS.forEach(cat => {
-    const wines = WINES.filter(w => w.cat === cat.id && w.available !== false);
+    const wines = WINES.filter(w => w.cat === cat.id && (typeof unavailableWineIds === 'undefined' || !unavailableWineIds.has(w.id)));
     if (wines.length === 0) return;
     const isOpen = openCats.has(cat.id);
 
@@ -1407,7 +1476,7 @@ function filterWines() {
 
 function getFilteredWines() {
   return WINES.filter(w => {
-    if (w.available === false) return false;
+    if (typeof unavailableWineIds !== 'undefined' && unavailableWineIds.has(w.id)) return false;
     return !searchQ ||
       w.name.toLowerCase().includes(searchQ) ||
       (w.uve || '').toLowerCase().includes(searchQ) ||
@@ -1423,6 +1492,7 @@ function wineRow(w) {
   const imgHtml = w.img
     ? `<img src="${w.img}" alt="${w.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="wine-row-img-placeholder" style="display:none"></div>`
     : `<div class="wine-row-img-placeholder"></div>`;
+  const q = (typeof wineCartQty !== 'undefined') ? (wineCartQty[w.id] || 0) : 0;
   return `
   <div class="wine-row" onclick="openModal('${w.id}')">
     <div class="wine-row-img">${imgHtml}</div>
@@ -1432,7 +1502,11 @@ function wineRow(w) {
     </div>
     <div class="wine-row-right">
       <div class="wine-row-price">€ ${w.price}</div>
-      <div class="wine-row-arrow">›</div>
+      <div class="wine-qty-row" onclick="event.stopPropagation()">
+        <button class="wine-qty-btn" onclick="changeWineQty('${w.id}',-1)">−</button>
+        <span class="wine-qty-display" id="wqty-${w.id}">${q}</span>
+        <button class="wine-qty-btn" onclick="changeWineQty('${w.id}',1)">+</button>
+      </div>
     </div>
   </div>`;
 }
@@ -1451,7 +1525,7 @@ function getGrapes(uve) {
 
 function findSimilarWines(wine, limit = 4) {
   const myGrapes = getGrapes(wine.uve);
-  return WINES.filter(w => w.id !== wine.id && w.available !== false).map(w => {
+  return WINES.filter(w => w.id !== wine.id && (typeof unavailableWineIds === 'undefined' || !unavailableWineIds.has(w.id))).map(w => {
     let score = 0;
     if (w.regione && wine.regione && w.regione === wine.regione) score += 3;
     const overlap = getGrapes(w.uve).filter(g => myGrapes.includes(g)).length;
@@ -1486,6 +1560,9 @@ function openModal(id) {
   const w = WINES.find(x => x.id === id);
   if (!w) return;
 
+  const lang = window._currentLang || 'it';
+  const d = (typeof TRANSLATIONS !== 'undefined' && TRANSLATIONS[lang]) ? TRANSLATIONS[lang] : {};
+
   const img = document.getElementById('modalImg');
   const shimmer = document.getElementById('modalImgShimmer');
   if (w.img) {
@@ -1507,7 +1584,7 @@ function openModal(id) {
     w.regione    && [d.detail_regione    || 'Regione',    w.regione],
     w.gradazione && [d.detail_gradazione || 'Gradazione', w.gradazione],
     w.uve        && [d.detail_uve        || 'Uve',        w.uve],
-    w.colore     && [d.detail_colore     || 'Colore',     w.colore],
+    w.colore     && [d.detail_colore     || 'Colore',     (typeof getWineText !== 'undefined') ? getWineText(w, 'colore') : w.colore],
     w.sigla      && [d.detail_sigla      || 'Sigla',      w.sigla],
   ].filter(Boolean);
 
@@ -1517,15 +1594,14 @@ function openModal(id) {
       <div class="detail-value">${v}</div>
     </div>`).join('');
 
-  const lang = window._currentLang || 'it';
-  const d = (typeof TRANSLATIONS !== 'undefined' && TRANSLATIONS[lang]) ? TRANSLATIONS[lang] : {};
   const gusto_text = (typeof getWineText !== 'undefined') ? getWineText(w, 'gusto') : w.gusto;
   const desc_text  = (typeof getWineText !== 'undefined') ? getWineText(w, 'desc')  : w.desc;
 
   let descHtml = '';
   if (gusto_text) descHtml += `<p><strong>${d.modal_gusto || 'Gusto'}</strong><span>${gusto_text}</span></p>`;
   if (desc_text)  descHtml += `<p><strong>${d.modal_desc || 'Descrizione'}</strong><span>${desc_text}</span></p>`;
-  if (w.vinif)    descHtml += `<p><strong>${d.modal_vinif || 'Vinificazione'}</strong><span>${w.vinif}</span></p>`;
+  const vinif_text = (typeof getWineText !== 'undefined') ? getWineText(w, 'vinif') : w.vinif;
+  if (vinif_text) descHtml += `<p><strong>${d.modal_vinif || 'Vinificazione'}</strong><span>${vinif_text}</span></p>`;
   document.getElementById('modalDesc').innerHTML = descHtml;
 
   document.getElementById('modalSimilar').innerHTML = renderSimilarWines(w);
@@ -1572,69 +1648,18 @@ function setLang(langCode) {
 }
 
 (function syncDropdown() {
-  const saved = sessionStorage.getItem('userLang') || 'it';
-  window._currentLang = saved;
+  window._currentLang = 'it';
   const sel = document.getElementById('langSelect');
-  if (sel) sel.value = saved;
+  if (sel) sel.value = 'it';
 }());
 
 // ── CHIP LABELS ───────────────────────────────────────────────
 const CHIP_LABELS = {
-  it: { antipasto:'🥗 Antipasto',    pasta:'🍝 Pasta',   carne:'🥩 Carne',    pesce:'🐟 Pesce'   },
-  en: { antipasto:'🥗 Starters',     pasta:'🍝 Pasta',   carne:'🥩 Meat',     pesce:'🐟 Fish'    },
-  fr: { antipasto:'🥗 Entrées',      pasta:'🍝 Pâtes',   carne:'🥩 Viande',   pesce:'🐟 Poisson' },
-  de: { antipasto:'🥗 Vorspeisen',   pasta:'🍝 Pasta',   carne:'🥩 Fleisch',  pesce:'🐟 Fisch'   },
-  es: { antipasto:'🥗 Entrantes',    pasta:'🍝 Pasta',   carne:'🥩 Carne',    pesce:'🐟 Pescado' },
-  pt: { antipasto:'🥗 Entradas',     pasta:'🍝 Massa',   carne:'🥩 Carne',    pesce:'🐟 Peixe'   },
-  ru: { antipasto:'🥗 Закуски',      pasta:'🍝 Паста',   carne:'🥩 Мясо',     pesce:'🐟 Рыба'    },
-  nl: { antipasto:'🥗 Voorgerechten',pasta:'🍝 Pasta',   carne:'🥩 Vlees',    pesce:'🐟 Vis'     },
-  pl: { antipasto:'🥗 Przystawki',   pasta:'🍝 Makaron', carne:'🥩 Mięso',    pesce:'🐟 Ryba'    },
-  sv: { antipasto:'🥗 Förrätter',    pasta:'🍝 Pasta',   carne:'🥩 Kött',     pesce:'🐟 Fisk'    },
-  da: { antipasto:'🥗 Forretter',    pasta:'🍝 Pasta',   carne:'🥩 Kød',      pesce:'🐟 Fisk'    },
-  no: { antipasto:'🥗 Forretter',    pasta:'🍝 Pasta',   carne:'🥩 Kjøtt',    pesce:'🐟 Fisk'    },
-  fi: { antipasto:'🥗 Alkupalat',    pasta:'🍝 Pasta',   carne:'🥩 Liha',     pesce:'🐟 Kala'    },
-  cs: { antipasto:'🥗 Předkrmy',     pasta:'🍝 Těstoviny',carne:'🥩 Maso',    pesce:'🐟 Ryby'    },
-  hu: { antipasto:'🥗 Előételek',    pasta:'🍝 Tészta',  carne:'🥩 Hús',      pesce:'🐟 Hal'     },
-  ro: { antipasto:'🥗 Antreuri',     pasta:'🍝 Paste',   carne:'🥩 Carne',    pesce:'🐟 Pește'   },
-  tr: { antipasto:'🥗 Başlangıçlar', pasta:'🍝 Makarna', carne:'🥩 Et',       pesce:'🐟 Balık'   },
-  ar: { antipasto:'🥗 المقبلات',    pasta:'🍝 المعكرونة',carne:'🥩 اللحم',   pesce:'🐟 السمك'   },
-  'zh-CN':{ antipasto:'🥗 开胃菜',  pasta:'🍝 意面',    carne:'🥩 肉类',     pesce:'🐟 海鲜'    },
-  ja: { antipasto:'🥗 前菜',         pasta:'🍝 パスタ',  carne:'🥩 肉料理',   pesce:'🐟 魚料理'  },
+  it: { antipasto:'🥗 Antipasto', pasta:'🍝 Pasta', carne:'🥩 Carne', pesce:'🐟 Pesce' },
+  en: { antipasto:'🥗 Starters',  pasta:'🍝 Pasta', carne:'🥩 Meat',  pesce:'🐟 Fish'   },
+  fr: { antipasto:'🥗 Entrées',   pasta:'🍝 Pâtes', carne:'🥩 Viande',pesce:'🐟 Poisson' },
+  de: { antipasto:'🥗 Vorspeisen',pasta:'🍝 Pasta', carne:'🥩 Fleisch',pesce:'🐟 Fisch'  },
 };
-
-// ── DISH NAME TRANSLATIONS ─────────────────────────────────────
-const DISH_LABELS = {
-  antipasto_tipico:   { en:'Typical Lago Bin Starter',fr:'Entrée Typique du Lago Bin',de:'Typische Lago Bin Vorspeise',es:'Entrante Típico del Lago Bin',pt:'Entrada Típica do Lago Bin',ru:'Типичная закуска Lago Bin',nl:'Typisch Lago Bin Voorgerecht',pl:'Typowa Przystawka Lago Bin',sv:'Typisk Lago Bin Förrätt',da:'Typisk Lago Bin Forret',no:'Typisk Lago Bin Forrett',fi:'Tyypillinen Lago Bin Alkupala',cs:'Typické Předkrmy Lago Bin',hu:'Tipikus Lago Bin Előétel',ro:'Intrare Tipică Lago Bin',tr:'Tipik Lago Bin Başlangıcı',ar:'مقبلات لاغو بن النموذجية','zh-CN':'典型的拉戈宾开胃菜',ja:'典型的なLago Bin前菜' },
-  salumiere:          { en:'Charcuterie Selection',fr:'Sélection de Charcuteries',de:'Wurstwarenauswahl',es:'Selección de Embutidos',pt:'Seleção de Frios',ru:'Мясная нарезка',nl:'Vleeswaren Selectie',pl:'Wybór Wędlin',sv:'Charkuterier',da:'Pålæg Udvalg',no:'Kjøttpålegg Utvalg',fi:'Leikkeleet',cs:'Výběr Uzenin',hu:'Hidegfelvágott Választék',ro:'Selecție de Mezeluri',tr:'Şarküteri Seçimi',ar:'تشكيلة اللحوم المعالجة','zh-CN':'肉食拼盘',ja:'シャルキュトリー盛り合わせ' },
-  prosciutto:         { en:'Parma Ham',fr:'Jambon de Parme',de:'Parmaschinken',es:'Jamón de Parma',pt:'Presunto de Parma',ru:'Пармская ветчина',nl:'Parmezaanse Ham',pl:'Szynka Parmeńska',sv:'Parmaham',da:'Parmaskinke',no:'Parmaskinte',fi:'Parmankinku',cs:'Parmská Šunka',hu:'Pármai Sonka',ro:'Șuncă de Parma',tr:'Parma Jambonu',ar:'جبون دي بارما','zh-CN':'帕尔马火腿',ja:'パルマハム' },
-  lumache:            { en:'Braised Snails',fr:'Escargots en Sauce',de:'Geschmorte Schnecken',es:'Caracoles Estofados',pt:'Caracóis Estufados',ru:'Тушёные улитки',nl:'Gestoofde Slakken',pl:'Duszone Ślimaki',sv:'Stuvade Sniglar',da:'Braisserede Snegle',no:'Braisserte Snegler',fi:'Haudutetut Etanat',cs:'Dušené Hlemýždě',hu:'Párolt Csigák',ro:'Melci Înăbușiți',tr:'Sotelenmiş Salyangozlar',ar:'الحلزون المطهو','zh-CN':'焖蜗牛',ja:'煮込みカタツムリ' },
-  brandacujan:        { en:'Ligurian Codfish Dip',fr:'Brandade Ligurienne',de:'Ligurischer Kabeljau-Dip',es:'Brandada Ligur',pt:'Bacalhau à Ligure',ru:'Лигурийская треска',nl:'Ligurische Kabeljauwdip',pl:'Liguryjski Dorsz',sv:'Ligurisk Torskröra',da:'Ligurisk Torskedip',no:'Ligurisk Torskedip',fi:'Ligurialainen Turskatahnа',cs:'Ligurský Tresčí Dip',hu:'Liguriai Tőkehal',ro:'Cod Ligur',tr:'Ligurya Morina Ezmesi',ar:'سمك القد الليغوري','zh-CN':'利古里亚鳕鱼蘸酱',ja:'リグーリア風タラのディップ' },
-  tartare_manzo:      { en:'Beef Tartare',fr:'Tartare de Bœuf',de:'Rindfleisch Tartare',es:'Tartar de Ternera',pt:'Tartare de Novilho',ru:'Тартар из говядины',nl:'Runder Tartaar',pl:'Tatar Wołowy',sv:'Nötkött Tartare',da:'Okse Tartare',no:'Biff Tartare',fi:'Naudanliha Tartare',cs:'Hovězí Tatarák',hu:'Marhahús Tartare',ro:'Tartare de Vită',tr:'Dana Tartar',ar:'تارتار لحم البقر','zh-CN':'牛肉塔塔',ja:'牛肉のタルタル' },
-  tomino:             { en:'Warm Alpine Cheese',fr:'Tomme d\'Alpage Chaude',de:'Warmer Alpkäse',es:'Queso Alpino Caliente',pt:'Queijo Alpino Quente',ru:'Тёплый горный сыр',nl:'Warme Bergkaas',pl:'Ciepły Ser Górski',sv:'Varm Alpost',da:'Varm Alpeost',no:'Varm Alpeost',fi:'Lämmin Vuoristojuusto',cs:'Teplý Alpský Sýr',hu:'Meleg Alpesi Sajt',ro:'Brânză Alpină Caldă',tr:'Sıcak Alp Peyniri',ar:'جبن جبلي دافئ','zh-CN':'温热阿尔卑斯奶酪',ja:'温かいアルプスチーズ' },
-  tartare_pesce:      { en:'Fish Tartare',fr:'Tartare de Poisson',de:'Fisch Tartare',es:'Tartar de Pescado',pt:'Tartare de Peixe',ru:'Тартар из рыбы',nl:'Vis Tartaar',pl:'Tatar Rybny',sv:'Fisk Tartare',da:'Fisk Tartare',no:'Fisk Tartare',fi:'Kala Tartare',cs:'Rybí Tatarák',hu:'Hal Tartare',ro:'Tartare de Pește',tr:'Balık Tartar',ar:'تارتار السمك','zh-CN':'鱼肉塔塔',ja:'魚のタルタル' },
-  antipasto_mare:     { en:'Mixed Seafood Starter',fr:'Antipasto de Mer',de:'Meeresfrüchte Vorspeise',es:'Antipasto Marinero',pt:'Antipasto do Mar',ru:'Морская закуска',nl:'Zeevruchten Voorgerecht',pl:'Owoce Morza Przystawka',sv:'Skaldjursvorspeise',da:'Skaldyr Forret',no:'Sjømat Forrett',fi:'Mereneläimiä Alkupala',cs:'Mořské Antipasto',hu:'Tengeri Előétel',ro:'Antipasto de Mare',tr:'Deniz Ürünleri Başlangıcı',ar:'مقبلات المأكولات البحرية','zh-CN':'混合海鲜前菜',ja:'混合シーフード前菜' },
-  ravioli_pomodoro:   { en:'Ravioli (Tomato / Butter & Sage)',fr:'Ravioli (Tomate / Beurre & Sauge)',de:'Ravioli (Tomaten / Butter & Salbei)',es:'Ravioli (Tomate / Mantequilla & Salvia)',pt:'Ravioli (Tomate / Manteiga & Salva)',ru:'Равиоли (томат / масло и шалфей)',nl:'Ravioli (Tomaat / Boter & Salie)',pl:'Ravioli (Pomidor / Masło i Szałwia)',sv:'Ravioli (Tomat / Smör & Salvia)',da:'Ravioli (Tomat / Smør & Salvie)',no:'Ravioli (Tomat / Smør & Salvie)',fi:'Ravioli (Tomaatti / Voi & Salvia)',cs:'Ravioli (Rajče / Máslo a Šalvěj)',hu:'Ravioli (Paradicsom / Vaj és Zsálya)',ro:'Ravioli (Roșii / Unt și Salvie)',tr:'Ravioli (Domates / Tereyağı ve Adaçayı)',ar:'رافيولي (طماطم / زبدة ومريمية)','zh-CN':'饺饺（番茄/黄油鼠尾草）',ja:'ラビオリ（トマト/バター＆セージ）' },
-  ravioli_coniglio:   { en:'Rabbit Ravioli',fr:'Ravioli au Lapin',de:'Kaninchenravioli',es:'Ravioli de Conejo',pt:'Ravioli de Coelho',ru:'Равиоли с кроликом',nl:'Konijnen Ravioli',pl:'Ravioli z Królikiem',sv:'Kanin Ravioli',da:'Kanin Ravioli',no:'Kanin Ravioli',fi:'Kaniini Ravioli',cs:'Králičí Ravioli',hu:'Nyúl Ravioli',ro:'Ravioli cu Iepure',tr:'Tavşanlı Ravioli',ar:'رافيولي بالأرنب','zh-CN':'兔肉饺子',ja:'ウサギのラビオリ' },
-  tagliatelle_selvaggina:{ en:'Tagliatelle with Game',fr:'Tagliatelles au Gibier',de:'Tagliatelle mit Wildfleisch',es:'Tagliatelle con Caza',pt:'Tagliatelle com Caça',ru:'Тальятелле с дичью',nl:'Tagliatelle met Wild',pl:'Tagliatelle z Dziczyzną',sv:'Tagliatelle med Vilt',da:'Tagliatelle med Vildt',no:'Tagliatelle med Vilt',fi:'Tagliatelle Riistalla',cs:'Tagliatelle se Zvěřinou',hu:'Tagliatelle Vadhússal',ro:'Tagliatelle cu Vânat',tr:'Tagliatelle Av Etiyle',ar:'تاليتيللي باللحم البري','zh-CN':'野味宽面',ja:'タリアテッレのジビエソース' },
-  tagliatelle_funghi:{ en:'Tagliatelle with Mushrooms',fr:'Tagliatelles aux Champignons',de:'Tagliatelle mit Pilzen',es:'Tagliatelle con Setas',pt:'Tagliatelle com Cogumelos',ru:'Тальятелле с грибами',nl:'Tagliatelle met Paddenstoelen',pl:'Tagliatelle z Grzybami',sv:'Tagliatelle med Svamp',da:'Tagliatelle med Svampe',no:'Tagliatelle med Sopp',fi:'Tagliatelle Sienillä',cs:'Tagliatelle s Houbami',hu:'Tagliatelle Gombával',ro:'Tagliatelle cu Ciuperci',tr:'Tagliatelle Mantarlı',ar:'تاليتيللي بالفطر','zh-CN':'蘑菇宽面',ja:'タリアテッレのキノコソース' },
-  tagliatelle_pesto:  { en:'Tagliatelle with Fresh Pesto',fr:'Tagliatelles au Pesto Frais',de:'Tagliatelle mit frischem Pesto',es:'Tagliatelle con Pesto Fresco',pt:'Tagliatelle com Pesto Fresco',ru:'Тальятелле с песто',nl:'Tagliatelle met Verse Pesto',pl:'Tagliatelle z Pesto',sv:'Tagliatelle med Pesto',da:'Tagliatelle med Pesto',no:'Tagliatelle med Pesto',fi:'Tagliatelle Pestolla',cs:'Tagliatelle s Pestem',hu:'Tagliatelle Pestóval',ro:'Tagliatelle cu Pesto',tr:'Tagliatelle Pestolu',ar:'تاليتيللي بالبيستو الطازج','zh-CN':'青酱宽面',ja:'タリアテッレのフレッシュペスト' },
-  tagliatelle_mare:   { en:'Tagliatelle with Seafood',fr:'Tagliatelles aux Fruits de Mer',de:'Tagliatelle mit Meeresfrüchten',es:'Tagliatelle con Mariscos',pt:'Tagliatelle com Frutos do Mar',ru:'Тальятелле с морепродуктами',nl:'Tagliatelle met Zeevruchten',pl:'Tagliatelle z Owocami Morza',sv:'Tagliatelle med Skaldjur',da:'Tagliatelle med Skaldyr',no:'Tagliatelle med Sjømat',fi:'Tagliatelle Mereneläimillä',cs:'Tagliatelle s Mořskými Plody',hu:'Tagliatelle Tenger Gyümölcseivel',ro:'Tagliatelle cu Fructe de Mare',tr:'Tagliatelle Deniz Mahsullü',ar:'تاليتيللي بثمار البحر','zh-CN':'海鲜宽面',ja:'タリアテッレのシーフードソース' },
-  mezzelune:          { en:'Mezzelune (Butter & Sage / Walnuts)',fr:'Mezzelune (Beurre & Sauge / Noix)',de:'Mezzelune (Butter & Salbei / Walnüsse)',es:'Mezzelune (Mantequilla & Salvia / Nueces)',pt:'Mezzelune (Manteiga & Salva / Nozes)',ru:'Меццелуне (масло и шалфей / орехи)',nl:'Mezzelune (Boter & Salie / Walnoten)',pl:'Mezzelune (Masło & Szałwia / Orzechy)',sv:'Mezzelune (Smör & Salvia / Valnötter)',da:'Mezzelune (Smør & Salvie / Valnødder)',no:'Mezzelune (Smør & Salvie / Valnøtter)',fi:'Mezzelune (Voi & Salvia / Pähkinät)',cs:'Mezzelune (Máslo & Šalvěj / Vlašské ořechy)',hu:'Mezzelune (Vaj & Zsálya / Dió)',ro:'Mezzelune (Unt & Salvie / Nuci)',tr:'Mezzelune (Tereyağı & Adaçayı / Ceviz)',ar:'ميتسيلوني (زبدة ومريمية / جوز)','zh-CN':'半月饺（黄油鼠尾草/核桃）',ja:'メッツェルーネ（バター＆セージ/クルミ）' },
-  troffie_pesto:      { en:'Troffie with Pesto / Spring',fr:'Troffie au Pesto / Printanières',de:'Troffie mit Pesto / Frühling',es:'Troffie con Pesto / Primavera',pt:'Troffie com Pesto / Primavera',ru:'Трофие с песто',nl:'Troffie met Pesto',pl:'Troffie z Pesto',sv:'Troffie med Pesto',da:'Troffie med Pesto',no:'Troffie med Pesto',fi:'Troffie Pestolla',cs:'Troffie s Pestem',hu:'Troffie Pestóval',ro:'Troffie cu Pesto',tr:'Troffie Pestolu',ar:'تروفيي بالبيستو','zh-CN':'扭扭面配青酱',ja:'トロフィエのペスト' },
-  troffie_gamberetti: { en:'Troffie with Prawns & Courgette',fr:'Troffie aux Crevettes & Courgettes',de:'Troffie mit Garnelen & Zucchini',es:'Troffie con Gambas & Calabacín',pt:'Troffie com Gambas & Courgette',ru:'Трофие с креветками и кабачками',nl:'Troffie met Garnalen & Courgette',pl:'Troffie z Krewetkami i Cukinią',sv:'Troffie med Räkor & Zucchini',da:'Troffie med Rejer & Zucchini',no:'Troffie med Reker & Zucchini',fi:'Troffie Katkaravuilla ja Kesäkurpitsalla',cs:'Troffie s Krevetami a Cuketou',hu:'Troffie Rákkal és Cukkínivel',ro:'Troffie cu Creveți și Dovlecei',tr:'Troffie Karides ve Kabakla',ar:'تروفيي بالروبيان والكوسة','zh-CN':'扭扭面配虾仁西葫芦',ja:'トロフィエのエビとズッキーニ' },
-  gnocchi_funghi:     { en:'Gnocchi with Mushrooms',fr:'Gnocchi aux Champignons',de:'Gnocchi mit Pilzen',es:'Ñoquis con Setas',pt:'Gnocchi com Cogumelos',ru:'Ньокки с грибами',nl:'Gnocchi met Paddenstoelen',pl:'Gnocchi z Grzybami',sv:'Gnocchi med Svamp',da:'Gnocchi med Svampe',no:'Gnocchi med Sopp',fi:'Gnocchi Sienillä',cs:'Gnocchi s Houbami',hu:'Gnocchi Gombával',ro:'Gnocchi cu Ciuperci',tr:'Gnocchi Mantarlı',ar:'نيوكي بالفطر','zh-CN':'蘑菇土豆团子',ja:'キノコのニョッキ' },
-  gnocchi_formaggi:   { en:'Gnocchi with Gorgonzola Cheese',fr:'Gnocchi aux Fromages & Gorgonzola',de:'Gnocchi mit Gorgonzola Käse',es:'Ñoquis con Gorgonzola',pt:'Gnocchi com Gorgonzola',ru:'Ньокки с сыром горгонзола',nl:'Gnocchi met Gorgonzola',pl:'Gnocchi z Gorgonzolą',sv:'Gnocchi med Gorgonzola',da:'Gnocchi med Gorgonzola',no:'Gnocchi med Gorgonzola',fi:'Gnocchi Gorgonzolalla',cs:'Gnocchi s Gorgonzolou',hu:'Gnocchi Gorgonzolával',ro:'Gnocchi cu Gorgonzola',tr:'Gnocchi Gorgonzola Peynirli',ar:'نيوكي بجبن الغورغونزولا','zh-CN':'戈贡佐拉奶酪土豆团子',ja:'ゴルゴンゾーラチーズのニョッキ' },
-  risotto_mare:       { en:'Seafood Risotto',fr:'Risotto aux Fruits de Mer',de:'Meeresfrüchte Risotto',es:'Risotto de Mariscos',pt:'Risotto de Frutos do Mar',ru:'Ризотто с морепродуктами',nl:'Zeevruchten Risotto',pl:'Risotto z Owocami Morza',sv:'Skaldjursrisotto',da:'Skaldyrsrisotto',no:'Sjømatrisotto',fi:'Mereneläinrisotto',cs:'Risotto s Mořskými Plody',hu:'Tengeri Risotto',ro:'Risotto cu Fructe de Mare',tr:'Deniz Mahsullü Risotto',ar:'ريزوتو بثمار البحر','zh-CN':'海鲜烩饭',ja:'シーフードリゾット' },
-  coniglio:           { en:'Rabbit Rocchettina Style',fr:'Lapin à la Rocchettina',de:'Kaninchen nach Rocchettina Art',es:'Conejo a la Rocchettina',pt:'Coelho à Rocchettina',ru:'Кролик по-рокеттина',nl:'Konijn op Rocchettina Wijze',pl:'Królik po Rocchettinsku',sv:'Kanin Rocchettina',da:'Kanin Rocchettina',no:'Kanin Rocchettina',fi:'Kaniini Rocchettina',cs:'Králík Rocchettina',hu:'Rocchettina Nyúl',ro:'Iepure Rocchettina',tr:'Rocchettina Usulü Tavşan',ar:'أرنب على طريقة روكيتينا','zh-CN':'罗克蒂纳风味兔肉',ja:'ロッケッティーナ風ウサギ' },
-  selvaggina:         { en:'Game in Red Wine',fr:'Gibier au Vin Rouge',de:'Wild in Rotwein',es:'Caza al Vino Tinto',pt:'Caça ao Vinho Tinto',ru:'Дичь в красном вине',nl:'Wild in Rode Wijn',pl:'Dziczyzna w Czerwonym Winie',sv:'Vilt i Rödvin',da:'Vildt i Rødvin',no:'Vilt i Rødvin',fi:'Riista Punaviinissä',cs:'Zvěřina na Červeném Víně',hu:'Vad Vörösborban',ro:'Vânat în Vin Roșu',tr:'Kırmızı Şaraplı Av Eti',ar:'لحم الصيد بالنبيذ الأحمر','zh-CN':'红酒炖野味',ja:'赤ワイン煮込みジビエ' },
-  agnello:            { en:'Grilled Lamb Chops',fr:'Côtelettes d\'Agneau Grillées',de:'Gegrillte Lammkoteletts',es:'Costillas de Cordero a la Parrilla',pt:'Costeletas de Borrego Grelhadas',ru:'Жареные бараньи отбивные',nl:'Gegrilde Lamskoteletjes',pl:'Grillowane Kotlety Jagnięce',sv:'Grillat Lammkotlett',da:'Grillede Lammekotelet',no:'Grillede Lammekotelett',fi:'Grillattuja Lampaankyljyksiä',cs:'Grilovaná Jehněčí Kotleta',hu:'Grillezett Báránybordák',ro:'Cotlete de Miel la Grătar',tr:'Izgara Kuzu Pirzola',ar:'ضلوع الخروف المشوية','zh-CN':'烤羊排',ja:'子羊のグリル' },
-  grigliata_carne:    { en:'Mixed Meat Grill',fr:'Grillade Mixte de Viandes',de:'Gemischter Fleischgrill',es:'Parrillada Mixta de Carnes',pt:'Grelhada Mista de Carnes',ru:'Мясное ассорти на гриле',nl:'Gemengde Vleesgrillschotel',pl:'Mieszana Grillowana Mięsa',sv:'Blandat Kötgrill',da:'Blandet Kødgrill',no:'Blandet Kjøttgrill',fi:'Sekalainen Lihagrilll',cs:'Smíšený Masový Gril',hu:'Vegyes Húsgrill',ro:'Grătar Mixt de Carne',tr:'Karışık Et Izgara',ar:'مشويات لحم مشكل','zh-CN':'混合肉类烧烤',ja:'ミックスミートグリル' },
-  roastbeef:          { en:'Roast Beef',fr:'Rosbif',de:'Rinderbraten',es:'Rosbif',pt:'Rosbife',ru:'Ростбиф',nl:'Rosbief',pl:'Pieczeń Wołowa',sv:'Rostbiff',da:'Roastbeef',no:'Roastbiff',fi:'Paahtopaisti',cs:'Roastbeef',hu:'Roastbeef',ro:'Roast Beef',tr:'Roast Beef',ar:'الروستبيف','zh-CN':'烤牛肉',ja:'ローストビーフ' },
-  filetto:            { en:'Beef Fillet',fr:'Filet de Bœuf',de:'Rinderfilet',es:'Solomillo de Ternera',pt:'Lombinho de Novilho',ru:'Говяжье филе',nl:'Rundvlees Filet',pl:'Polędwica Wołowa',sv:'Nötfilé',da:'Oksemørbrad',no:'Oksemørbrad',fi:'Naudan Filee',cs:'Hovězí Svíčková',hu:'Marhaszűzérmék',ro:'Fileu de Vită',tr:'Dana Fileto',ar:'فيليه اللحم','zh-CN':'牛里脊',ja:'ビーフフィレ' },
-  pescato:            { en:'Fresh Catch / Prawns',fr:'Poisson du Jour / Gambas',de:'Tagesfang / Gambas',es:'Pescado del Día / Gambas',pt:'Peixe do Dia / Gambas',ru:'Свежий улов / Креветки',nl:'Dagvangst / Gambas',pl:'Świeży Połów / Krewetki',sv:'Dagens Fångst / Gambas',da:'Dagens Fangst / Rejer',no:'Dagens Fangst / Reker',fi:'Päivän Saalis / Gambas',cs:'Denní Úlovek / Krevety',hu:'Napi Fogás / Garnéla',ro:'Pește Proaspăt / Creveți',tr:'Taze Av / Karides',ar:'الصيد الطازج / الروبيان','zh-CN':'新鲜渔获/大虾',ja:'本日の魚介/海老' },
-  grigliata_pesce:    { en:'Mixed Fish Grill',fr:'Grillade Mixte de Poissons',de:'Gemischter Fischgrill',es:'Parrillada Mixta de Pescados',pt:'Grelhada Mista de Peixes',ru:'Рыбный гриль ассорти',nl:'Gemengde Visgrillschotel',pl:'Mieszany Grillowany Ryby',sv:'Blandat Fiskgrill',da:'Blandet Fiskegrill',no:'Blandet Fiskegrill',fi:'Sekalainen Kalagrilli',cs:'Smíšený Rybí Gril',hu:'Vegyes Halgrill',ro:'Grătar Mixt de Pește',tr:'Karışık Balık Izgara',ar:'مشويات سمك مشكلة','zh-CN':'混合鱼类烧烤',ja:'ミックスフィッシュグリル' },
-};
-
 
 function applyChipLabels(langCode) {
   const labels = CHIP_LABELS[langCode] || CHIP_LABELS['it'];
@@ -1690,13 +1715,180 @@ function applyUITranslations(langCode) {
   renderAll();
 }
 
+// ── FIREBASE CONFIG (same project as index.html / admin.html) ──
+const firebaseConfig = {
+  apiKey: "AIzaSyAAVvNWOTCUp9PT44pRvIWVnNBOzjxYdeI",
+  authDomain: "lagobin-orders.firebaseapp.com",
+  projectId: "lagobin-orders",
+  storageBucket: "lagobin-orders.firebasestorage.app",
+  messagingSenderId: "202005520791",
+  appId: "1:202005520791:web:8211a8b59b4fcea1eee4d2"
+};
+firebase.initializeApp(firebaseConfig);
+const wineDb = firebase.firestore();
+
+// ── TABLE NUMBER DROPDOWN (match index.html) ──
+const WINE_TOTAL_TABLES = 54;
+function populateWineTableSelect(){
+  const sel = document.getElementById('wineTableSelect');
+  if (!sel) return;
+  for (let i = 1; i <= WINE_TOTAL_TABLES; i++) {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = 'Tavolo ' + i;
+    sel.appendChild(opt);
+  }
+}
+
+// ── WINE CART STATE ──
+let wineCart = [];
+let wineCartQty = {};
+let unavailableWineIds = new Set();
+
+function changeWineQty(id, delta) {
+  const w = WINES.find(x => x.id === id);
+  if (!w) return;
+  if (delta > 0) {
+    wineCart.push({ id: w.id, name: w.name, price: w.price });
+  } else {
+    const idx = wineCart.map(c => c.id).lastIndexOf(id);
+    if (idx >= 0) wineCart.splice(idx, 1);
+  }
+  wineCartQty[id] = wineCart.filter(c => c.id === id).length;
+  const qd = document.getElementById('wqty-' + id);
+  if (qd) qd.textContent = wineCartQty[id];
+  updateWineCart();
+}
+
+function updateWineCart() {
+  const grouped = {};
+  wineCart.forEach(e => {
+    if (!grouped[e.id]) grouped[e.id] = { name: e.name, price: e.price, count: 0, total: 0 };
+    grouped[e.id].count++;
+    grouped[e.id].total += e.price;
+  });
+  const content = document.getElementById('wineCartContent');
+  const totalBox = document.getElementById('wineCartTotal');
+  const sendBtn = document.getElementById('wineSendBtn');
+  const keys = Object.keys(grouped);
+  if (keys.length === 0) {
+    content.innerHTML = '<div class="wine-cart-empty">Nessun vino ancora selezionato</div>';
+    totalBox.style.display = 'none';
+    sendBtn.disabled = true;
+  } else {
+    let html = '', total = 0;
+    keys.forEach(id => {
+      const g = grouped[id];
+      total += g.total;
+      html += `<div class="wine-cart-row">
+        <div class="wine-cart-row-name">${g.name} ×${g.count}</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="color:var(--burg);font-weight:700;">€${g.total}</span>
+          <button class="wine-cart-remove" onclick="removeWineFromCart('${id}')">✕</button>
+        </div>
+      </div>`;
+    });
+    content.innerHTML = html;
+    document.getElementById('wineCartTotalAmount').textContent = '€' + total;
+    totalBox.style.display = 'flex';
+    sendBtn.disabled = false;
+  }
+  document.getElementById('wineCartBadge').textContent = wineCart.length;
+}
+
+function removeWineFromCart(id) {
+  wineCart = wineCart.filter(c => c.id !== id);
+  wineCartQty[id] = 0;
+  const qd = document.getElementById('wqty-' + id);
+  if (qd) qd.textContent = 0;
+  updateWineCart();
+}
+
+function toggleWineCart() {
+  document.getElementById('wineCartPanel').classList.toggle('open');
+}
+
+async function sendWineOrder() {
+  const tableSel = document.getElementById('wineTableSelect');
+  const tableNum = tableSel ? tableSel.value : '';
+  if (!tableNum) {
+    alert('⚠️ Seleziona il numero del tavolo prima di inviare!');
+    return;
+  }
+  if (!wineCart.length) return;
+
+  const btn = document.getElementById('wineSendBtn');
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '⏳ ...';
+
+  const items = wineCart.map(e => ({
+    name: e.name,
+    detail: '',
+    person: '',
+    turno: '',
+    course: 'bevande',
+    category: 'drink',
+    price: e.price
+  }));
+  const total = wineCart.reduce((s, e) => s + e.price, 0);
+
+  const orderData = {
+    table: tableNum,
+    items: items,
+    total: total,
+    status: 'pending',
+    lastOrder: false,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  try {
+    await wineDb.collection('orders').add(orderData);
+    wineCart = [];
+    wineCartQty = {};
+    updateWineCart();
+    renderAll();
+    tableSel.value = '';
+    document.getElementById('wineCartPanel').classList.remove('open');
+    alert('✅ Ordine vini inviato! Il cameriere lo riceverà a breve.');
+  } catch (err) {
+    console.error('Wine order submission failed:', err);
+    alert('❌ Errore durante l\'invio. Riprova.');
+  } finally {
+    btn.disabled = wineCart.length === 0;
+    btn.textContent = originalText;
+  }
+}
+
+// ── WINE AVAILABILITY (reads the SAME menuAvailability collection admin.html manages) ──
+async function applyWineAvailability() {
+  try {
+    const snap = await wineDb.collection('menuAvailability').get();
+    unavailableWineIds = new Set();
+    snap.forEach(doc => {
+      if (doc.data().available === false) unavailableWineIds.add(doc.id);
+    });
+    renderAll();
+  } catch (err) {
+    console.error('Could not load wine availability:', err);
+  }
+}
+
+document.addEventListener('click', e => {
+  const panel = document.getElementById('wineCartPanel');
+  const fab = document.querySelector('.wine-cart-fab');
+  if (panel && fab && !panel.contains(e.target) && !fab.contains(e.target)) {
+    panel.classList.remove('open');
+  }
+});
+
 // ── INIT ──────────────────────────────────────────────────────
 renderAll();
+populateWineTableSelect();
+applyWineAvailability();
 (function() {
-  const lang = sessionStorage.getItem('userLang') || 'it';
-  window._currentLang = lang;
-  applyChipLabels(lang);
-  if (lang !== 'it') applyUITranslations(lang);
+  window._currentLang = 'it';
+  applyChipLabels('it');
 }());
 </script>
 </body>
