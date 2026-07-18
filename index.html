@@ -410,6 +410,16 @@ img{display:block}
   flex-shrink:0;
 }
 .dish-btn.active .dish-btn-wines{color:var(--gold3)}
+.dish-sub-trans{
+  display:block;
+  font-family:'Montserrat',sans-serif;
+  font-size:11px;
+  font-style:italic;
+  font-weight:600;
+  color:var(--burg);
+  margin-top:3px;
+}
+.dish-btn.active .dish-sub-trans{color:var(--gold3)}
 
 .main{
   max-width:780px;
@@ -1280,6 +1290,45 @@ const DISH_PAIRINGS = {
 
 let activeDishCat = 'antipasti';
 
+// ── DISH LABEL TRANSLATIONS (Italian name stays primary; this is the sub-translation) ──
+const DISH_TRANS = {
+  'Antipasto Tipico del Lago Bin': { en:'Typical Lago Bin Starter', fr:'Assortiment Typique du Lago Bin', de:'Typische Lago Bin Vorspeise', es:'Entrante Típico del Lago Bin', pt:'Entrada Típica do Lago Bin', ru:'Типичная закуска Lago Bin', nl:'Typisch Lago Bin voorgerecht', pl:'Typowa przystawka Lago Bin', sv:'Typisk Lago Bin-förrätt', da:'Typisk Lago Bin-forret', no:'Typisk Lago Bin-forrett', fi:'Tyypillinen Lago Bin -alkupala', cs:'Typický předkrm Lago Bin', hu:'Tipikus Lago Bin előétel', ro:'Antreu tipic Lago Bin', tr:'Tipik Lago Bin başlangıcı', ar:'مقبلات لاجو بين التقليدية', 'zh-CN':'典型的Lago Bin开胃菜', ja:'典型的なラーゴ・ビンの前菜' },
+  'Assortimento del Salumiere': { en:'Mixed Charcuterie Platter', fr:'Assortiment de Charcuterie', de:'Gemischte Aufschnittplatte', es:'Surtido de Embutidos', pt:'Seleção de Enchidos', ru:'Ассорти колбасных изделий', nl:'Gemengde vleeswarenschotel', pl:'Talerz wędlin', sv:'Blandad charkbricka', da:'Blandet pålægsfad', no:'Blandet pålleggsfat', fi:'Sekoitettu leikkelelautanen', cs:'Míchaný talíř uzenin', hu:'Vegyes felvágott tál', ro:'Platou mixt de mezeluri', tr:'Karışık şarküteri tabağı', ar:'طبق لحوم مقددة مشكلة', 'zh-CN':'什锦冷肉拼盘', ja:'ミックス生ハム盛り合わせ' },
+  'Prosciutto di Parma': { en:'Parma Ham', fr:'Jambon de Parme', de:'Parmaschinken', es:'Jamón de Parma', pt:'Presunto de Parma', ru:'Пармская ветчина', nl:'Parmaham', pl:'Szynka parmeńska', sv:'Parmaskinka', da:'Parmaskinke', no:'Parmaskinke', fi:'Parman kinkku', cs:'Parmská šunka', hu:'Parmai sonka', ro:'Șuncă de Parma', tr:'Parma jambonu', ar:'لحم بارما المقدد', 'zh-CN':'帕尔玛火腿', ja:'パルマハム' },
+  'Lumache in Umido': { en:'Braised Snails', fr:'Escargots Braisés', de:'Geschmorte Schnecken', es:'Caracoles Estofados', pt:'Caracóis Estufados', ru:'Тушёные улитки', nl:'Gestoofde slakken', pl:'Duszone ślimaki', sv:'Grytstuvade sniglar', da:'Braiserede snegle', no:'Braiserte snegler', fi:'Haudutetut etanat', cs:'Dušení hlemýždi', hu:'Párolt csigák', ro:'Melci înăbușiți', tr:'Güveçte salyangoz', ar:'حلزون مطهو ببطء', 'zh-CN':'炖蜗牛', ja:'エスカルゴの煮込み' },
+  'Brandacujan': { en:'Traditional Stockfish Spread', fr:'Brandade de Morue Traditionnelle', de:'Traditioneller Stockfisch-Aufstrich', es:'Puré Tradicional de Bacalao Seco', pt:'Pasta Tradicional de Bacalhau Seco', ru:'Традиционная паста из трески', nl:'Traditionele stokvispuree', pl:'Tradycyjna pasta z suszonej ryby', sv:'Traditionellt torrfiskröra', da:'Traditionel klipfiskepure', no:'Tradisjonell tørrfiskrøre', fi:'Perinteinen kalkkunakala-tahna', cs:'Tradiční pomazánka ze sušené ryby', hu:'Hagyományos szárítotthal-krém', ro:'Pastă tradițională de pește uscat', tr:'Geleneksel kurutulmuş balık ezmesi', ar:'معجون سمك مجفف تقليدي', 'zh-CN':'传统鳕鱼干泥', ja:'伝統的な干し鱈のペースト' },
+  'Tartare di Manzo al Coltello': { en:'Hand-cut Beef Tartare', fr:'Tartare de Bœuf Coupé au Couteau', de:'Handgeschnittenes Rindertatar', es:'Tartar de Ternera Cortado a Cuchillo', pt:'Tártaro de Vaca Cortado à Faca', ru:'Рубленый говяжий тартар', nl:'Met de hand gesneden runder tartaar', pl:'Tatar wołowy krojony nożem', sv:'Handskuren biff tartar', da:'Håndskåret oksetatar', no:'Håndskåret oksetartar', fi:'Käsin viipaloitu naudan tartar', cs:'Ručně krájený hovězí tatarák', hu:'Kézzel vágott marha tatár', ro:'Tartar de vită tăiat manual', tr:'Elde kıyılmış dana tartar', ar:'تارتار لحم بقر مقطع باليد', 'zh-CN':'手切牛肉塔塔', ja:'手切りの牛肉タルタル' },
+  "Tomino d'Alpeggio Caldo": { en:'Warm Alpine Tomino Cheese', fr:"Tomino d'Alpage Chaud", de:'Warmer Alpen-Tomino-Käse', es:'Tomino de Alpe Caliente', pt:'Tomino de Alpe Quente', ru:'Тёплый альпийский сыр томино', nl:'Warme alpenkaas Tomino', pl:'Ciepły ser tomino z alp', sv:'Varm alpost Tomino', da:'Varm alpeost Tomino', no:'Varm alpeost Tomino', fi:'Lämmin alppijuusto Tomino', cs:'Teplý alpský sýr Tomino', hu:'Meleg alpesi Tomino sajt', ro:'Brânză Tomino caldă de munte', tr:'Sıcak Alp Tomino peyniri', ar:'جبنة تومينو الألبية الدافئة', 'zh-CN':'温热高山托米诺奶酪', ja:'温かいアルプス・トミノチーズ' },
+  'Tartare di Pesce': { en:'Fish Tartare', fr:'Tartare de Poisson', de:'Fisch-Tatar', es:'Tartar de Pescado', pt:'Tártaro de Peixe', ru:'Рыбный тартар', nl:'Vistartaar', pl:'Tatar rybny', sv:'Fisktartar', da:'Fisketatar', no:'Fisketartar', fi:'Kalatartar', cs:'Rybí tatarák', hu:'Hal tatár', ro:'Tartar de pește', tr:'Balık tartar', ar:'تارتار السمك', 'zh-CN':'鱼肉塔塔', ja:'魚のタルタル' },
+  'Antipasto Misto di Mare': { en:'Mixed Seafood Starter', fr:'Entrée de Mer Mixte', de:'Gemischte Meeresfrüchte-Vorspeise', es:'Entrante Mixto de Mar', pt:'Entrada Mista de Mar', ru:'Ассорти морепродуктов', nl:'Gemengd zeevruchten voorgerecht', pl:'Mieszana przystawka z owoców morza', sv:'Blandad havsfrukt förrätt', da:'Blandet havforret', no:'Blandet sjømatforrett', fi:'Sekoitettu merenelävä alkupala', cs:'Míchaný mořský předkrm', hu:'Vegyes tengeri előétel', ro:'Antreu mixt de fructe de mare', tr:'Karışık deniz ürünleri başlangıcı', ar:'مقبلات مأكولات بحرية مشكلة', 'zh-CN':'什锦海鲜开胃菜', ja:'ミックスシーフードの前菜' },
+  'Ravioli della Nonna (Pomodoro / Burro e Salvia)': { en:"Grandma's Ravioli (Tomato / Butter & Sage)", fr:'Ravioli de Grand-Mère (Tomate / Beurre et Sauge)', de:"Omas Ravioli (Tomate / Butter & Salbei)", es:'Ravioles de la Abuela (Tomate / Mantequilla y Salvia)', pt:'Ravioli da Avó (Tomate / Manteiga e Salva)', ru:'Равиоли бабушки (томат / масло и шалфей)', nl:"Oma's ravioli (tomaat / boter en salie)", pl:'Ravioli babci (pomidor / masło i szałwia)', sv:'Mormors ravioli (tomat / smör och salvia)', da:'Bedstemors ravioli (tomat / smør og salvie)', no:'Bestemors ravioli (tomat / smør og salvie)', fi:'Mummon ravioli (tomaatti / voi ja salvia)', cs:'Babiččiny ravioli (rajče / máslo a šalvěj)', hu:'Nagymama raviolija (paradicsom / vaj és zsálya)', ro:'Ravioli bunicii (roșii / unt și salvie)', tr:'Büyükanne raviolisi (domates / tereyağı ve adaçayı)', ar:'رافيولي الجدة (طماطم / زبدة ومريمية)', 'zh-CN':'奶奶的意大利饺（番茄/黄油鼠尾草）', ja:'おばあちゃんのラビオリ（トマト／バターとセージ）' },
+  'Ravioli al Coniglio': { en:'Rabbit Ravioli', fr:'Ravioli au Lapin', de:'Kaninchen-Ravioli', es:'Ravioles de Conejo', pt:'Ravioli de Coelho', ru:'Равиоли с кроликом', nl:'Konijnenravioli', pl:'Ravioli z królikiem', sv:'Kaninravioli', da:'Kaninravioli', no:'Kaninravioli', fi:'Kaniraviolit', cs:'Ravioli s králíkem', hu:'Nyúlhúsos ravioli', ro:'Ravioli cu iepure', tr:'Tavşan raviolisi', ar:'رافيولي بالأرنب', 'zh-CN':'兔肉意大利饺', ja:'ウサギ肉のラビオリ' },
+  'Tagliatelle alla Selvaggina': { en:'Game Tagliatelle', fr:'Tagliatelles au Gibier', de:'Wild-Tagliatelle', es:'Tagliatelle de Caza', pt:'Tagliatelle de Caça', ru:'Тальятелле с дичью', nl:'Tagliatelle met wild', pl:'Tagliatelle z dziczyzną', sv:'Tagliatelle med vilt', da:'Tagliatelle med vildt', no:'Tagliatelle med vilt', fi:'Riistatagliatelle', cs:'Tagliatelle se zvěřinou', hu:'Vadhúsos tagliatelle', ro:'Tagliatelle cu vânat', tr:'Av eti tagliatelle', ar:'تالياتيلي بلحم الطرائد', 'zh-CN':'野味宽面', ja:'ジビエのタリアテッレ' },
+  'Tagliatelle ai Funghi': { en:'Mushroom Tagliatelle', fr:'Tagliatelles aux Champignons', de:'Pilz-Tagliatelle', es:'Tagliatelle de Setas', pt:'Tagliatelle de Cogumelos', ru:'Тальятелле с грибами', nl:'Tagliatelle met paddenstoelen', pl:'Tagliatelle z grzybami', sv:'Tagliatelle med svamp', da:'Tagliatelle med svampe', no:'Tagliatelle med sopp', fi:'Sienitagliatelle', cs:'Tagliatelle s houbami', hu:'Gombás tagliatelle', ro:'Tagliatelle cu ciuperci', tr:'Mantarlı tagliatelle', ar:'تالياتيلي بالفطر', 'zh-CN':'蘑菇宽面', ja:'きのこのタリアテッレ' },
+  'Tagliatelle al Pesto Fresco': { en:'Fresh Pesto Tagliatelle', fr:'Tagliatelles au Pesto Frais', de:'Tagliatelle mit frischem Pesto', es:'Tagliatelle al Pesto Fresco', pt:'Tagliatelle com Pesto Fresco', ru:'Тальятелле со свежим песто', nl:'Tagliatelle met verse pesto', pl:'Tagliatelle ze świeżym pesto', sv:'Tagliatelle med färsk pesto', da:'Tagliatelle med frisk pesto', no:'Tagliatelle med fersk pesto', fi:'Tagliatelle tuoreella pestolla', cs:'Tagliatelle s čerstvým pestem', hu:'Tagliatelle friss pestóval', ro:'Tagliatelle cu pesto proaspăt', tr:'Taze pesto tagliatelle', ar:'تالياتيلي بالبيستو الطازج', 'zh-CN':'鲜青酱宽面', ja:'フレッシュペストのタリアテッレ' },
+  'Tagliatelle ai Frutti di Mare': { en:'Seafood Tagliatelle', fr:'Tagliatelles aux Fruits de Mer', de:'Tagliatelle mit Meeresfrüchten', es:'Tagliatelle de Mariscos', pt:'Tagliatelle de Marisco', ru:'Тальятелле с морепродуктами', nl:'Tagliatelle met zeevruchten', pl:'Tagliatelle z owocami morza', sv:'Tagliatelle med skaldjur', da:'Tagliatelle med skaldyr', no:'Tagliatelle med sjømat', fi:'Tagliatelle äyriäisillä', cs:'Tagliatelle s mořskými plody', hu:'Tagliatelle tenger gyümölcseivel', ro:'Tagliatelle cu fructe de mare', tr:'Deniz ürünlü tagliatelle', ar:'تالياتيلي بالمأكولات البحرية', 'zh-CN':'海鲜宽面', ja:'魚介類のタリアテッレ' },
+  'Mezzelune di Magro al Burro e Salvia / Noci': { en:'Mezzelune with Butter & Sage / Walnuts', fr:'Mezzelune au Beurre et Sauge / Noix', de:'Mezzelune mit Butter & Salbei / Walnüssen', es:'Mezzelune con Mantequilla y Salvia / Nueces', pt:'Mezzelune com Manteiga e Salva / Nozes', ru:'Медзалуне с маслом и шалфеем / грецкими орехами', nl:'Mezzelune met boter en salie / walnoten', pl:'Mezzelune z masłem i szałwią / orzechami', sv:'Mezzelune med smör och salvia / valnötter', da:'Mezzelune med smør og salvie / valnødder', no:'Mezzelune med smør og salvie / valnøtter', fi:'Mezzelune voilla ja salvialla / saksanpähkinöillä', cs:'Mezzelune s máslem a šalvějí / vlašskými ořechy', hu:'Mezzelune vajjal és zsályával / dióval', ro:'Mezzelune cu unt și salvie / nuci', tr:'Tereyağı ve adaçayı / cevizli mezzelune', ar:'ميزيلوني بالزبدة والمريمية / الجوز', 'zh-CN':'黄油鼠尾草/核桃半月饺', ja:'バターとセージ／クルミのメッツェルーネ' },
+  'Troffie al Pesto Fresco / Primavera': { en:'Troffie with Fresh Pesto / Primavera Style', fr:'Troffie au Pesto Frais / Primavera', de:'Troffie mit frischem Pesto / Primavera-Art', es:'Troffie al Pesto Fresco / Estilo Primavera', pt:'Troffie com Pesto Fresco / Estilo Primavera', ru:'Троффие со свежим песто / примавера', nl:'Troffie met verse pesto / primavera-stijl', pl:'Troffie ze świeżym pesto / w stylu primavera', sv:'Troffie med färsk pesto / primavera-stil', da:'Troffie med frisk pesto / primavera-stil', no:'Troffie med fersk pesto / primavera-stil', fi:'Troffie tuoreella pestolla / primavera-tyyliin', cs:'Troffie s čerstvým pestem / styl primavera', hu:'Troffie friss pestóval / primavera stílusban', ro:'Troffie cu pesto proaspăt / stil primavera', tr:'Taze pesto / primavera usulü troffie', ar:'تروفيه بالبيستو الطازج / على طريقة الربيع', 'zh-CN':'鲜青酱/初春风味特飞面', ja:'フレッシュペスト／プリマヴェーラ風トロフィエ' },
+  'Troffie con Gamberetti e Zucchine': { en:'Troffie with Shrimp and Courgettes', fr:'Troffie aux Crevettes et Courgettes', de:'Troffie mit Garnelen und Zucchini', es:'Troffie con Gambas y Calabacín', pt:'Troffie com Camarão e Courgette', ru:'Троффие с креветками и цукини', nl:'Troffie met garnalen en courgette', pl:'Troffie z krewetkami i cukinią', sv:'Troffie med räkor och zucchini', da:'Troffie med rejer og squash', no:'Troffie med reker og squash', fi:'Troffie katkaravuilla ja kesäkurpitsalla', cs:'Troffie s krevetami a cuketou', hu:'Troffie garnélával és cukkinivel', ro:'Troffie cu creveți și dovlecei', tr:'Karides ve kabaklı troffie', ar:'تروفيه بالروبيان والكوسا', 'zh-CN':'虾仁西葫芦特飞面', ja:'エビとズッキーニのトロフィエ' },
+  'Gnocchi ai Funghi': { en:'Mushroom Gnocchi', fr:'Gnocchi aux Champignons', de:'Pilz-Gnocchi', es:'Ñoquis de Setas', pt:'Nhoque de Cogumelos', ru:'Ньокки с грибами', nl:'Gnocchi met paddenstoelen', pl:'Gnocchi z grzybami', sv:'Gnocchi med svamp', da:'Gnocchi med svampe', no:'Gnocchi med sopp', fi:'Sieni-gnocchi', cs:'Gnocchi s houbami', hu:'Gombás gnocchi', ro:'Gnocchi cu ciuperci', tr:'Mantarlı gnocchi', ar:'نيوكي بالفطر', 'zh-CN':'蘑菇土豆团', ja:'きのこのニョッキ' },
+  'Gnocchi ai Formaggi con Gorgonzola': { en:'Gnocchi with Cheese and Gorgonzola', fr:'Gnocchi aux Fromages et Gorgonzola', de:'Gnocchi mit Käse und Gorgonzola', es:'Ñoquis con Quesos y Gorgonzola', pt:'Nhoque com Queijos e Gorgonzola', ru:'Ньокки с сырами и горгонзолой', nl:'Gnocchi met kaas en gorgonzola', pl:'Gnocchi z serami i gorgonzolą', sv:'Gnocchi med ostar och gorgonzola', da:'Gnocchi med oste og gorgonzola', no:'Gnocchi med oster og gorgonzola', fi:'Gnocchi juustoilla ja gorgonzolalla', cs:'Gnocchi se sýry a gorgonzolou', hu:'Gnocchi sajtokkal és gorgonzolával', ro:'Gnocchi cu brânzeturi și gorgonzola', tr:'Peynir ve gorgonzolalı gnocchi', ar:'نيوكي بالجبن والغورغونزولا', 'zh-CN':'奶酪戈贡佐拉土豆团', ja:'チーズとゴルゴンゾーラのニョッキ' },
+  'Risotto ai Frutti di Mare': { en:'Seafood Risotto', fr:'Risotto aux Fruits de Mer', de:'Meeresfrüchte-Risotto', es:'Risotto de Mariscos', pt:'Risoto de Marisco', ru:'Ризотто с морепродуктами', nl:'Risotto met zeevruchten', pl:'Risotto z owocami morza', sv:'Risotto med skaldjur', da:'Risotto med skaldyr', no:'Risotto med sjømat', fi:'Äyriäisrisotto', cs:'Rizoto s mořskými plody', hu:'Tengeri risotto', ro:'Risotto cu fructe de mare', tr:'Deniz ürünlü risotto', ar:'ريزوتو بالمأكولات البحرية', 'zh-CN':'海鲜烩饭', ja:'魚介類のリゾット' },
+  'Coniglio alla Rocchettina': { en:'Rabbit Rocchettina Style', fr:'Lapin à la Rocchettina', de:'Kaninchen Rocchettina-Art', es:'Conejo a la Rocchettina', pt:'Coelho à Rocchettina', ru:'Кролик по-роккеттински', nl:'Konijn op Rocchettina-wijze', pl:'Królik po rocchettińsku', sv:'Kanin Rocchettina-stil', da:'Kanin Rocchettina-stil', no:'Kanin Rocchettina-stil', fi:'Kani Rocchettina-tyyliin', cs:'Králík po rocchettinsku', hu:'Nyúl Rocchettina módra', ro:'Iepure în stil Rocchettina', tr:'Rocchettina usulü tavşan', ar:'أرنب على طريقة روكيتينا', 'zh-CN':'洛切蒂纳风味兔肉', ja:'ロッケッティーナ風ウサギ' },
+  'Selvaggina al Vino Rosso': { en:'Game in Red Wine', fr:'Gibier au Vin Rouge', de:'Wildfleisch in Rotwein', es:'Caza al Vino Tinto', pt:'Caça em Vinho Tinto', ru:'Дичь в красном вине', nl:'Wild in rode wijn', pl:'Dziczyzna w czerwonym winie', sv:'Vilt i rödvin', da:'Vildt i rødvin', no:'Vilt i rødvin', fi:'Riista punaviinissä', cs:'Zvěřina v červeném víně', hu:'Vadhús vörösborban', ro:'Vânat în vin roșu', tr:'Kırmızı şaraplı av eti', ar:'لحم الطرائد بالنبيذ الأحمر', 'zh-CN':'红酒炖野味', ja:'赤ワイン煮込みのジビエ' },
+  'Costine di Agnello alla Griglia': { en:'Grilled Lamb Ribs', fr:"Côtes d'Agneau Grillées", de:'Gegrillte Lammrippchen', es:'Costillas de Cordero a la Parrilla', pt:'Costeletas de Borrego Grelhadas', ru:'Жареные бараньи рёбрышки', nl:'Gegrilde lamsribbetjes', pl:'Grillowane żeberka jagnięce', sv:'Grillade lammrevben', da:'Grillede lammeribben', no:'Grillede lammeribbe', fi:'Grillatut lampaan kylkiluut', cs:'Grilovaná jehněčí žebírka', hu:'Grillezett bárányborda', ro:'Coaste de miel la grătar', tr:'Izgara kuzu kaburgası', ar:'أضلاع الحمل المشوية', 'zh-CN':'烤羊排', ja:'ラムリブのグリル' },
+  'Grigliata Mista di Carne': { en:'Mixed Grilled Meat', fr:'Grillade Mixte de Viandes', de:'Gemischter Fleischteller vom Grill', es:'Parrillada Mixta de Carnes', pt:'Grelhado Misto de Carne', ru:'Мясное ассорти на гриле', nl:'Gemengde grillschotel vlees', pl:'Mieszany grill mięsny', sv:'Blandad grillad kött', da:'Blandet grillet kød', no:'Blandet grillet kjøtt', fi:'Sekagrilliliha', cs:'Míchaný grilovaný talíř masa', hu:'Vegyes grillezett hústál', ro:'Grătar mixt de carne', tr:'Karışık ızgara et', ar:'مشاوي لحم مشكلة', 'zh-CN':'什锦烤肉', ja:'ミックスグリル肉' },
+  'Roast Beef': { en:'Roast Beef', fr:'Rosbif', de:'Roastbeef', es:'Rosbif', pt:'Rosbife', ru:'Ростбиф', nl:'Rosbief', pl:'Rostbef', sv:'Rostbiff', da:'Roastbeef', no:'Roastbiff', fi:'Roast beef', cs:'Roastbeef', hu:'Roast beef', ro:'Roast beef', tr:'Roast beef', ar:'روزبيف', 'zh-CN':'烤牛肉', ja:'ローストビーフ' },
+  'Filetto di Manzo': { en:'Beef Fillet', fr:'Filet de Bœuf', de:'Rinderfilet', es:'Filete de Ternera', pt:'Filete de Vaca', ru:'Говяжье филе', nl:'Runderfilet', pl:'Filet wołowy', sv:'Oxfilé', da:'Oksefilet', no:'Oksefilet', fi:'Naudanfilee', cs:'Hovězí filet', hu:'Marhafilé', ro:'File de vită', tr:'Dana bonfile', ar:'فيليه لحم بقر', 'zh-CN':'牛柳', ja:'牛フィレ肉' },
+  'Pescato / Gamberoni': { en:'Catch of the Day / King Prawns', fr:'Poisson du Jour / Gambas', de:'Fisch des Tages / Riesengarnelen', es:'Pescado del Día / Langostinos', pt:'Peixe do Dia / Gambas', ru:'Улов дня / королевские креветки', nl:'Vangst van de dag / reuzengarnalen', pl:'Ryba dnia / krewetki królewskie', sv:'Dagens fångst / jätteräkor', da:'Dagens fangst / kæmpe rejer', no:'Dagens fangst / kjemperøje', fi:'Päivän saalis / jättikatkaravut', cs:'Úlovek dne / obří krevety', hu:'Napi fogás / óriásgarnéla', ro:'Peștele zilei / creveți uriași', tr:'Günün balığı / kral karidesi', ar:'صيد اليوم / الجمبري الملكي', 'zh-CN':'时令鱼获/大虾', ja:'本日の魚／大エビ' },
+  'Grigliata Mista di Pesce': { en:'Mixed Grilled Seafood', fr:'Grillade Mixte de Poisson', de:'Gemischte Fischplatte vom Grill', es:'Parrillada Mixta de Pescado', pt:'Grelhado Misto de Peixe', ru:'Рыбное ассорти на гриле', nl:'Gemengde grillschotel vis', pl:'Mieszany grill rybny', sv:'Blandad grillad fisk', da:'Blandet grillet fisk', no:'Blandet grillet fisk', fi:'Sekagrillikala', cs:'Míchaný grilovaný talíř ryb', hu:'Vegyes grillezett haltál', ro:'Grătar mixt de pește', tr:'Karışık ızgara balık', ar:'مشاوي سمك مشكلة', 'zh-CN':'什锦烤海鲜', ja:'ミックスグリル魚介' },
+};
+function dishLabelTrans(itLabel){
+  const lang = window._currentLang || 'it';
+  if (lang === 'it') return '';
+  const tr = DISH_TRANS[itLabel];
+  return (tr && tr[lang]) || '';
+}
+
 function openDishModal() {
   setDishCat(activeDishCat, document.querySelector('.dish-cat-tab'));
   document.getElementById('dishOverlay').classList.add('open');
@@ -1304,11 +1353,14 @@ function setDishCat(cat, el) {
   });
   const list = document.getElementById('dishList');
   const dishes = Object.entries(DISH_PAIRINGS).filter(([,d]) => d.cat === cat);
-  list.innerHTML = dishes.map(([id, d]) => `
+  list.innerHTML = dishes.map(([id, d]) => {
+    const sub = dishLabelTrans(d.label);
+    return `
     <button class="dish-btn${activeDish===id?' active':''}" onclick="selectDish('${id}')">
-      <span>${d.label}</span>
+      <span>${d.label}${sub ? `<span class="dish-sub-trans">${sub}</span>` : ''}</span>
       <span class="dish-btn-wines">${d.wines.length} ${((typeof TRANSLATIONS !== 'undefined' && TRANSLATIONS[window._currentLang || 'it']) || {}).wines_count || 'vini'}</span>
-    </button>`).join('');
+    </button>`;
+  }).join('');
 }
 
 function selectDish(id) {
@@ -1659,6 +1711,22 @@ const CHIP_LABELS = {
   en: { antipasto:'🥗 Starters',  pasta:'🍝 Pasta', carne:'🥩 Meat',  pesce:'🐟 Fish'   },
   fr: { antipasto:'🥗 Entrées',   pasta:'🍝 Pâtes', carne:'🥩 Viande',pesce:'🐟 Poisson' },
   de: { antipasto:'🥗 Vorspeisen',pasta:'🍝 Pasta', carne:'🥩 Fleisch',pesce:'🐟 Fisch'  },
+  es: { antipasto:'🥗 Entrantes', pasta:'🍝 Pasta', carne:'🥩 Carne', pesce:'🐟 Pescado' },
+  pt: { antipasto:'🥗 Entradas',  pasta:'🍝 Massa', carne:'🥩 Carne', pesce:'🐟 Peixe'   },
+  ru: { antipasto:'🥗 Закуски',   pasta:'🍝 Паста', carne:'🥩 Мясо',  pesce:'🐟 Рыба'    },
+  nl: { antipasto:'🥗 Voorgerechten', pasta:'🍝 Pasta', carne:'🥩 Vlees', pesce:'🐟 Vis' },
+  pl: { antipasto:'🥗 Przystawki',pasta:'🍝 Makaron',carne:'🥩 Mięso', pesce:'🐟 Ryba'    },
+  sv: { antipasto:'🥗 Förrätter', pasta:'🍝 Pasta', carne:'🥩 Kött',  pesce:'🐟 Fisk'    },
+  da: { antipasto:'🥗 Forretter', pasta:'🍝 Pasta', carne:'🥩 Kød',   pesce:'🐟 Fisk'    },
+  no: { antipasto:'🥗 Forretter', pasta:'🍝 Pasta', carne:'🥩 Kjøtt', pesce:'🐟 Fisk'    },
+  fi: { antipasto:'🥗 Alkupalat', pasta:'🍝 Pasta', carne:'🥩 Liha',  pesce:'🐟 Kala'    },
+  cs: { antipasto:'🥗 Předkrmy',  pasta:'🍝 Těstoviny',carne:'🥩 Maso', pesce:'🐟 Ryby'  },
+  hu: { antipasto:'🥗 Előételek', pasta:'🍝 Tészta',carne:'🥩 Hús',   pesce:'🐟 Hal'     },
+  ro: { antipasto:'🥗 Antreuri',  pasta:'🍝 Paste', carne:'🥩 Carne', pesce:'🐟 Pește'   },
+  tr: { antipasto:'🥗 Başlangıçlar', pasta:'🍝 Makarna', carne:'🥩 Et', pesce:'🐟 Balık' },
+  ar: { antipasto:'🥗 المقبلات',  pasta:'🍝 المعكرونة', carne:'🥩 اللحم', pesce:'🐟 السمك' },
+  'zh-CN': { antipasto:'🥗 开胃菜', pasta:'🍝 意面', carne:'🥩 肉类', pesce:'🐟 海鲜'    },
+  ja: { antipasto:'🥗 前菜',      pasta:'🍝 パスタ',carne:'🥩 肉料理',pesce:'🐟 魚料理'  },
 };
 
 function applyChipLabels(langCode) {
@@ -1713,6 +1781,12 @@ function applyUITranslations(langCode) {
 
   // Re-render to update category headers
   renderAll();
+
+  // Refresh dish selector modal content (Italian name + sub-translation) if it's open
+  if (document.getElementById('dishOverlay') && document.getElementById('dishOverlay').classList.contains('open')) {
+    setDishCat(activeDishCat);
+  }
+  updateDishBar();
 }
 
 // ── FIREBASE CONFIG (same project as index.html / admin.html) ──
