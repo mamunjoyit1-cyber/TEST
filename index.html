@@ -1832,6 +1832,11 @@ function changeWineQty(id, delta) {
   const qd = document.getElementById('wqty-' + id);
   if (qd) qd.textContent = wineCartQty[id];
   updateWineCart();
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'wineCartUpdate', id: w.id, name: w.name, price: w.price, delta: delta > 0 ? 1 : -1 }, '*');
+    }
+  } catch (e) {}
 }
 
 function updateWineCart() {
