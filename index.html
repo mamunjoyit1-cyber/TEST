@@ -1897,51 +1897,6 @@ function sendWineOrder() {
     }
   } catch (e) {}
 }
-  if (!wineCart.length) return;
-
-  const btn = document.getElementById('wineSendBtn');
-  const originalText = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = '⏳ ...';
-
-  const items = wineCart.map(e => ({
-    name: e.name,
-    detail: '',
-    person: '',
-    turno: '',
-    course: 'bevande',
-    category: 'drink',
-    price: e.price
-  }));
-  const total = wineCart.reduce((s, e) => s + e.price, 0);
-
-  const orderData = {
-    table: tableNum,
-    items: items,
-    total: total,
-    status: 'pending',
-    lastOrder: false,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-  };
-
-  try {
-    await wineDb.collection('orders').add(orderData);
-    wineCart = [];
-    wineCartQty = {};
-    updateWineCart();
-    renderAll();
-    tableSel.value = '';
-    document.getElementById('wineCartPanel').classList.remove('open');
-    alert('✅ Ordine vini inviato! Il cameriere lo riceverà a breve.');
-  } catch (err) {
-    console.error('Wine order submission failed:', err);
-    alert('❌ Errore durante l\'invio. Riprova.');
-  } finally {
-    btn.disabled = wineCart.length === 0;
-    btn.textContent = originalText;
-  }
-}
-
 // ── WINE AVAILABILITY (reads the SAME menuAvailability collection admin.html manages) ──
 async function applyWineAvailability() {
   try {
