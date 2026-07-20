@@ -1815,23 +1815,26 @@ function populateWineTableSelect(){
 }
 
 // ── WINE CART STATE ──
-let wineCart = [];
+let externalCart = [];
 let wineCartQty = {};
 let unavailableWineIds = new Set();
+
+window.addEventListener('message', function(event){
+  if(!event.data || event.data.type !== 'fullCartSync') return;
+  externalCart = event.data.cart || [];
+  wineCartQty = {};
+  WINES.forEach(w=>{
+    const count = externalCart.filter(c=>c.itemId==='winesync_'+w.id).length;
+    wineCartQty[w.id] = count;
+    const qd = document.getElementById('wqty-'+w.id);
+    if(qd) qd.textContent = count;
+  });
+  updateWineCart();
+});
 
 function changeWineQty(id, delta) {
   const w = WINES.find(x => x.id === id);
   if (!w) return;
-  if (delta > 0) {
-    wineCart.push({ id: w.id, name: w.name, price: w.price });
-  } else {
-    const idx = wineCart.map(c => c.id).lastIndexOf(id);
-    if (idx >= 0) wineCart.splice(idx, 1);
-  }
-  wineCartQty[id] = wineCart.filter(c => c.id === id).length;
-  const qd = document.getElementById('wqty-' + id);
-  if (qd) qd.textContent = wineCartQty[id];
-  updateWineCart();
   try {
     if (window.parent && window.parent !== window) {
       window.parent.postMessage({ type: 'wineCartUpdate', id: w.id, name: w.name, price: w.price, delta: delta > 0 ? 1 : -1 }, '*');
@@ -1840,60 +1843,60 @@ function changeWineQty(id, delta) {
 }
 
 function updateWineCart() {
-  const grouped = {};
-  wineCart.forEach(e => {
-    if (!grouped[e.id]) grouped[e.id] = { name: e.name, price: e.price, count: 0, total: 0 };
-    grouped[e.id].count++;
-    grouped[e.id].total += e.price;
-  });
   const content = document.getElementById('wineCartContent');
   const totalBox = document.getElementById('wineCartTotal');
   const sendBtn = document.getElementById('wineSendBtn');
-  const keys = Object.keys(grouped);
-  if (keys.length === 0) {
-    content.innerHTML = '<div class="wine-cart-empty">Nessun vino ancora selezionato</div>';
+  if (!externalCart || externalCart.length === 0) {
+    content.innerHTML = '<div class="wine-cart-empty">Nessun articolo ancora</div>';
     totalBox.style.display = 'none';
     sendBtn.disabled = true;
-  } else {
-    let html = '', total = 0;
-    keys.forEach(id => {
-      const g = grouped[id];
-      total += g.total;
-      html += `<div class="wine-cart-row">
-        <div class="wine-cart-row-name">${g.name} ×${g.count}</div>
-        <div style="display:flex;align-items:center;gap:6px;">
-          <span style="color:var(--burg);font-weight:700;">€${g.total}</span>
-          <button class="wine-cart-remove" onclick="removeWineFromCart('${id}')">✕</button>
-        </div>
-      </div>`;
-    });
-    content.innerHTML = html;
-    document.getElementById('wineCartTotalAmount').textContent = '€' + total;
-    totalBox.style.display = 'flex';
-    sendBtn.disabled = false;
+    document.getElementById('wineCartBadge').textContent = '0';
+    return;
   }
-  document.getElementById('wineCartBadge').textContent = wineCart.length;
-}
-
-function removeWineFromCart(id) {
-  wineCart = wineCart.filter(c => c.id !== id);
-  wineCartQty[id] = 0;
-  const qd = document.getElementById('wqty-' + id);
-  if (qd) qd.textContent = 0;
-  updateWineCart();
+  const grouped = {};
+  externalCart.forEach(e => {
+    const key = (e.itemId||'') + '||' + (e.detail||'') + '||' + (e.person||'');
+    if (!grouped[key]) grouped[key] = { name: e.name, detail: e.detail, person: e.person, count: 0, total: 0 };
+    grouped[key].count++;
+    grouped[key].total += e.price;
+  });
+  let html = '', total = 0, totalItems = 0;
+  Object.values(grouped).forEach(g => {
+    total += g.total; totalItems += g.count;
+    const pTxt = g.person ? g.person + ' — ' : '';
+    const dTxt = g.detail ? `<div style="font-size:11px;color:var(--text-lite);font-style:italic;margin-top:2px;">${g.detail}</div>` : '';
+    html += `<div class="wine-cart-row">
+      <div class="wine-cart-row-name">${pTxt}${g.name} ×${g.count}${dTxt}</div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="color:var(--burg);font-weight:700;">€${g.total}</span>
+      </div>
+    </div>`;
+  });
+  content.innerHTML = html;
+  document.getElementById('wineCartTotalAmount').textContent = '€' + total;
+  totalBox.style.display = 'flex';
+  sendBtn.disabled = false;
+  document.getElementById('wineCartBadge').textContent = totalItems;
 }
 
 function toggleWineCart() {
   document.getElementById('wineCartPanel').classList.toggle('open');
 }
 
-async function sendWineOrder() {
+function sendWineOrder() {
   const tableSel = document.getElementById('wineTableSelect');
   const tableNum = tableSel ? tableSel.value : '';
   if (!tableNum) {
     alert('⚠️ Seleziona il numero del tavolo prima di inviare!');
     return;
   }
+  if (!externalCart || !externalCart.length) return;
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'submitOrderRequest', table: tableNum }, '*');
+    }
+  } catch (e) {}
+}
   if (!wineCart.length) return;
 
   const btn = document.getElementById('wineSendBtn');
