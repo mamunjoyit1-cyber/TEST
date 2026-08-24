@@ -1073,7 +1073,7 @@ function showAppModal(message, opts){
     document.getElementById('appModalIcon').textContent=opts.icon||'🍷';
     const confirmBtn=document.getElementById('appModalConfirmBtn');
     const cancelBtn=document.getElementById('appModalCancelBtn');
-    confirmBtn.textContent=opts.confirmLabel||(APP_MODAL_OK_LABEL[currentLang]||APP_MODAL_OK_LABEL.it);
+    confirmBtn.textContent=opts.confirmLabel||tMsg('msg_modal_ok','✓ Ho capito','✓ Compris','✓ Got it','✓ Verstanden');
     if(opts.cancelLabel){
       cancelBtn.style.display='block';
       cancelBtn.textContent=opts.cancelLabel;
@@ -1191,7 +1191,7 @@ function showCartToast(msg){
   __cartToastTimer=setTimeout(()=>el.classList.remove('show'),1600);
 }
 function addedToCartMsg(){
-  return currentLang==='it'?'✓ Aggiunto al carrello':currentLang==='fr'?'✓ Ajouté au panier':currentLang==='de'?'✓ Zum Warenkorb hinzugefügt':'✓ Added to cart';
+  return tMsg('msg_added_cart','✓ Aggiunto al carrello','✓ Ajouté au panier','✓ Added to cart','✓ Zum Warenkorb hinzugefügt');
 }
 
 const CART_STORAGE_KEY='lagobin_cart_v1';
@@ -1230,13 +1230,10 @@ function toggleFontSize(){
 }
 async function clearCart(){
   if(!cart.length)return;
-  const ok=await showAppModal(currentLang==='it'?'Svuotare il carrello?':
-        currentLang==='fr'?'Vider le panier?':
-        currentLang==='de'?'Warenkorb leeren?':
-        'Clear the cart?',
+  const ok=await showAppModal(tMsg('msg_clear_cart_q','Svuotare il carrello?','Vider le panier?','Clear the cart?','Warenkorb leeren?'),
         {icon:'🗑️',
-         confirmLabel:currentLang==='it'?'✓ Sì, svuota':currentLang==='fr'?'✓ Oui, vider':currentLang==='de'?'✓ Ja, leeren':'✓ Yes, clear',
-         cancelLabel:currentLang==='it'?'Annulla':currentLang==='fr'?'Annuler':currentLang==='de'?'Abbrechen':'Cancel'});
+         confirmLabel:tMsg('msg_clear_yes','✓ Sì, svuota','✓ Oui, vider','✓ Yes, clear','✓ Ja, leeren'),
+         cancelLabel:tMsg('msg_cancel','Annulla','Annuler','Cancel','Abbrechen')});
   if(!ok)return;
   cart.length=0;
   pkgPersons={};
@@ -1632,7 +1629,7 @@ function updateCart(){
         '<button class="cart-remove-btn" onclick="'+rem+'">✕</button>'+
         '</div></div>';
     });
-    const itemsWord=currentLang==='it'?'articoli':currentLang==='fr'?'articles':currentLang==='de'?'Artikel':'items';
+    const itemsWord=tMsg('msg_items_word','articoli','articles','items','Artikel');
     html+='<div class="cart-cat-section" style="border-left-color:'+bucketAccent(bid)+';">'+
       '<div class="cart-cat-head'+(isOpen?' open':'')+'" data-bid="'+bid.replace(/"/g,'&quot;')+'">'+
         '<span class="cart-cat-icon">'+bucketIcon(bid)+'</span>'+
@@ -1649,7 +1646,7 @@ function updateCart(){
     cc.innerHTML=html;tc.style.display='flex';document.getElementById('total-amount').textContent='€'+fmtPrice(totalPrice);wb.disabled=false;if(swb)swb.disabled=false;if(ccb)ccb.disabled=false;
     if(ms){
       ms.style.display='flex';
-      const itemsWord=currentLang==='it'?'articoli':currentLang==='fr'?'articles':currentLang==='de'?'Artikel':'items';
+      const itemsWord=tMsg('msg_items_word','articoli','articles','items','Artikel');
       if(msCount)msCount.innerHTML='<b>'+totalItems+'</b> '+itemsWord;
       if(msTotal)msTotal.textContent='€'+fmtPrice(totalPrice);
     }
@@ -1690,7 +1687,7 @@ function removeOneCartItem(gk){for(let i=cart.length-1;i>=0;i--){const e=cart[i]
 function addSameItem(gk){const e=cart.find(c=>(c.itemId+'||'+(c.detail||'')+'||'+(c.person||'')+'||'+(c.turno||''))===gk);if(!e)return;if(e.isPkg&&e.pkgPid)return;cart.push({...e,id:++cartIdCounter});updateCart();}
 function toggleCart(){document.getElementById('cart-panel').classList.toggle('open');}
 
-const OVERLAY_NOTE_SENT={it:'✅ Ordine inviato! Il cameriere lo riceverà a breve.',fr:'✅ Commande envoyée! Le serveur la recevra bientôt.',en:'✅ Order sent! The waiter will receive it shortly.',de:'✅ Bestellung gesendet! Der Kellner erhält sie in Kürze.'};
+const OVERLAY_NOTE_SENT={it:'Mostra questo schermo al cameriere',fr:'Montrez cet écran au serveur',en:'Show this screen to the waiter',de:'Zeigen Sie dies dem Kellner'};
 const OVERLAY_NOTE_SHOW={it:'Mostra questo schermo al cameriere',fr:'Montrez cet écran au serveur',en:'Show this screen to the waiter',de:'Zeigen Sie dies dem Kellner'};
 function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -1722,7 +1719,7 @@ function showOverlay(cartSnapshot,wasSent,kitchenNote){
     html+='</div>';
   });
   if(kNote){
-    const noteTitle=currentLang==='it'?'📝 Note':currentLang==='fr'?'📝 Notes':currentLang==='de'?'📝 Hinweise':'📝 Notes';
+    const noteTitle=tMsg('msg_note_title','📝 Note','📝 Notes','📝 Notes','📝 Hinweise');
     html+='<div class="overlay-section"><div class="overlay-section-title">'+noteTitle+'</div><div style="color:#f9f1e2;font-size:14px;font-style:italic;">'+escapeHtml(kNote)+'</div></div>';
   }
   html+='<div class="overlay-total-box"><div class="overlay-total-label">'+t('totale_stimato')+'</div><div class="overlay-total-amount">€'+fmtPrice(total)+'</div></div>';
@@ -1755,6 +1752,19 @@ const T={
   de:{add_vino_cart:'Zum Warenkorb',vino_back:'Zurück zu Weinen',sub_default:'Zur Bestellung hinzufügen',sub_gelato:'Bis zu 3 Sorten wählen',sub_sorbetto:'Mit oder ohne Alkohol?',sub_multi:n=>`Wählen Sie ${n} Gerichte pro Person`,sub_sauce:'Wählen Sie die Sauce',name_ph:'Name (optional)',gusti_label:'🍦 Sorten (max. 3):',gusti_sel:n=>`Ausgewählt: ${n}/3`,gusti_hint:'Tippen um 3 Sorten zu wählen',seleziona_gusto:'Wählen Sie mind. 1 Sorte',preferenza_label:'🍹 Präferenz:',con_alcol:'🍷 Mit Alkohol',senza_alcol:'🧃 Ohne Alkohol',scegli_n:(n,s)=>`🍽️ Wählen Sie ${n} Gerichte (${s}/${n}):`,seleziona_ancora:n=>`Noch ${n} Gericht(e) wählen`,condimento_label:'🍽️ Sauce:',cottura_label:'🔥 Garstufe:',turno_label:'📋 Gang (erforderlich)',seleziona_turno:'Gang auswählen',nessun_articolo:'Noch keine Artikel',piatti_sel:(c,l)=>`${c} / ${l} Gerichte`,persona:'👤 Person',conferma_aggiungi:'✓ Bestätigen und hinzufügen',conferma_btn:'✓ Bestätigen',confermato:'✅ Bestätigt',modifica:'✏️ Ändern',scegli_btn:'+ Wählen',selezionato_btn:'✓ Ausgewählt',condimento_row:'Sauce:',cinque_portate:'5 Gänge von der Küche',totale_stimato:'Geschätzter Gesamtbetrag',nessun_risultato:'Keine Ergebnisse',vedi:'📋 Anzeigen ▾',chiudi:'📋 Schließen ▴',add_person:'+ Person hinzufügen',vino_prompt:'Wie viele Flaschen?',vino_name:'Hauswein',vino_detail:'Aus der Weinkarte auswählen',nota_label:'📝 Hinweis (optional)',nota_ph:'Z.B. ohne Zwiebeln...'}
 };
 function t(key,...args){const v=(T[currentLang]||T.it)[key];if(typeof v==='function')return v(...args);return v!==undefined?v:(T.it[key]||key);}
+// tMsg: for the small set of custom alert/confirm strings that are hardcoded
+// per-core-language (it/fr/en/de) inline rather than routed through T{}.
+// For any other language, falls back to window.I18N_PATCH[currentLang][key]
+// (populated by i18n_patch_extra.js), then to the English text.
+function tMsg(key,itText,frText,enText,deText){
+  if(currentLang==='it')return itText;
+  if(currentLang==='fr')return frText;
+  if(currentLang==='de')return deText;
+  if(currentLang==='en')return enText;
+  const pack=window.I18N_PATCH&&window.I18N_PATCH[currentLang];
+  if(pack&&pack[key])return pack[key];
+  return enText;
+}
 
 function applyLang(lang){
   document.querySelectorAll('[data-'+lang+']').forEach(el=>{
@@ -1869,10 +1879,11 @@ function updateTableOccupiedHint(){
   if(!sel||!hint)return;
   const v=sel.value;
   if(v && occupiedTablesMap[v]){
-    const msg=currentLang==='it'?'ℹ️ Questo tavolo risulta già occupato — se sei seduto qui va tutto bene.':
-               currentLang==='fr'?'ℹ️ Cette table est déjà occupée — si vous y êtes assis, tout va bien.':
-               currentLang==='de'?'ℹ️ Dieser Tisch ist bereits belegt — wenn Sie dort sitzen, ist alles in Ordnung.':
-               'ℹ️ This table shows as already occupied — if that\'s you, no problem at all.';
+    const msg=tMsg('msg_table_occupied',
+               'ℹ️ Questo tavolo risulta già occupato — se sei seduto qui va tutto bene.',
+               'ℹ️ Cette table est déjà occupée — si vous y êtes assis, tout va bien.',
+               'ℹ️ This table shows as already occupied — if that\'s you, no problem at all.',
+               'ℹ️ Dieser Tisch ist bereits belegt — wenn Sie dort sitzen, ist alles in Ordnung.');
     hint.textContent=msg;
     hint.style.display='block';
   }else{
@@ -1887,32 +1898,35 @@ function categoryFor(entry){
 async function sendOrder(){
   if(__isSubmittingOrder)return;
   if(!navigator.onLine){
-    await showAppModal(currentLang==='it'?'📡 Nessuna connessione internet. Riprova quando torni online.':
-          currentLang==='fr'?'📡 Aucune connexion internet. Réessayez une fois reconnecté.':
-          currentLang==='de'?'📡 Keine Internetverbindung. Versuchen Sie es erneut, sobald Sie wieder online sind.':
-          '📡 No internet connection. Please try again once you\'re back online.', {icon:'📡'});
+    await showAppModal(tMsg('msg_offline',
+          '📡 Nessuna connessione internet. Riprova quando torni online.',
+          '📡 Aucune connexion internet. Réessayez une fois reconnecté.',
+          '📡 No internet connection. Please try again once you\'re back online.',
+          '📡 Keine Internetverbindung. Versuchen Sie es erneut, sobald Sie wieder online sind.'), {icon:'📡'});
     return;
   }
   const tableSel=document.getElementById('tableSelect');
   const tableNum=tableSel?tableSel.value:'';
   if(!tableNum){
-    await showAppModal(currentLang==='it'?'⚠️ Seleziona il numero del tavolo prima di inviare!':
-          currentLang==='fr'?'⚠️ Veuillez sélectionner le numéro de table!':
-          currentLang==='de'?'⚠️ Bitte wählen Sie die Tischnummer!':
-          '⚠️ Please select your table number first!', {icon:'🪑'});
+    await showAppModal(tMsg('msg_table_required',
+          '⚠️ Seleziona il numero del tavolo prima di inviare!',
+          '⚠️ Veuillez sélectionner le numéro de table!',
+          '⚠️ Please select your table number first!',
+          '⚠️ Bitte wählen Sie die Tischnummer!'), {icon:'🪑'});
     return;
   }
   if(!cart.length)return;
 
   const hasBevande=cart.some(e=>e.course==='bevande');
   if(!hasBevande){
-    const proceed=await showAppModal(currentLang==='it'?'⚠️ Non hai aggiunto nessuna bevanda. Vuoi inviare comunque l\'ordine?':
-          currentLang==='fr'?'⚠️ Vous n\'avez ajouté aucune boisson. Voulez-vous quand même envoyer la commande?':
-          currentLang==='de'?'⚠️ Sie haben kein Getränk hinzugefügt. Möchten Sie die Bestellung trotzdem senden?':
+    const proceed=await showAppModal(tMsg('msg_no_beverage',
+          '⚠️ Non hai aggiunto nessuna bevanda. Vuoi inviare comunque l\'ordine?',
+          '⚠️ Vous n\'avez ajouté aucune boisson. Voulez-vous quand même envoyer la commande?',
           '⚠️ You haven\'t added any drinks. Do you want to send the order anyway?',
+          '⚠️ Sie haben kein Getränk hinzugefügt. Möchten Sie die Bestellung trotzdem senden?'),
           {icon:'🍷',
-           confirmLabel:currentLang==='it'?'✓ Sì, invia comunque':currentLang==='fr'?'✓ Oui, envoyer quand même':currentLang==='de'?'✓ Ja, trotzdem senden':'✓ Yes, send anyway',
-           cancelLabel:currentLang==='it'?'Torna indietro':currentLang==='fr'?'Retour':currentLang==='de'?'Zurück':'Go back'});
+           confirmLabel:tMsg('msg_send_anyway','✓ Sì, invia comunque','✓ Oui, envoyer quand même','✓ Yes, send anyway','✓ Ja, trotzdem senden'),
+           cancelLabel:tMsg('msg_go_back','Torna indietro','Retour','Go back','Zurück')});
     if(!proceed)return;
   }
 
@@ -1955,14 +1969,22 @@ async function sendOrder(){
     cart.length=0;
     updateCart();
     if(lastOrderCheck)lastOrderCheck.checked=false;
+    await showAppModal(tMsg('msg_order_sent',
+          'Ordine inviato con successo! Il cameriere lo riceverà a breve.',
+          'Commande envoyée avec succès! Le serveur la recevra bientôt.',
+          'Order sent successfully! The waiter will receive it shortly.',
+          'Bestellung erfolgreich gesendet! Der Kellner erhält sie in Kürze.'),
+          {icon:'✅',
+           confirmLabel:tMsg('msg_modal_ok','✓ Ho capito','✓ Compris','✓ Got it','✓ Verstanden')});
     showOverlay(cartSnapshot,true,orderNote);
     if(orderNoteEl)orderNoteEl.value='';
   }catch(err){
     console.error('Order submission failed:',err);
-    await showAppModal(currentLang==='it'?'❌ Errore durante l\'invio. Riprova.':
-          currentLang==='fr'?'❌ Erreur lors de l\'envoi. Réessayez.':
-          currentLang==='de'?'❌ Fehler beim Senden. Bitte erneut versuchen.':
-          '❌ Error sending order. Please try again.', {icon:'❌'});
+    await showAppModal(tMsg('msg_order_error',
+          '❌ Errore durante l\'invio. Riprova.',
+          '❌ Erreur lors de l\'envoi. Réessayez.',
+          '❌ Error sending order. Please try again.',
+          '❌ Fehler beim Senden. Bitte erneut versuchen.'), {icon:'❌'});
   }finally{
     __isSubmittingOrder=false;
     btn.disabled=cart.length===0;
@@ -2050,8 +2072,10 @@ document.addEventListener('click',e=>{
 });
 </script>
 <script src="i18n_patch.js"></script>
+<script src="i18n_patch_extra.js"></script>
 <script src="apply_i18n_patch.js"></script>
 <script src="connect_menu_i18n.js"></script>
+<script src="connect_menu_i18n_extra.js"></script>
 <script src="bar_trans_patch.js"></script>
 
 </body>
