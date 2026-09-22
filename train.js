@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Bangladesh Railway Search Helper
+// @name         Bangladesh Railway Search & Seat Helper
 // @namespace    http://tampermonkey.net/
-// @version      6.0.0
-// @description  Bangladesh Railway search helper with direct train targeting
+// @version      6.4.0
+// @description  Bangladesh Railway train search, coach and seat selection helper
 // @match        https://eticket.railway.gov.bd/*
 // @grant        none
 // ==/UserScript==
@@ -27,17 +27,55 @@
     'AC_CHAIR'
   ];
 
+  const COACHES = [
+    'ANY',
+    'KA',
+    'KHA',
+    'GA',
+    'GHA',
+    'CHA',
+    'CHHA',
+    'JA',
+    'JHA',
+    'TA',
+    'THA',
+    'DA',
+    'DHA',
+    'NA',
+    'PA',
+    'MA',
+    'UMA'
+  ];
+
   const DEFAULTS = {
     from: 'Dhaka',
     to: 'Chattogram',
     date: '23-Sep-2026',
     className: 'SNIGDHA',
 
-    // Example:
-    // MAHANAGAR PROVATI (704)
     train: 'MAHANAGAR PROVATI',
-    trainNumber: '704'
+    trainNumber: '704',
+
+    coach: 'ANY',
+
+    passengerCount: 1,
+
+    // ANY
+    // 25
+    // 1-60
+    // 1,5,25
+    // 1-10,25,40-45
+    seatNumbers: 'ANY',
+
+    // ANY / WINDOW / NORMAL
+    seatType: 'ANY'
   };
+
+  const SETTINGS_KEY =
+    'BR_BOT_SETTINGS_640';
+
+  const PENDING_KEY =
+    'BR_BOT_PENDING_640';
 
   // =========================================================
   // STATE
@@ -54,11 +92,17 @@
 
   let resultRetryTimer = null;
 
+  let seatObserver = null;
+
+  let seatRetryTimer = null;
+
   let botRunning = false;
 
   let searchRunning = false;
 
   let searchRunId = 0;
+
+  let seatPageRunning = false;
 
   // =========================================================
   // HELPERS
@@ -160,6 +204,163 @@
   }
 
   // =========================================================
+  // SETTINGS
+  // =========================================================
+
+  function getSettings() {
+
+    const get = id => {
+
+      const el =
+        document.getElementById(id);
+
+      return el
+        ? el.value
+        : '';
+    };
+
+    return {
+      from: get('br-from'),
+      to: get('br-to'),
+      date: get('br-date'),
+      className: get('br-class'),
+      train: get('br-train-name'),
+      trainNumber: get('br-train-number'),
+      coach: get('br-coach'),
+      passengerCount:
+        Number(
+          get('br-passenger-count')
+        ) || 1,
+      seatNumbers:
+        get('br-seat-numbers'),
+      seatType:
+        get('br-seat-type')
+    };
+  }
+
+  function saveSettings() {
+
+    try {
+
+      localStorage.setItem(
+        SETTINGS_KEY,
+        JSON.stringify(
+          getSettings()
+        )
+      );
+
+    } catch (e) {
+
+      log(
+        'Could not save settings',
+        e
+      );
+    }
+  }
+
+  function loadSettings() {
+
+    try {
+
+      const raw =
+        localStorage.getItem(
+          SETTINGS_KEY
+        );
+
+      if (!raw) {
+        return;
+      }
+
+      const saved =
+        JSON.parse(raw);
+
+      const set = (
+        id,
+        value
+      ) => {
+
+        const el =
+          document.getElementById(id);
+
+        if (
+          el &&
+          value !== undefined &&
+          value !== null
+        ) {
+          el.value = value;
+        }
+      };
+
+      set(
+        'br-from',
+        saved.from ||
+        DEFAULTS.from
+      );
+
+      set(
+        'br-to',
+        saved.to ||
+        DEFAULTS.to
+      );
+
+      set(
+        'br-date',
+        saved.date ||
+        DEFAULTS.date
+      );
+
+      set(
+        'br-class',
+        saved.className ||
+        DEFAULTS.className
+      );
+
+      set(
+        'br-train-name',
+        saved.train ||
+        DEFAULTS.train
+      );
+
+      set(
+        'br-train-number',
+        saved.trainNumber ||
+        DEFAULTS.trainNumber
+      );
+
+      set(
+        'br-coach',
+        saved.coach ||
+        DEFAULTS.coach
+      );
+
+      set(
+        'br-passenger-count',
+        saved.passengerCount ||
+        DEFAULTS.passengerCount
+      );
+
+      set(
+        'br-seat-numbers',
+        saved.seatNumbers ||
+        DEFAULTS.seatNumbers
+      );
+
+      set(
+        'br-seat-type',
+        saved.seatType ||
+        DEFAULTS.seatType
+      );
+
+    } catch (e) {
+
+      log(
+        'Could not load settings',
+        e
+      );
+    }
+  }
+
+  // =========================================================
   // TARGET TRAIN
   // =========================================================
 
@@ -214,6 +415,15 @@
 
       resultRetryTimer = null;
     }
+
+    if (seatRetryTimer) {
+
+      clearTimeout(
+        seatRetryTimer
+      );
+
+      seatRetryTimer = null;
+    }
   }
 
   function disconnectObserver() {
@@ -224,6 +434,13 @@
 
       resultsObserver = null;
     }
+
+    if (seatObserver) {
+
+      seatObserver.disconnect();
+
+      seatObserver = null;
+    }
   }
 
   function stopBot(
@@ -233,6 +450,8 @@
     botRunning = false;
 
     searchRunning = false;
+
+    seatPageRunning = false;
 
     searchRunId++;
 
@@ -256,7 +475,7 @@
     if (showMessage) {
 
       status(
-        'Bot stopped. No automatic actions will continue.'
+        'Bot stopped.'
       );
     }
 
@@ -367,7 +586,7 @@
           </div>
 
           <div id="br-bot-subtitle">
-            Direct Train Search
+            Search + Coach + Seat
           </div>
 
         </div>
@@ -523,7 +742,6 @@
             value="${escapeHtml(
               DEFAULTS.train
             )}"
-            placeholder="Example: MAHANAGAR PROVATI"
             autocomplete="off"
           >
 
@@ -538,7 +756,6 @@
             value="${escapeHtml(
               DEFAULTS.trainNumber
             )}"
-            placeholder="Example: 704"
             autocomplete="off"
           >
 
@@ -553,6 +770,92 @@
               DEFAULTS.trainNumber
             )})
           </div>
+
+        </div>
+
+        <div class="br-seat-section">
+
+          <div class="br-target-title">
+            💺 Seat Preferences
+          </div>
+
+          <label class="br-small-label">
+            Coach
+          </label>
+
+          <select
+            id="br-coach"
+            class="br-input"
+          >
+
+            ${COACHES.map(coach => `
+              <option
+                value="${coach}"
+                ${
+                  coach === DEFAULTS.coach
+                    ? 'selected'
+                    : ''
+                }
+              >
+                ${coach}
+              </option>
+            `).join('')}
+
+          </select>
+
+          <label class="br-small-label">
+            Passenger / Seat Count
+          </label>
+
+          <select
+            id="br-passenger-count"
+            class="br-input"
+          >
+
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+
+          </select>
+
+          <label class="br-small-label">
+            Seat Number
+          </label>
+
+          <input
+            id="br-seat-numbers"
+            class="br-input"
+            type="text"
+            value="${escapeHtml(
+              DEFAULTS.seatNumbers
+            )}"
+            placeholder="ANY / 25 / 1-20 / 1,5,25"
+            autocomplete="off"
+          >
+
+          <label class="br-small-label">
+            Seat Type
+          </label>
+
+          <select
+            id="br-seat-type"
+            class="br-input"
+          >
+
+            <option value="ANY">
+              ANY
+            </option>
+
+            <option value="WINDOW">
+              WINDOW
+            </option>
+
+            <option value="NORMAL">
+              NORMAL
+            </option>
+
+          </select>
 
         </div>
 
@@ -637,6 +940,11 @@
         'input',
         updateTargetPreview
       );
+
+      trainName.addEventListener(
+        'change',
+        saveSettings
+      );
     }
 
     if (trainNumber) {
@@ -645,10 +953,48 @@
         'input',
         updateTargetPreview
       );
+
+      trainNumber.addEventListener(
+        'change',
+        saveSettings
+      );
     }
 
+    [
+      'br-from',
+      'br-to',
+      'br-date',
+      'br-class',
+      'br-coach',
+      'br-passenger-count',
+      'br-seat-numbers',
+      'br-seat-type'
+    ].forEach(id => {
+
+      const el =
+        document.getElementById(id);
+
+      if (!el) {
+        return;
+      }
+
+      el.addEventListener(
+        'change',
+        saveSettings
+      );
+
+      el.addEventListener(
+        'input',
+        saveSettings
+      );
+    });
+
+    loadSettings();
+
+    updateTargetPreview();
+
     log(
-      'Railway Bot v6.0.0 panel created'
+      'Railway Bot v6.4.0 panel created'
     );
   }
 
@@ -777,32 +1123,26 @@
       #br-bot-title {
 
         font-size: 17px;
-
         font-weight: 700;
       }
 
       #br-bot-subtitle {
 
         font-size: 11px;
-
         color: #777;
-
         margin-top: 2px;
       }
 
       #br-header-right {
 
         display: flex;
-
         align-items: center;
-
         gap: 6px;
       }
 
       #br-bot-state {
 
         font-size: 9px;
-
         font-weight: 700;
 
         padding: 4px 6px;
@@ -810,7 +1150,6 @@
         border-radius: 5px;
 
         background: #e8e8e8;
-
         color: #555;
       }
 
@@ -820,18 +1159,15 @@
         height: 30px;
 
         border: none;
-
         border-radius: 7px;
 
         background: #ddd;
 
         font-size: 20px;
-
         cursor: pointer;
       }
 
       #br-bot-content {
-
         padding: 14px;
       }
 
@@ -843,9 +1179,7 @@
           9px 0 5px;
 
         font-size: 12px;
-
         font-weight: 700;
-
         color: #555;
       }
 
@@ -854,7 +1188,6 @@
         box-sizing: border-box;
 
         width: 100%;
-
         height: 40px;
 
         padding: 0 11px;
@@ -874,23 +1207,19 @@
       .br-input:focus {
 
         border-color: #777;
-
         outline: none;
-
         box-shadow: none;
       }
 
       .br-date-wrapper {
 
         position: relative;
-
         width: 100%;
       }
 
       #br-date {
 
         padding-right: 48px;
-
         cursor: pointer;
       }
 
@@ -905,7 +1234,6 @@
         height: 30px;
 
         border: none;
-
         border-radius: 6px;
 
         background: #f0f0f0;
@@ -947,9 +1275,7 @@
       .br-calendar-header {
 
         display: flex;
-
         align-items: center;
-
         justify-content:
           space-between;
 
@@ -962,20 +1288,17 @@
         height: 32px;
 
         border: none;
-
         border-radius: 7px;
 
         background: #f1f1f1;
 
         font-size: 22px;
-
         cursor: pointer;
       }
 
       #br-calendar-month {
 
         font-size: 14px;
-
         font-weight: 700;
       }
 
@@ -995,7 +1318,6 @@
         text-align: center;
 
         font-size: 10px;
-
         font-weight: 700;
 
         color: #777;
@@ -1008,7 +1330,6 @@
         height: 31px;
 
         border: none;
-
         border-radius: 6px;
 
         background: transparent;
@@ -1034,15 +1355,13 @@
       .br-day.selected {
 
         background: #222;
-
         color: #fff;
 
         font-weight: 700;
       }
 
-      /* TARGET TRAIN */
-
-      .br-target-section {
+      .br-target-section,
+      .br-seat-section {
 
         margin-top: 13px;
 
@@ -1056,10 +1375,14 @@
         background: #fafafa;
       }
 
+      .br-seat-section {
+
+        background: #f8f8f8;
+      }
+
       .br-target-title {
 
         font-size: 13px;
-
         font-weight: 700;
 
         margin-bottom: 8px;
@@ -1073,16 +1396,15 @@
           7px 0 4px;
 
         font-size: 10px;
-
         font-weight: 700;
 
         color: #666;
       }
 
-      .br-target-section .br-input {
+      .br-target-section .br-input,
+      .br-seat-section .br-input {
 
         height: 36px;
-
         font-size: 12px;
       }
 
@@ -1097,7 +1419,6 @@
         background: #eee;
 
         font-size: 11px;
-
         font-weight: 700;
 
         color: #333;
@@ -1108,7 +1429,6 @@
       .br-main-buttons {
 
         display: flex;
-
         gap: 7px;
 
         margin-top: 16px;
@@ -1122,13 +1442,11 @@
         min-height: 43px;
 
         border: none;
-
         border-radius: 9px;
 
         color: white;
 
         font-size: 11px;
-
         font-weight: 700;
 
         cursor: pointer;
@@ -1145,7 +1463,6 @@
       #br-start-search:disabled {
 
         opacity: .6;
-
         cursor: wait;
       }
 
@@ -1187,7 +1504,6 @@
       .br-target-found-title {
 
         font-size: 13px;
-
         font-weight: 700;
 
         margin-bottom: 6px;
@@ -1196,7 +1512,6 @@
       .br-target-found-time {
 
         font-size: 11px;
-
         color: #666;
       }
 
@@ -1205,7 +1520,6 @@
         margin-top: 8px;
 
         font-size: 12px;
-
         font-weight: 700;
       }
 
@@ -1228,7 +1542,6 @@
       .br-target-available.sold {
 
         color: #a00000;
-
         font-weight: 700;
       }
 
@@ -1267,12 +1580,9 @@
         #br-bot-panel {
 
           top: 70px;
-
           right: 8px;
-
           width: 300px;
         }
-
       }
     `;
 
@@ -1659,6 +1969,8 @@
             formatDateForBot(
               selectedDate
             );
+
+          saveSettings();
 
           const picker =
             document.getElementById(
@@ -2549,6 +2861,87 @@
   }
 
   // =========================================================
+  // SECURITY CHALLENGE
+  // =========================================================
+
+  function hasSecurityChallenge() {
+
+    const visibleFrames = [
+      ...document.querySelectorAll(
+        'iframe'
+      )
+    ].some(
+      iframe => {
+
+        if (!isVisible(iframe)) {
+          return false;
+        }
+
+        const text = (
+          iframe.src +
+          ' ' +
+          (
+            iframe.title || ''
+          )
+        ).toLowerCase();
+
+        return (
+          text.includes('captcha') ||
+          text.includes('turnstile')
+        );
+      }
+    );
+
+    if (visibleFrames) {
+      return true;
+    }
+
+    const body =
+      normalizeText(
+        document.body.innerText
+      ).toLowerCase();
+
+    return (
+      body.includes(
+        'verify you are human'
+      ) ||
+      body.includes(
+        'captcha'
+      ) ||
+      body.includes(
+        'turnstile'
+      ) ||
+      body.includes(
+        'one time password'
+      ) ||
+      /\botp\b/.test(body)
+    );
+  }
+
+  function stopForSecurityChallenge() {
+
+    botRunning = false;
+
+    searchRunning = false;
+
+    seatPageRunning = false;
+
+    searchRunId++;
+
+    clearBotTimers();
+
+    disconnectObserver();
+
+    setBotState(
+      'SECURITY'
+    );
+
+    status(
+      'Security/OTP challenge detected. Bot stopped. Complete it manually.'
+    );
+  }
+
+  // =========================================================
   // RESULT PAGE
   // =========================================================
 
@@ -2570,7 +2963,7 @@
   }
 
   // =========================================================
-  // FIND ONLY TARGET TRAIN CONTAINER
+  // FIND TARGET TRAIN CONTAINER
   // =========================================================
 
   function findTargetTrainContainer() {
@@ -2636,11 +3029,6 @@
             current.innerText
           );
 
-        /*
-         * Train number is the strongest
-         * identifier.
-         */
-
         const numberMatch =
           train.number &&
           new RegExp(
@@ -2648,10 +3036,6 @@
           ).test(
             text
           );
-
-        /*
-         * Name is a secondary identifier.
-         */
 
         const nameMatch =
           train.name &&
@@ -2702,10 +3086,6 @@
         'i'
       );
 
-    /*
-     * Search smaller visible elements first.
-     */
-
     const elements = [
       ...trainContainer.querySelectorAll(
         'div, section, li, article, td'
@@ -2749,11 +3129,6 @@
         continue;
       }
 
-      /*
-       * Avoid selecting a giant parent
-       * containing several classes.
-       */
-
       const classMatches =
         text.match(
           new RegExp(
@@ -2779,87 +3154,6 @@
       }
 
       return el;
-    }
-
-    /*
-     * Fallback: walk from BOOK NOW buttons.
-     */
-
-    const buttons = [
-      ...trainContainer.querySelectorAll(
-        'button, a'
-      )
-    ];
-
-    for (
-      const button of buttons
-    ) {
-
-      if (!isVisible(button)) {
-        continue;
-      }
-
-      const text =
-        normalizeText(
-          button.innerText ||
-          button.textContent
-        );
-
-      if (
-        !/BOOK NOW/i.test(text)
-      ) {
-        continue;
-      }
-
-      let current =
-        button.parentElement;
-
-      for (
-        let level = 0;
-        level < 7 && current;
-        level++
-      ) {
-
-        const currentText =
-          normalizeText(
-            current.innerText
-          );
-
-        if (
-          classRegex.test(
-            currentText
-          )
-        ) {
-
-          const matches =
-            currentText.match(
-              new RegExp(
-                `\\b(${CLASSES.join('|')})\\b`,
-                'gi'
-              )
-            ) || [];
-
-          const unique =
-            [
-              ...new Set(
-                matches.map(
-                  x =>
-                    x.toUpperCase()
-                )
-              )
-            ];
-
-          if (
-            unique.length === 1
-          ) {
-
-            return current;
-          }
-        }
-
-        current =
-          current.parentElement;
-      }
     }
 
     return null;
@@ -2966,75 +3260,6 @@
         );
     }
 
-    /*
-     * Fallback for availability.
-     */
-
-    if (
-      available === null
-    ) {
-
-      const numbers =
-        text.match(
-          /\b\d+\b/g
-        ) || [];
-
-      /*
-       * Don't blindly use train number.
-       * Prefer numbers after "Available".
-       */
-
-      const lower =
-        text.toLowerCase();
-
-      const availableIndex =
-        lower.indexOf(
-          'available'
-        );
-
-      if (
-        availableIndex >= 0
-      ) {
-
-        const after =
-          text.slice(
-            availableIndex
-          );
-
-        const match =
-          after.match(
-            /\b(\d+)\b/
-          );
-
-        if (match) {
-
-          available =
-            Number(
-              match[1]
-            );
-        }
-      }
-
-      if (
-        available === null &&
-        numbers.length
-      ) {
-
-        const last =
-          Number(
-            numbers[
-              numbers.length - 1
-            ]
-          );
-
-        if (
-          Number.isFinite(last)
-        ) {
-          available = last;
-        }
-      }
-    }
-
     const bookButton =
       findBookButton(
         block
@@ -3077,10 +3302,6 @@
     const train =
       getTargetTrain();
 
-    /*
-     * Verify again before accepting.
-     */
-
     if (
       train.number &&
       !new RegExp(
@@ -3098,12 +3319,6 @@
           train.name.toLowerCase()
         )
     ) {
-
-      /*
-       * If number matched, name mismatch
-       * is allowed because the website text
-       * may have formatting differences.
-       */
 
       if (!train.number) {
         return null;
@@ -3171,9 +3386,7 @@
     if (!classBlock) {
 
       return {
-
         train,
-
         classOption: null
       };
     }
@@ -3185,9 +3398,7 @@
       );
 
     return {
-
       train,
-
       classOption
     };
   }
@@ -3235,7 +3446,6 @@
           </strong>
 
         </div>
-
       `;
 
       return;
@@ -3332,12 +3542,11 @@
         </div>
 
       </div>
-
     `;
   }
 
   // =========================================================
-  // HANDLE TARGET
+  // HANDLE TARGET RESULT
   // =========================================================
 
   function processTargetResult() {
@@ -3372,7 +3581,12 @@
     if (!classOption) {
 
       status(
-        `Target train found. Waiting for ${document.getElementById('br-class')?.value || DEFAULTS.className}...`
+        `Target train found. Waiting for ${
+          document.getElementById(
+            'br-class'
+          )?.value ||
+          DEFAULTS.className
+        }...`
       );
 
       return false;
@@ -3404,28 +3618,15 @@
       return false;
     }
 
-    /*
-     * We have found:
-     *
-     * target train
-     * target class
-     * actual BOOK NOW
-     *
-     * Do not automatically click here.
-     *
-     * The user should still press the
-     * BOOK NOW action in the bot.
-     */
-
     setBotState(
       'READY TO BOOK'
     );
 
     status(
-      'Target train + class found. BOOK NOW is ready.'
+      'Target train + class found. Opening BOOK NOW...'
     );
 
-    showBookButton(
+    clickTargetBook(
       result
     );
 
@@ -3433,150 +3634,59 @@
   }
 
   // =========================================================
-  // SHOW BOOK BUTTON
+  // SAVE PENDING BOOKING
   // =========================================================
 
-  function showBookButton(
-    result
-  ) {
+  function savePendingBooking() {
 
-    const resultsEl =
-      document.getElementById(
-        'br-results'
+    try {
+
+      const settings =
+        getSettings();
+
+      localStorage.setItem(
+        PENDING_KEY,
+        JSON.stringify({
+          ...settings,
+          train: targetTrain.name,
+          trainNumber:
+            targetTrain.number,
+          createdAt:
+            Date.now()
+        })
       );
 
-    if (!resultsEl) {
-      return;
+      log(
+        'Pending booking saved'
+      );
+
+    } catch (e) {
+
+      log(
+        'Could not save pending booking',
+        e
+      );
     }
+  }
 
-    const option =
-      result.classOption;
+  function getPendingBooking() {
 
-    const available =
-      option
-        ? option.available
-        : null;
+    try {
 
-    const disabled =
-      !option ||
-      !option.bookButton ||
-      available === 0;
+      const raw =
+        localStorage.getItem(
+          PENDING_KEY
+        );
 
-    resultsEl.innerHTML = `
+      if (!raw) {
+        return null;
+      }
 
-      <div class="br-target-found">
+      return JSON.parse(raw);
 
-        <div
-          class="br-target-found-title"
-        >
-          🎯 TARGET READY
-        </div>
+    } catch (e) {
 
-        <div>
-          <strong>
-            ${escapeHtml(
-              result.train.name
-            )}
-            ${
-              result.train.number
-                ? `(${escapeHtml(
-                    result.train.number
-                  )})`
-                : ''
-            }
-          </strong>
-        </div>
-
-        <div
-          class="br-target-found-time"
-        >
-          ${
-            result.train.departure ||
-            '--'
-          }
-          →
-          ${
-            result.train.arrival ||
-            '--'
-          }
-        </div>
-
-        <div class="br-target-class">
-
-          Class:
-          ${escapeHtml(
-            document.getElementById(
-              'br-class'
-            )?.value ||
-            DEFAULTS.className
-          )}
-
-        </div>
-
-        <div class="br-target-price">
-
-          ${
-            option?.price
-              ? escapeHtml(
-                  option.price
-                )
-              : 'Price unavailable'
-          }
-
-        </div>
-
-        <div
-          class="br-target-available ${
-            available === 0
-              ? 'sold'
-              : ''
-          }"
-        >
-
-          ${
-            available === null
-              ? 'Availability unknown'
-              : available === 0
-                ? 'SOLD OUT'
-                : `${available} available`
-          }
-
-        </div>
-
-        <button
-          id="br-book-target"
-          class="br-book-target"
-          ${
-            disabled
-              ? 'disabled'
-              : ''
-          }
-        >
-          📌 BOOK NOW
-        </button>
-
-      </div>
-
-    `;
-
-    const book =
-      document.getElementById(
-        'br-book-target'
-      );
-
-    if (book) {
-
-      book.addEventListener(
-        'click',
-        event => {
-
-          event.stopPropagation();
-
-          clickTargetBook(
-            result
-          );
-        }
-      );
+      return null;
     }
   }
 
@@ -3632,6 +3742,8 @@
       return;
     }
 
+    savePendingBooking();
+
     status(
       `Opening ${result.train.name} → ${option.className}...`
     );
@@ -3640,15 +3752,12 @@
       'BOOKING'
     );
 
-    /*
-     * Only here do we click the
-     * website's actual BOOK NOW.
-     */
-
     option.bookButton.click();
 
     /*
-     * Stop after BOOK NOW.
+     * Search-page automation ends here.
+     * Pending booking remains in localStorage
+     * so the next page can continue seat selection.
      */
 
     botRunning = false;
@@ -3662,12 +3771,2030 @@
     disconnectObserver();
 
     setBotState(
-      'STOPPED'
+      'OPENING SEATS'
     );
 
     status(
-      'BOOK NOW clicked. Bot stopped.'
+      'BOOK NOW clicked. Waiting for seat page...'
     );
+
+    waitForSeatPage();
+  }
+
+  // =========================================================
+  // SEAT PAGE DETECTION
+  // =========================================================
+
+  function isSeatPage() {
+
+    const body =
+      normalizeText(
+        document.body.innerText
+      );
+
+    return (
+      /Choose your seat/i.test(body) ||
+      /Choose your seats/i.test(body) ||
+      /Maximum 4 seats/i.test(body) ||
+      /Select Coach/i.test(body) ||
+      /Seat Details/i.test(body)
+    );
+  }
+
+  async function waitForSeatPage() {
+
+    for (
+      let i = 0;
+      i < 80;
+      i++
+    ) {
+
+      await sleep(500);
+
+      if (
+        hasSecurityChallenge()
+      ) {
+
+        stopForSecurityChallenge();
+
+        return;
+      }
+
+      if (
+        isSeatPage()
+      ) {
+
+        createOrRestorePanel();
+
+        status(
+          'Seat selection page detected.'
+        );
+
+        setBotState(
+          'SEAT PAGE'
+        );
+
+        await sleep(500);
+
+        startSeatSelection();
+
+        return;
+      }
+    }
+
+    /*
+     * Page navigation may have replaced the
+     * JavaScript context, so this may not execute
+     * after a full navigation. The pending state
+     * is also checked during init.
+     */
+
+    log(
+      'Seat page wait ended'
+    );
+  }
+
+  // =========================================================
+  // COACH PARSER
+  // =========================================================
+
+  function parseCoachAvailability() {
+
+    const coaches = [];
+
+    const seen = new Set();
+
+    const elements = [
+      ...document.querySelectorAll(
+        'button, [role="button"], li, div, span, label, a'
+      )
+    ];
+
+    const coachRegex =
+      /^([A-Z]{1,4})\s*-\s*(\d+)\s*Seat\s*\(s\)$/i;
+
+    for (
+      const el of elements
+    ) {
+
+      if (!isVisible(el)) {
+        continue;
+      }
+
+      if (isBotElement(el)) {
+        continue;
+      }
+
+      const text =
+        normalizeText(
+          el.innerText ||
+          el.textContent
+        );
+
+      const match =
+        text.match(
+          coachRegex
+        );
+
+      if (!match) {
+        continue;
+      }
+
+      const coach =
+        match[1].toUpperCase();
+
+      const count =
+        Number(
+          match[2]
+        );
+
+      if (!Number.isFinite(count)) {
+        continue;
+      }
+
+      /*
+       * Find the smallest useful clickable
+       * ancestor for the coach.
+       */
+
+      let clickable =
+        null;
+
+      if (
+        el.matches(
+          'button, [role="button"], a'
+        )
+      ) {
+
+        clickable = el;
+
+      } else {
+
+        let current = el;
+
+        for (
+          let level = 0;
+          level < 5 && current;
+          level++
+        ) {
+
+          if (
+            current.matches &&
+            current.matches(
+              'button, [role="button"], a'
+            )
+          ) {
+
+            clickable =
+              current;
+
+            break;
+          }
+
+          current =
+            current.parentElement;
+        }
+      }
+
+      /*
+       * Use a stable key so duplicate
+       * nested spans do not create duplicates.
+       */
+
+      const key =
+        coach + ':' + count;
+
+      if (seen.has(key)) {
+        continue;
+      }
+
+      seen.add(key);
+
+      coaches.push({
+
+        coach,
+        count,
+        element: el,
+        clickable
+
+      });
+    }
+
+    /*
+     * Sometimes the website uses a container
+     * whose text contains multiple coaches.
+     * Parse individual lines as fallback.
+     */
+
+    if (!coaches.length) {
+
+      const body =
+        normalizeText(
+          document.body.innerText
+        );
+
+      const matches =
+        body.match(
+          /[A-Z]{1,4}\s*-\s*\d+\s*Seat\s*\(s\)/gi
+        ) || [];
+
+      for (
+        const raw of matches
+      ) {
+
+        const match =
+          raw.match(
+            /^([A-Z]{1,4})\s*-\s*(\d+)/i
+          );
+
+        if (!match) {
+          continue;
+        }
+
+        const coach =
+          match[1].toUpperCase();
+
+        const count =
+          Number(match[2]);
+
+        if (
+          !seen.has(
+            coach + ':' + count
+          )
+        ) {
+
+          coaches.push({
+            coach,
+            count,
+            element: null,
+            clickable: null
+          });
+        }
+      }
+    }
+
+    return coaches;
+  }
+
+  // =========================================================
+  // SEAT NUMBER
+  // =========================================================
+
+  function extractSeatNumber(
+    text
+  ) {
+
+    const value =
+      normalizeText(text);
+
+    /*
+     * Examples:
+     * CHA-25
+     * GA-27
+     * Kha - 25
+     */
+
+    let match =
+      value.match(
+        /[-–]\s*(\d+)\s*$/
+      );
+
+    if (match) {
+      return Number(
+        match[1]
+      );
+    }
+
+    match =
+      value.match(
+        /(?:seat\s*)?(\d+)\s*$/
+      );
+
+    if (match) {
+      return Number(
+        match[1]
+      );
+    }
+
+    return null;
+  }
+
+  function extractCoachFromSeat(
+    text
+  ) {
+
+    const value =
+      normalizeText(text);
+
+    const match =
+      value.match(
+        /^([A-Z]{1,4})\s*[-–]\s*\d+$/i
+      );
+
+    return match
+      ? match[1].toUpperCase()
+      : '';
+  }
+
+  // =========================================================
+  // SEAT PREFERENCE
+  // =========================================================
+
+  function parseSeatPreference(
+    value
+  ) {
+
+    const raw =
+      normalizeText(value)
+        .toUpperCase();
+
+    if (
+      !raw ||
+      raw === 'ANY'
+    ) {
+
+      return {
+        any: true,
+        numbers: [],
+        ranges: []
+      };
+    }
+
+    const numbers = [];
+    const ranges = [];
+
+    const parts =
+      raw
+        .split(',')
+        .map(x => x.trim())
+        .filter(Boolean);
+
+    for (
+      const part of parts
+    ) {
+
+      const range =
+        part.match(
+          /^(\d+)\s*-\s*(\d+)$/
+        );
+
+      if (range) {
+
+        let start =
+          Number(range[1]);
+
+        let end =
+          Number(range[2]);
+
+        if (
+          start > end
+        ) {
+
+          const temp = start;
+
+          start = end;
+          end = temp;
+        }
+
+        ranges.push({
+          start,
+          end
+        });
+
+        continue;
+      }
+
+      const number =
+        part.match(
+          /^\d+$/
+        );
+
+      if (number) {
+
+        numbers.push(
+          Number(number[0])
+        );
+      }
+    }
+
+    return {
+      any:
+        numbers.length === 0 &&
+        ranges.length === 0,
+
+      numbers,
+
+      ranges
+    };
+  }
+
+  function seatMatchesPreference(
+    number,
+    preference
+  ) {
+
+    if (
+      number === null ||
+      !Number.isFinite(number)
+    ) {
+      return false;
+    }
+
+    if (preference.any) {
+      return true;
+    }
+
+    if (
+      preference.numbers.includes(
+        number
+      )
+    ) {
+      return true;
+    }
+
+    return preference.ranges.some(
+      range =>
+        number >= range.start &&
+        number <= range.end
+    );
+  }
+
+  // =========================================================
+  // SEAT TYPE
+  // =========================================================
+
+  function seatMatchesType(
+    element,
+    requestedType
+  ) {
+
+    if (
+      requestedType === 'ANY'
+    ) {
+      return true;
+    }
+
+    const text =
+      (
+        element.innerText ||
+        element.textContent ||
+        ''
+      ).toLowerCase();
+
+    const aria =
+      (
+        element.getAttribute(
+          'aria-label'
+        ) || ''
+      ).toLowerCase();
+
+    const title =
+      (
+        element.getAttribute(
+          'title'
+        ) || ''
+      ).toLowerCase();
+
+    const data =
+      (
+        element.getAttribute(
+          'data-seat-type'
+        ) || ''
+      ).toLowerCase();
+
+    const combined =
+      `${text} ${aria} ${title} ${data}`;
+
+    if (
+      requestedType === 'WINDOW'
+    ) {
+
+      return (
+        combined.includes(
+          'window'
+        ) ||
+        combined.includes(
+          'janala'
+        )
+      );
+    }
+
+    if (
+      requestedType === 'NORMAL'
+    ) {
+
+      return !(
+        combined.includes(
+          'window'
+        ) ||
+        combined.includes(
+          'janala'
+        )
+      );
+    }
+
+    return true;
+  }
+
+  // =========================================================
+  // SEAT STATE
+  // =========================================================
+
+  function getSeatState(
+    element
+  ) {
+
+    if (!element) {
+      return 'unknown';
+    }
+
+    const chain = [];
+
+    let current =
+      element;
+
+    for (
+      let i = 0;
+      i < 5 && current;
+      i++
+    ) {
+
+      chain.push(
+        current
+      );
+
+      current =
+        current.parentElement;
+    }
+
+    const classText =
+      chain
+        .map(
+          el =>
+            String(
+              el.className ||
+              ''
+            )
+        )
+        .join(' ')
+        .toLowerCase();
+
+    const attrs =
+      chain
+        .map(
+          el =>
+            [
+              el.getAttribute(
+                'aria-label'
+              ),
+              el.getAttribute(
+                'title'
+              ),
+              el.getAttribute(
+                'data-status'
+              ),
+              el.getAttribute(
+                'data-state'
+              ),
+              el.getAttribute(
+                'data-seat-status'
+              ),
+              el.getAttribute(
+                'data-available'
+              )
+            ]
+              .filter(Boolean)
+              .join(' ')
+              .toLowerCase()
+        )
+        .join(' ');
+
+    const combined =
+      classText +
+      ' ' +
+      attrs;
+
+    if (
+      /\bbooked\b/.test(
+        combined
+      ) ||
+      /\boccupied\b/.test(
+        combined
+      ) ||
+      /\breserved\b/.test(
+        combined
+      ) ||
+      /\bsold\b/.test(
+        combined
+      ) ||
+      /\bnot[-_\s]?available\b/.test(
+        combined
+      )
+    ) {
+
+      return 'booked';
+    }
+
+    if (
+      /\bin[-_\s]?progress\b/.test(
+        combined
+      ) ||
+      /\bprogress\b/.test(
+        combined
+      )
+    ) {
+
+      return 'in-progress';
+    }
+
+    if (
+      /\bselected\b/.test(
+        combined
+      ) ||
+      /\bactive\b/.test(
+        combined
+      )
+    ) {
+
+      return 'selected';
+    }
+
+    /*
+     * aria-disabled is a strong indicator.
+     */
+
+    if (
+      element.getAttribute(
+        'aria-disabled'
+      ) === 'true'
+    ) {
+
+      return 'booked';
+    }
+
+    if (
+      element.disabled === true
+    ) {
+
+      return 'booked';
+    }
+
+    /*
+     * Check computed background color.
+     *
+     * Railway commonly represents:
+     * white  = available
+     * black  = selected
+     * green  = in progress
+     * orange = booked
+     */
+
+    for (
+      const el of chain
+    ) {
+
+      const style =
+        window.getComputedStyle(
+          el
+        );
+
+      const bg =
+        style.backgroundColor;
+
+      const color =
+        style.color;
+
+      const combinedColor =
+        `${bg} ${color}`
+          .toLowerCase();
+
+      /*
+       * RGB/rgba approximate detection.
+       */
+
+      const rgb =
+        bg.match(
+          /rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/i
+        );
+
+      if (rgb) {
+
+        const r =
+          Number(rgb[1]);
+
+        const g =
+          Number(rgb[2]);
+
+        const b =
+          Number(rgb[3]);
+
+        /*
+         * Black
+         */
+
+        if (
+          r < 50 &&
+          g < 50 &&
+          b < 50
+        ) {
+          return 'selected';
+        }
+
+        /*
+         * Green
+         */
+
+        if (
+          g > r * 1.25 &&
+          g > b * 1.15 &&
+          g > 70
+        ) {
+          return 'in-progress';
+        }
+
+        /*
+         * Orange
+         */
+
+        if (
+          r > 150 &&
+          g > 60 &&
+          g < 190 &&
+          b < 100
+        ) {
+          return 'booked';
+        }
+
+        /*
+         * White/light background.
+         */
+
+        if (
+          r > 220 &&
+          g > 220 &&
+          b > 220
+        ) {
+          return 'available';
+        }
+      }
+
+      /*
+       * Named color fallback.
+       */
+
+      if (
+        combinedColor.includes(
+          'orange'
+        )
+      ) {
+        return 'booked';
+      }
+
+      if (
+        combinedColor.includes(
+          'green'
+        )
+      ) {
+        return 'in-progress';
+      }
+
+      if (
+        combinedColor.includes(
+          'black'
+        )
+      ) {
+        return 'selected';
+      }
+
+      if (
+        combinedColor.includes(
+          'white'
+        )
+      ) {
+        return 'available';
+      }
+    }
+
+    return 'unknown';
+  }
+
+  // =========================================================
+  // FIND SEAT ELEMENTS
+  // =========================================================
+
+  function findSeatElements() {
+
+    const candidates = [
+      ...document.querySelectorAll(
+        [
+          '[data-seat]',
+          '[data-seat-number]',
+          '[data-seat-no]',
+          '[aria-label*="seat" i]',
+          '[title*="seat" i]',
+          '[class*="seat" i]',
+          '[id*="seat" i]',
+          'button',
+          '[role="button"]',
+          'label'
+        ].join(',')
+      )
+    ];
+
+    const seats = [];
+
+    const seen =
+      new Set();
+
+    for (
+      const el of candidates
+    ) {
+
+      if (!isVisible(el)) {
+        continue;
+      }
+
+      if (isBotElement(el)) {
+        continue;
+      }
+
+      const text =
+        normalizeText(
+          el.innerText ||
+          el.textContent ||
+          el.getAttribute(
+            'data-seat'
+          ) ||
+          el.getAttribute(
+            'data-seat-number'
+          ) ||
+          el.getAttribute(
+            'aria-label'
+          ) ||
+          el.getAttribute(
+            'title'
+          )
+        );
+
+      /*
+       * Seat labels like:
+       * CHA-1
+       * GA-27
+       */
+
+      if (
+        !/^[A-Z]{1,4}\s*[-–]\s*\d+$/i.test(
+          text
+        )
+      ) {
+        continue;
+      }
+
+      const number =
+        extractSeatNumber(
+          text
+        );
+
+      const coach =
+        extractCoachFromSeat(
+          text
+        );
+
+      if (
+        number === null
+      ) {
+        continue;
+      }
+
+      /*
+       * Deduplicate by actual DOM element.
+       */
+
+      if (
+        seen.has(el)
+      ) {
+        continue;
+      }
+
+      seen.add(el);
+
+      seats.push({
+
+        element: el,
+
+        text,
+
+        number,
+
+        coach,
+
+        state:
+          getSeatState(el)
+
+      });
+    }
+
+    return seats;
+  }
+
+  // =========================================================
+  // SELECT COACH
+  // =========================================================
+
+  async function selectCoach(
+    desiredCoach
+  ) {
+
+    const coaches =
+      parseCoachAvailability();
+
+    if (!coaches.length) {
+
+      status(
+        'Coach availability not detected yet...'
+      );
+
+      return false;
+    }
+
+    log(
+      'Coach availability:',
+      coaches.map(
+        x =>
+          `${x.coach}=${x.count}`
+      )
+    );
+
+    const available =
+      coaches.filter(
+        x =>
+          x.count > 0
+      );
+
+    if (!available.length) {
+
+      status(
+        'No coach currently has available seats.'
+      );
+
+      return false;
+    }
+
+    let selectedCoach =
+      null;
+
+    if (
+      desiredCoach &&
+      desiredCoach !== 'ANY'
+    ) {
+
+      selectedCoach =
+        available.find(
+          x =>
+            x.coach ===
+            desiredCoach.toUpperCase()
+        );
+
+      if (!selectedCoach) {
+
+        status(
+          `${desiredCoach} has no available seat.`
+        );
+
+        return false;
+      }
+
+    } else {
+
+      selectedCoach =
+        available[0];
+    }
+
+    status(
+      `Selecting coach ${selectedCoach.coach} (${selectedCoach.count} available)...`
+    );
+
+    /*
+     * If we have a clickable element,
+     * use it.
+     */
+
+    if (
+      selectedCoach.clickable
+    ) {
+
+      selectedCoach.clickable.click();
+
+      await sleep(700);
+
+      status(
+        `Coach ${selectedCoach.coach} selected ✓`
+      );
+
+      return true;
+    }
+
+    /*
+     * Otherwise click the matched text element.
+     */
+
+    if (
+      selectedCoach.element
+    ) {
+
+      selectedCoach.element.click();
+
+      await sleep(700);
+
+      status(
+        `Coach ${selectedCoach.coach} selected ✓`
+      );
+
+      return true;
+    }
+
+    /*
+     * Last safe fallback:
+     * search again for exact text.
+     */
+
+    const elements = [
+      ...document.querySelectorAll(
+        'button, [role="button"], li, div, span, label, a'
+      )
+    ];
+
+    const pattern =
+      new RegExp(
+        `^${selectedCoach.coach}\\s*-\\s*${selectedCoach.count}\\s*Seat\\s*\\(s\\)$`,
+        'i'
+      );
+
+    for (
+      const el of elements
+    ) {
+
+      if (!isVisible(el)) {
+        continue;
+      }
+
+      if (isBotElement(el)) {
+        continue;
+      }
+
+      if (
+        pattern.test(
+          normalizeText(
+            el.innerText ||
+            el.textContent
+          )
+        )
+      ) {
+
+        el.click();
+
+        await sleep(700);
+
+        status(
+          `Coach ${selectedCoach.coach} selected ✓`
+        );
+
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  // =========================================================
+  // CHOOSE SEATS
+  // =========================================================
+
+  function getSeatCandidates(
+    desiredCoach
+  ) {
+
+    const settings =
+      getSettings();
+
+    const preference =
+      parseSeatPreference(
+        settings.seatNumbers
+      );
+
+    const requestedType =
+      String(
+        settings.seatType ||
+        'ANY'
+      ).toUpperCase();
+
+    const seats =
+      findSeatElements();
+
+    let candidates =
+      seats.filter(
+        seat => {
+
+          if (
+            desiredCoach &&
+            desiredCoach !== 'ANY' &&
+            seat.coach &&
+            seat.coach !==
+              desiredCoach.toUpperCase()
+          ) {
+            return false;
+          }
+
+          /*
+           * Only available seats.
+           */
+
+          if (
+            seat.state === 'booked' ||
+            seat.state === 'in-progress' ||
+            seat.state === 'selected'
+          ) {
+            return false;
+          }
+
+          /*
+           * Unknown state is not automatically
+           * treated as available when a specific
+           * seat is requested.
+           *
+           * For ANY, allow unknown so the actual
+           * click can determine the state.
+           */
+
+          if (
+            seat.state === 'unknown' &&
+            !preference.any
+          ) {
+            return false;
+          }
+
+          if (
+            !seatMatchesPreference(
+              seat.number,
+              preference
+            )
+          ) {
+            return false;
+          }
+
+          if (
+            !seatMatchesType(
+              seat.element,
+              requestedType
+            )
+          ) {
+            return false;
+          }
+
+          return true;
+        }
+      );
+
+    /*
+     * Requested number/range candidates first.
+     */
+
+    candidates.sort(
+      (a, b) =>
+        a.number -
+        b.number
+    );
+
+    return candidates;
+  }
+
+  async function selectRequiredSeats(
+    desiredCoach
+  ) {
+
+    const settings =
+      getSettings();
+
+    const requiredCount =
+      Math.min(
+        4,
+        Math.max(
+          1,
+          Number(
+            settings.passengerCount
+          ) || 1
+        )
+      );
+
+    const preference =
+      parseSeatPreference(
+        settings.seatNumbers
+      );
+
+    status(
+      `Looking for ${requiredCount} seat(s)...`
+    );
+
+    let candidates =
+      getSeatCandidates(
+        desiredCoach
+      );
+
+    /*
+     * If specific seat preference produced
+     * nothing, fallback to ANY available seat
+     * as requested.
+     */
+
+    if (
+      candidates.length <
+      requiredCount
+    ) {
+
+      status(
+        'Requested seat not fully available. Falling back to available seats...'
+      );
+
+      const allSeats =
+        findSeatElements()
+          .filter(
+            seat => {
+
+              if (
+                desiredCoach &&
+                desiredCoach !== 'ANY' &&
+                seat.coach &&
+                seat.coach !==
+                  desiredCoach.toUpperCase()
+              ) {
+                return false;
+              }
+
+              return (
+                seat.state !== 'booked' &&
+                seat.state !== 'in-progress' &&
+                seat.state !== 'selected'
+              );
+            }
+          );
+
+      allSeats.sort(
+        (a, b) =>
+          a.number -
+          b.number
+      );
+
+      candidates =
+        allSeats;
+    }
+
+    if (
+      candidates.length === 0
+    ) {
+
+      status(
+        'No selectable seat found.'
+      );
+
+      return false;
+    }
+
+    const selected = [];
+
+    for (
+      const seat of candidates
+    ) {
+
+      if (
+        selected.length >=
+        requiredCount
+      ) {
+        break;
+      }
+
+      /*
+       * Re-check state before clicking.
+       */
+
+      const state =
+        getSeatState(
+          seat.element
+        );
+
+      if (
+        state === 'booked' ||
+        state === 'in-progress' ||
+        state === 'selected'
+      ) {
+        continue;
+      }
+
+      status(
+        `Selecting ${seat.text}...`
+      );
+
+      try {
+
+        seat.element.click();
+
+      } catch (e) {
+
+        log(
+          'Seat click failed',
+          e
+        );
+
+        continue;
+      }
+
+      await sleep(450);
+
+      /*
+       * Verify selected state after click.
+       */
+
+      const newState =
+        getSeatState(
+          seat.element
+        );
+
+      if (
+        newState === 'selected' ||
+        newState === 'in-progress'
+      ) {
+
+        selected.push(
+          seat
+        );
+
+        status(
+          `${seat.text} selected ✓`
+        );
+
+      } else {
+
+        /*
+         * Some sites do not expose the
+         * selected state on the exact element.
+         * Check Seat Details below.
+         */
+
+        selected.push(
+          seat
+        );
+
+        status(
+          `${seat.text} clicked ✓`
+        );
+      }
+
+      await sleep(250);
+    }
+
+    if (
+      selected.length <
+      requiredCount
+    ) {
+
+      status(
+        `Only ${selected.length}/${requiredCount} seat(s) selected.`
+      );
+
+      return false;
+    }
+
+    status(
+      `Selected ${selected.length} seat(s) ✓`
+    );
+
+    return true;
+  }
+
+  // =========================================================
+  // SEAT DETAILS VERIFICATION
+  // =========================================================
+
+  function getSeatDetailsText() {
+
+    const body =
+      document.body.innerText || '';
+
+    const index =
+      body.toLowerCase().indexOf(
+        'seat details'
+      );
+
+    if (index < 0) {
+      return '';
+    }
+
+    return normalizeText(
+      body.slice(
+        index,
+        index + 1500
+      )
+    );
+  }
+
+  function verifySeatDetails(
+    requiredCount
+  ) {
+
+    const text =
+      getSeatDetailsText();
+
+    if (!text) {
+
+      log(
+        'Seat Details section not detected'
+      );
+
+      return false;
+    }
+
+    const seatMatches =
+      text.match(
+        /\b[A-Z]{1,4}\s*[-–]\s*\d+\b/g
+      ) || [];
+
+    const unique =
+      [
+        ...new Set(
+          seatMatches.map(
+            x =>
+              x
+                .replace(/\s+/g, '')
+                .toUpperCase()
+          )
+        )
+      ];
+
+    log(
+      'Seat Details:',
+      unique
+    );
+
+    return (
+      unique.length >=
+      requiredCount
+    );
+  }
+
+  // =========================================================
+  // CONTINUE PURCHASE
+  // =========================================================
+
+  function findContinuePurchaseButton() {
+
+    const elements = [
+      ...document.querySelectorAll(
+        'button, a, [role="button"], input[type="button"], input[type="submit"]'
+      )
+    ];
+
+    for (
+      const el of elements
+    ) {
+
+      if (!isVisible(el)) {
+        continue;
+      }
+
+      if (isBotElement(el)) {
+        continue;
+      }
+
+      const text =
+        normalizeText(
+          el.innerText ||
+          el.value ||
+          el.textContent
+        );
+
+      if (
+        /^CONTINUE PURCHASE$/i.test(
+          text
+        )
+      ) {
+
+        return el;
+      }
+    }
+
+    return null;
+  }
+
+  async function clickContinuePurchase() {
+
+    const button =
+      findContinuePurchaseButton();
+
+    if (!button) {
+
+      status(
+        'CONTINUE PURCHASE button not found.'
+      );
+
+      return false;
+    }
+
+    status(
+      'Seats selected. Opening next page...'
+    );
+
+    setBotState(
+      'CONTINUING'
+    );
+
+    await sleep(300);
+
+    /*
+     * User explicitly wants to proceed
+     * to the OTP page.
+     */
+
+    button.click();
+
+    await sleep(1000);
+
+    /*
+     * Do not fill or bypass OTP.
+     */
+
+    if (
+      hasSecurityChallenge()
+    ) {
+
+      botRunning = false;
+
+      seatPageRunning = false;
+
+      setBotState(
+        'OTP / SECURITY'
+      );
+
+      status(
+        'OTP/security page reached. Manual action required.'
+      );
+
+      return true;
+    }
+
+    botRunning = false;
+
+    seatPageRunning = false;
+
+    setBotState(
+      'DONE'
+    );
+
+    status(
+      'CONTINUE PURCHASE clicked. Complete OTP manually.'
+    );
+
+    return true;
+  }
+
+  // =========================================================
+  // SEAT PAGE FLOW
+  // =========================================================
+
+  async function startSeatSelection() {
+
+    if (seatPageRunning) {
+      return;
+    }
+
+    seatPageRunning = true;
+
+    const pending =
+      getPendingBooking();
+
+    if (pending) {
+
+      /*
+       * Restore user preferences from
+       * pending booking if panel was created
+       * after navigation.
+       */
+
+      restorePendingIntoPanel(
+        pending
+      );
+    }
+
+    const settings =
+      getSettings();
+
+    const desiredCoach =
+      String(
+        settings.coach ||
+        DEFAULTS.coach
+      ).toUpperCase();
+
+    const requiredCount =
+      Math.min(
+        4,
+        Math.max(
+          1,
+          Number(
+            settings.passengerCount
+          ) || 1
+        )
+      );
+
+    setBotState(
+      'SEAT SEARCH'
+    );
+
+    status(
+      `Finding available coach for ${requiredCount} seat(s)...`
+    );
+
+    /*
+     * Wait for coach information.
+     */
+
+    let coachOK = false;
+
+    for (
+      let i = 0;
+      i < 40;
+      i++
+    ) {
+
+      if (
+        hasSecurityChallenge()
+      ) {
+
+        stopForSecurityChallenge();
+
+        return;
+      }
+
+      const coaches =
+        parseCoachAvailability();
+
+      if (
+        coaches.some(
+          x => x.count > 0
+        )
+      ) {
+
+        coachOK =
+          await selectCoach(
+            desiredCoach
+          );
+
+        if (coachOK) {
+          break;
+        }
+      }
+
+      await sleep(500);
+    }
+
+    if (!coachOK) {
+
+      status(
+        'Could not select an available coach.'
+      );
+
+      setBotState(
+        'NO COACH'
+      );
+
+      seatPageRunning = false;
+
+      return;
+    }
+
+    /*
+     * Give coach UI time to update.
+     */
+
+    await sleep(800);
+
+    const selected =
+      await selectRequiredSeats(
+        desiredCoach === 'ANY'
+          ? getCurrentlySelectedCoach()
+          : desiredCoach
+      );
+
+    if (!selected) {
+
+      setBotState(
+        'NO SEAT'
+      );
+
+      seatPageRunning = false;
+
+      return;
+    }
+
+    await sleep(700);
+
+    const verified =
+      verifySeatDetails(
+        requiredCount
+      );
+
+    if (!verified) {
+
+      /*
+       * Do not block the user permanently if
+       * the site doesn't expose Seat Details
+       * in a normal DOM representation.
+       */
+
+      status(
+        'Seat selected. Seat Details verification unavailable; proceeding.'
+      );
+
+    } else {
+
+      status(
+        'Seat Details verified ✓'
+      );
+    }
+
+    await sleep(500);
+
+    /*
+     * CONTINUE PURCHASE intentionally proceeds
+     * to the next page / OTP.
+     */
+
+    await clickContinuePurchase();
+  }
+
+  // =========================================================
+  // CURRENT COACH
+  // =========================================================
+
+  function getCurrentlySelectedCoach() {
+
+    const body =
+      normalizeText(
+        document.body.innerText
+      );
+
+    const match =
+      body.match(
+        /Coach\s*:\s*([A-Z]{1,4})/i
+      );
+
+    return match
+      ? match[1].toUpperCase()
+      : 'ANY';
+  }
+
+  // =========================================================
+  // RESTORE PENDING SETTINGS
+  // =========================================================
+
+  function restorePendingIntoPanel(
+    pending
+  ) {
+
+    if (!pending) {
+      return;
+    }
+
+    const set = (
+      id,
+      value
+    ) => {
+
+      const el =
+        document.getElementById(id);
+
+      if (
+        el &&
+        value !== undefined &&
+        value !== null
+      ) {
+        el.value =
+          value;
+      }
+    };
+
+    set(
+      'br-from',
+      pending.from
+    );
+
+    set(
+      'br-to',
+      pending.to
+    );
+
+    set(
+      'br-date',
+      pending.date
+    );
+
+    set(
+      'br-class',
+      pending.className
+    );
+
+    set(
+      'br-train-name',
+      pending.train
+    );
+
+    set(
+      'br-train-number',
+      pending.trainNumber
+    );
+
+    set(
+      'br-coach',
+      pending.coach
+    );
+
+    set(
+      'br-passenger-count',
+      pending.passengerCount
+    );
+
+    set(
+      'br-seat-numbers',
+      pending.seatNumbers
+    );
+
+    set(
+      'br-seat-type',
+      pending.seatType
+    );
+
+    updateTargetPreview();
+
+    log(
+      'Pending booking preferences restored'
+    );
+  }
+
+  // =========================================================
+  // CREATE / RESTORE PANEL
+  // =========================================================
+
+  function createOrRestorePanel() {
+
+    if (
+      !document.getElementById(
+        'br-bot-panel'
+      )
+    ) {
+
+      createBotPanel();
+
+      enableDragging();
+    }
+
+    const pending =
+      getPendingBooking();
+
+    if (pending) {
+
+      restorePendingIntoPanel(
+        pending
+      );
+    }
+  }
+
+  // =========================================================
+  // SEAT PAGE OBSERVER
+  // =========================================================
+
+  function startSeatObserver() {
+
+    if (seatObserver) {
+      seatObserver.disconnect();
+    }
+
+    seatObserver =
+      new MutationObserver(
+        mutations => {
+
+          if (
+            !seatPageRunning
+          ) {
+            return;
+          }
+
+          let changed = false;
+
+          for (
+            const mutation of mutations
+          ) {
+
+            if (
+              mutation.target &&
+              mutation.target.closest &&
+              mutation.target.closest(
+                '#br-bot-panel'
+              )
+            ) {
+              continue;
+            }
+
+            if (
+              mutation.addedNodes &&
+              mutation.addedNodes.length
+            ) {
+
+              changed = true;
+
+              break;
+            }
+          }
+
+          if (!changed) {
+            return;
+          }
+
+          clearTimeout(
+            seatRetryTimer
+          );
+
+          seatRetryTimer =
+            setTimeout(
+              () => {
+
+                if (
+                  seatPageRunning
+                ) {
+
+                  /*
+                   * Observer is mainly for
+                   * dynamic coach/seat rendering.
+                   *
+                   * Don't start a second full
+                   * selection if already done.
+                   */
+
+                  log(
+                    'Seat page changed'
+                  );
+                }
+
+              },
+              500
+            );
+        }
+      );
+
+    seatObserver.observe(
+      document.body,
+      {
+        childList: true,
+        subtree: true
+      }
+    );
+  }
+
+  // =========================================================
+  // WAIT / AUTO RESUME AFTER NAVIGATION
+  // =========================================================
+
+  async function resumePendingBooking() {
+
+    const pending =
+      getPendingBooking();
+
+    if (!pending) {
+      return;
+    }
+
+    if (!isSeatPage()) {
+      return;
+    }
+
+    createOrRestorePanel();
+
+    await sleep(1000);
+
+    if (
+      hasSecurityChallenge()
+    ) {
+
+      stopForSecurityChallenge();
+
+      return;
+    }
+
+    setBotState(
+      'SEAT PAGE'
+    );
+
+    status(
+      'Pending booking found. Starting seat selection...'
+    );
+
+    startSeatSelection();
   }
 
   // =========================================================
@@ -3711,6 +5838,15 @@
       }
 
       if (
+        hasSecurityChallenge()
+      ) {
+
+        stopForSecurityChallenge();
+
+        return false;
+      }
+
+      if (
         !isResultsPage()
       ) {
         continue;
@@ -3719,10 +5855,6 @@
       status(
         'Results page detected. Looking for target train...'
       );
-
-      /*
-       * Give the result cards time to render.
-       */
 
       await sleep(500);
 
@@ -3900,6 +6032,8 @@
 
     updateTargetTrain();
 
+    saveSettings();
+
     const startButton =
       document.getElementById(
         'br-start-search'
@@ -3921,10 +6055,6 @@
     setBotState(
       'RUNNING'
     );
-
-    /*
-     * Validate target train first.
-     */
 
     if (
       !targetTrain.name &&
@@ -3964,10 +6094,6 @@
           'br-class'
         ).value;
 
-      // -----------------------------------------------------
-      // STATIONS
-      // -----------------------------------------------------
-
       status(
         'Finding station fields...'
       );
@@ -3994,10 +6120,6 @@
         return;
       }
 
-      // -----------------------------------------------------
-      // FROM
-      // -----------------------------------------------------
-
       const fromOK =
         await selectStation(
           stationInputs[0],
@@ -4014,10 +6136,6 @@
       }
 
       await sleep(400);
-
-      // -----------------------------------------------------
-      // TO
-      // -----------------------------------------------------
 
       const refreshedInputs =
         findStationInputs();
@@ -4043,10 +6161,6 @@
 
       await sleep(500);
 
-      // -----------------------------------------------------
-      // DATE
-      // -----------------------------------------------------
-
       const dateOK =
         await selectDate(
           date
@@ -4067,10 +6181,6 @@
       }
 
       await sleep(400);
-
-      // -----------------------------------------------------
-      // CLASS
-      // -----------------------------------------------------
 
       const classOK =
         await selectClass(
@@ -4093,10 +6203,6 @@
 
       await sleep(400);
 
-      // -----------------------------------------------------
-      // SEARCH
-      // -----------------------------------------------------
-
       const searchOK =
         await clickSearch();
 
@@ -4108,10 +6214,6 @@
       ) {
         return;
       }
-
-      // -----------------------------------------------------
-      // RESULTS
-      // -----------------------------------------------------
 
       await waitForResults(
         runId
@@ -4259,8 +6361,29 @@
 
     updateTargetPreview();
 
+    /*
+     * If BOOK NOW caused a full page navigation,
+     * the old JS context is gone. The pending
+     * booking stored in localStorage allows
+     * the new page to resume.
+     */
+
+    if (
+      isSeatPage()
+    ) {
+
+      setTimeout(
+        () => {
+
+          resumePendingBooking();
+
+        },
+        1200
+      );
+    }
+
     log(
-      'Bangladesh Railway Search Helper v6.0.0 ready'
+      'Bangladesh Railway Search & Seat Helper v6.4.0 ready'
     );
   }
 
